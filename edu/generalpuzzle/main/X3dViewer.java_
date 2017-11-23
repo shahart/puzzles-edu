@@ -1,0 +1,646 @@
+// requires java 3d 1.5.2, Xj3D 2.0
+
+package edu.generalpuzzle.main;
+
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Hashtable;
+
+import javax.media.j3d.AmbientLight;
+import javax.media.j3d.AudioDevice;
+import javax.media.j3d.Background;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.Bounds;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.GraphicsConfigTemplate3D;
+import javax.media.j3d.Group;
+import javax.media.j3d.Locale;
+import javax.media.j3d.Morph;
+import javax.media.j3d.Node;
+import javax.media.j3d.PhysicalBody;
+import javax.media.j3d.PhysicalEnvironment;
+import javax.media.j3d.SceneGraphObject;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.media.j3d.View;
+import javax.media.j3d.ViewPlatform;
+import javax.media.j3d.VirtualUniverse;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
+import javax.swing.*;
+
+import com.sun.j3d.audioengines.javasound.JavaSoundMixer;
+import com.sun.j3d.loaders.Scene;
+import org.web3d.j3d.loaders.X3DLoader;
+import org.web3d.x3d.jaxp.X3DSAVAdapter;
+
+// vrml97.VrmlLoader;
+import com.sun.j3d.utils.applet.MainFrame;
+import com.sun.j3d.utils.applet.JMainFrame;
+import com.sun.j3d.utils.behaviors.mouse.MouseRotate;
+import com.sun.j3d.utils.behaviors.mouse.MouseTranslate;
+import com.sun.j3d.utils.behaviors.mouse.MouseZoom;
+import com.sun.j3d.utils.behaviors.keyboard.KeyNavigator;
+import com.sun.j3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
+import com.sun.j3d.utils.picking.PickCanvas;
+import com.sun.j3d.utils.picking.PickResult;
+import com.sun.j3d.utils.picking.PickTool;
+
+/**
+ * This example loads a VRML file, automatically computes the view point to view
+ * the objects in the file, and then mouse picks. For each pick all the selected
+ * components of the scene are reported (by their VRML name). The VRML scene can
+ * be rotates, scaled and translated using the mouse.
+ */
+public class X3dViewer extends  Java3dApplet implements MouseListener, KeyListener {
+  PickCanvas pickCanvas = null;
+
+  public X3dViewer() {
+  }
+
+  public X3dViewer(String[] args) {
+    saveCommandLineArguments(args);
+    initJava3d();
+  }
+
+    public void go(String[] args) {
+        saveCommandLineArguments(args);
+        initJava3d();
+    }
+
+  public void start() {
+    if (pickCanvas == null)
+      initJava3d();
+  }
+
+  protected void addCanvas3D(Canvas3D c3d) {
+
+    setLayout(new BorderLayout());
+    add(c3d, BorderLayout.CENTER);
+    doLayout();
+
+    if (m_SceneBranchGroup != null) {
+      c3d.addMouseListener(this);
+        c3d.addKeyListener(this);
+
+      pickCanvas = new PickCanvas(c3d, m_SceneBranchGroup);
+        pickCanvas.getCanvas().getView().setMinimumFrameCycleTime(40);            // 25 Hz
+
+      pickCanvas.setMode(PickTool.GEOMETRY_INTERSECT_INFO);
+      pickCanvas.setTolerance(4.0f);
+    }
+
+    c3d.setCursor(new Cursor(Cursor.HAND_CURSOR));
+  }
+
+  public TransformGroup[] getViewTransformGroupArray() {
+    TransformGroup[] tgArray = new TransformGroup[1];
+    tgArray[0] = new TransformGroup();
+
+    Transform3D viewTrans = new Transform3D();
+    Transform3D eyeTrans = new Transform3D();
+
+    BoundingSphere sceneBounds = (BoundingSphere) m_SceneBranchGroup
+        .getBounds();
+
+    // point the view at the center of the object
+    Point3d center = new Point3d();
+    sceneBounds.getCenter(center);
+    double radius = sceneBounds.getRadius();
+    Vector3d temp = new Vector3d(center);
+    viewTrans.set(temp);
+
+    // pull the eye back far enough to see the whole object
+    double eyeDist = 1 * radius / Math.tan(Math.toRadians(40) / 2.0);
+    temp.x = 0.0;
+    temp.y = 0.0;
+    temp.z = eyeDist;
+    eyeTrans.set(temp);
+    viewTrans.mul(eyeTrans);
+
+    // set the view transform
+    tgArray[0].setTransform(viewTrans);
+
+    return tgArray;
+  }
+
+  protected BranchGroup createSceneBranchGroup() {
+    BranchGroup objRoot = super.createSceneBranchGroup();
+
+    Bounds lightBounds = getApplicationBounds();
+
+    AmbientLight ambLight = new AmbientLight(true, new Color3f(1.0f, 1.0f,
+        1.0f));
+    ambLight.setInfluencingBounds(lightBounds);
+    objRoot.addChild(ambLight);
+
+    DirectionalLight headLight = new DirectionalLight();
+    headLight.setInfluencingBounds(lightBounds);
+    objRoot.addChild(headLight);
+
+    TransformGroup mouseGroup = createMouseBehaviorsGroup();
+
+    String vrmlFile = null;// "tmp/" + args[1] + ".x3d"; // "tmp/GraphIt_2d_8_8_0.x3d"; // "BoxConeSphere.x3d"; // .wrl
+
+    if (m_szCommandLineArray != null) {
+      switch (m_szCommandLineArray.length) {
+//      case 0:
+//        break;
+
+      case 1:
+        vrmlFile = /*"tmp/GraphIt_" + */  m_szCommandLineArray[0];// + ".x3d";
+          setTitle(vrmlFile);
+        break;
+
+      default:
+        System.err.println("Usage: x3dViewer fileName"); // [pathname|URL]");
+        System.err.println("maybe you used spaces in the fileName");
+        System.exit(-1);
+      }
+    }
+        System.out.println("loading URL:" + vrmlFile);
+
+    BranchGroup sceneRoot = loadVrmlFile(vrmlFile);
+
+    if (sceneRoot != null)
+      mouseGroup.addChild(sceneRoot);
+
+    objRoot.addChild(mouseGroup);
+
+    return objRoot;
+  }
+
+  private TransformGroup createMouseBehaviorsGroup() {
+    TransformGroup examineGroup = new TransformGroup();
+    examineGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+    examineGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+    Bounds behaviorBounds = getApplicationBounds();
+
+      KeyNavigatorBehavior k = new KeyNavigatorBehavior(examineGroup);
+      k.setSchedulingBounds(behaviorBounds);
+      examineGroup.addChild(k);
+
+      MouseRotate mr = new MouseRotate(examineGroup);
+    mr.setSchedulingBounds(behaviorBounds);
+    examineGroup.addChild(mr);
+
+    MouseTranslate mt = new MouseTranslate(examineGroup);
+    mt.setSchedulingBounds(behaviorBounds);
+    examineGroup.addChild(mt);
+
+//    MouseZoom mz = new MouseZoom(examineGroup);
+//      mz.setFactor(2);
+//    mz.setSchedulingBounds(behaviorBounds);
+//    examineGroup.addChild(mz);
+
+    return examineGroup;
+  }
+
+  private BranchGroup loadVrmlFile(String location) {
+    BranchGroup sceneGroup = null;
+    Scene scene = null;
+
+     X3DLoader loader = new X3DLoader();
+
+    try {
+      URL loadUrl = new URL(location);
+      try {
+        // load the scene
+        // set X3DSAVAdapter.UNKNOWN_DTD_MSG to null
+        scene = loader.load(new URL(location));
+      } catch (Exception e) {
+        System.out.println("Exception loading URL:" + e);
+        e.printStackTrace();
+      }
+    } catch (MalformedURLException badUrl) {
+      // location may be a path name
+      try {
+        // load the scene
+        scene = loader.load(location);
+      } catch (Exception e) {
+        System.out.println("Exception loading file " + location + " from path: " + e);
+//        e.printStackTrace();
+      }
+    }
+
+    if (scene != null) {
+      // get the scene group
+      sceneGroup = scene.getSceneGroup();
+
+      sceneGroup.setCapability(BranchGroup.ALLOW_BOUNDS_READ);
+      sceneGroup.setCapability(BranchGroup.ALLOW_CHILDREN_READ);
+
+
+      Hashtable namedObjects = scene.getNamedObjects();
+
+      // recursively set the user data here
+      // so we can find our objects when they are picked
+      java.util.Enumeration enumValues = namedObjects.elements();
+      java.util.Enumeration enumKeys = namedObjects.keys();
+
+      if (enumValues != null) {
+        while (enumValues.hasMoreElements() != false) {
+          Object value = enumValues.nextElement();
+          Object key = enumKeys.nextElement();
+
+          recursiveSetUserData(value, key);
+        }
+      }
+    }
+
+    return sceneGroup;
+  }
+
+  // method to recursively set the user data for objects in the scenegraph
+  // tree
+  // we also set the capabilites on Shape3D and Morph objects required by the
+  // PickTool
+  void recursiveSetUserData(Object value, Object key) {
+    if (value instanceof SceneGraphObject != false) {
+      // set the user data for the item
+      SceneGraphObject sg = (SceneGraphObject) value;
+      sg.setUserData(key);
+
+      // recursively process group
+      if (sg instanceof Group) {
+        Group g = (Group) sg;
+
+        // recurse on child branches
+        java.util.Enumeration enumKids = g.getAllChildren();
+
+        while (enumKids.hasMoreElements() != false)
+          recursiveSetUserData(enumKids.nextElement(), key);
+      } else if (sg instanceof Shape3D || sg instanceof Morph) {
+        PickTool.setCapabilities((Node) sg, PickTool.INTERSECT_FULL);
+      }
+    }
+  }
+
+  // rewritten to check for user data
+  public void mouseClicked(MouseEvent e) {
+
+    pickCanvas.setShapeLocation(e);
+
+    PickResult pickResult = pickCanvas.pickClosest();
+
+    if (pickResult != null) {
+
+      Node actualNode = pickResult.getObject();
+
+      if (actualNode.getUserData() != null) {
+        System.out.println(m_szCommandLineArray[0] + " - " + actualNode.getUserData()); 
+      }
+    }
+
+  }
+
+
+    public void keyPressed(KeyEvent e) {
+    }
+
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyReleased(KeyEvent e) {
+    }
+
+  public void mouseEntered(MouseEvent e) {
+  }
+
+  public void mouseExited(MouseEvent e) {
+  }
+
+  public void mousePressed(MouseEvent e) {
+  }
+
+  public void mouseReleased(MouseEvent e) {
+  }
+
+  public static void main(String[] args) {
+
+    X3dViewer pickingTest = new X3dViewer(args);
+      pickingTest.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+//    new MainFrame(pickingTest, 400, 400); //.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+  }
+}
+
+/*******************************************************************************
+ * Copyright (C) 2001 Daniel Selman
+ *
+ * First distributed with the book "Java 3D Programming" by Daniel Selman and
+ * published by Manning Publications. http://manning.com/selman
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * The license can be found on the WWW at: http://www.fsf.org/copyleft/gpl.html
+ *
+ * Or by writing to: Free Software Foundation, Inc., 59 Temple Place - Suite
+ * 330, Boston, MA 02111-1307, USA.
+ *
+ * Authors can be contacted at: Daniel Selman: daniel@selman.org
+ *
+ * If you make changes you think others would like, please contact one of the
+ * authors or someone at the www.j3d.org web site.
+ ******************************************************************************/
+
+//*****************************************************************************
+/**
+ * Java3dApplet
+ *
+ * Base class for defining a Java 3D applet. Contains some useful methods for
+ * defining views and scenegraphs etc.
+ *
+ * @author Daniel Selman
+ * @version 1.0
+ */
+//*****************************************************************************
+
+abstract class Java3dApplet extends JFrame { //Canvas { //JFrame {
+  public static int m_kWidth = 300;
+
+  public static int m_kHeight = 300;
+
+  protected String[] m_szCommandLineArray = null;
+
+  protected VirtualUniverse m_Universe = null;
+
+  protected BranchGroup m_SceneBranchGroup = null;
+
+  protected Bounds m_ApplicationBounds = null;
+
+  //  protected com.tornadolabs.j3dtree.Java3dTree m_Java3dTree = null;
+
+  public Java3dApplet() {
+//      setDefaultCloseOperation(EXIT_ON_CLOSE);
+  }
+
+
+  public URL getWorkingDirectory() throws java.net.MalformedURLException {
+    URL url = null;
+
+    try {
+      File file = new File(System.getProperty("user.dir"));
+      System.out.println("Running as Application:");
+      System.out.println("   " + file.toURI().toURL());
+      return file.toURI().toURL();
+    } catch (Exception e) {
+    }
+
+//    System.out.println("Running as Applet:");
+//    System.out.println("   " + getCodeBase());
+
+    return new URL("");//getCodeBase();
+  }
+
+  public VirtualUniverse getVirtualUniverse() {
+    return m_Universe;
+  }
+
+  //public com.tornadolabs.j3dtree.Java3dTree getJ3dTree() {
+  //return m_Java3dTree;
+  //  }
+
+  public Locale getFirstLocale() {
+    java.util.Enumeration e = m_Universe.getAllLocales();
+
+    if (e.hasMoreElements() != false)
+      return (Locale) e.nextElement();
+
+    return null;
+  }
+
+  protected Bounds getApplicationBounds() {
+    if (m_ApplicationBounds == null)
+      m_ApplicationBounds = createApplicationBounds();
+
+    return m_ApplicationBounds;
+  }
+
+  protected Bounds createApplicationBounds() {
+    m_ApplicationBounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0),
+        100.0);
+    return m_ApplicationBounds;
+  }
+
+  protected Background createBackground() {
+    Background back = new Background(new Color3f(0.9f, 0.9f, 0.9f));
+    back.setApplicationBounds(createApplicationBounds());
+    return back;
+  }
+
+  public void initJava3d() {
+    //  m_Java3dTree = new com.tornadolabs.j3dtree.Java3dTree();
+    m_Universe = createVirtualUniverse();
+
+    Locale locale = createLocale(m_Universe);
+
+    BranchGroup sceneBranchGroup = createSceneBranchGroup();
+
+    ViewPlatform vp = createViewPlatform();
+    BranchGroup viewBranchGroup = createViewBranchGroup(
+        getViewTransformGroupArray(), vp);
+
+    createView(vp);
+
+    Background background = createBackground();
+
+    if (background != null)
+      sceneBranchGroup.addChild(background);
+
+    //    m_Java3dTree.recursiveApplyCapability(sceneBranchGroup);
+    //  m_Java3dTree.recursiveApplyCapability(viewBranchGroup);
+
+    locale.addBranchGraph(sceneBranchGroup);
+    addViewBranchGroup(locale, viewBranchGroup);
+
+//      getContentPane().add(new JLabel("play with the mouse"));
+      setSize(400,400);
+      setVisible(true);
+      VirtualUniverse.setJ3DThreadPriority(Thread.MIN_PRIORITY);
+
+    onDoneInit();
+  }
+
+  protected void onDoneInit() {
+    //  m_Java3dTree.updateNodes(m_Universe);
+  }
+
+  protected double getScale() {
+    return 1.0;
+  }
+
+  public TransformGroup[] getViewTransformGroupArray() {
+    TransformGroup[] tgArray = new TransformGroup[1];
+    tgArray[0] = new TransformGroup();
+
+    // move the camera BACK a little...
+    // note that we have to invert the matrix as
+    // we are moving the viewer
+    Transform3D t3d = new Transform3D();
+    t3d.setScale(getScale());
+    t3d.setTranslation(new Vector3d(0.0, 0.0, -20.0));
+    t3d.invert();
+    tgArray[0].setTransform(t3d);
+
+    return tgArray;
+  }
+
+  protected void addViewBranchGroup(Locale locale, BranchGroup bg) {
+    locale.addBranchGraph(bg);
+  }
+
+  protected Locale createLocale(VirtualUniverse u) {
+    return new Locale(u);
+  }
+
+  protected BranchGroup createSceneBranchGroup() {
+    m_SceneBranchGroup = new BranchGroup();
+    return m_SceneBranchGroup;
+  }
+
+  protected View createView(ViewPlatform vp) {
+    View view = new View();
+
+    PhysicalBody pb = createPhysicalBody();
+    PhysicalEnvironment pe = createPhysicalEnvironment();
+
+    AudioDevice audioDevice = createAudioDevice(pe);
+
+    if (audioDevice != null) {
+      pe.setAudioDevice(audioDevice);
+      audioDevice.initialize();
+    }
+
+    view.setPhysicalEnvironment(pe);
+    view.setPhysicalBody(pb);
+
+    if (vp != null)
+      view.attachViewPlatform(vp);
+
+    view.setBackClipDistance(getBackClipDistance());
+    view.setFrontClipDistance(getFrontClipDistance());
+
+    Canvas3D c3d = createCanvas3D();
+    view.addCanvas3D(c3d);
+    addCanvas3D(c3d);
+
+    return view;
+  }
+
+  protected PhysicalBody createPhysicalBody() {
+    return new PhysicalBody();
+  }
+
+  protected AudioDevice createAudioDevice(PhysicalEnvironment pe) {
+    JavaSoundMixer javaSoundMixer = new JavaSoundMixer(pe);
+
+    if (javaSoundMixer == null)
+      System.out.println("create of audiodevice failed");
+
+    return javaSoundMixer;
+  }
+
+  protected PhysicalEnvironment createPhysicalEnvironment() {
+    return new PhysicalEnvironment();
+  }
+
+  protected float getViewPlatformActivationRadius() {
+    return 100;
+  }
+
+  protected ViewPlatform createViewPlatform() {
+    ViewPlatform vp = new ViewPlatform();
+    vp.setViewAttachPolicy(View.RELATIVE_TO_FIELD_OF_VIEW);
+    vp.setActivationRadius(getViewPlatformActivationRadius());
+
+    return vp;
+  }
+
+  protected Canvas3D createCanvas3D() {
+    GraphicsConfigTemplate3D gc3D = new GraphicsConfigTemplate3D();
+    gc3D.setSceneAntialiasing(GraphicsConfigTemplate.PREFERRED);
+    GraphicsDevice gd[] = GraphicsEnvironment.getLocalGraphicsEnvironment()
+        .getScreenDevices();
+
+    Canvas3D c3d = new Canvas3D(gd[0].getBestConfiguration(gc3D));
+    c3d.setSize(getCanvas3dWidth(c3d), getCanvas3dHeight(c3d));
+
+    return c3d;
+  }
+
+  protected int getCanvas3dWidth(Canvas3D c3d) {
+    return m_kWidth;
+  }
+
+  protected int getCanvas3dHeight(Canvas3D c3d) {
+    return m_kHeight;
+  }
+
+  protected double getBackClipDistance() {
+    return 100.0;
+  }
+
+  protected double getFrontClipDistance() {
+    return 1.0;
+  }
+
+  protected BranchGroup createViewBranchGroup(TransformGroup[] tgArray,
+      ViewPlatform vp) {
+    BranchGroup vpBranchGroup = new BranchGroup();
+
+    if (tgArray != null && tgArray.length > 0) {
+      Group parentGroup = vpBranchGroup;
+      TransformGroup curTg = null;
+
+      for (int n = 0; n < tgArray.length; n++) {
+        curTg = tgArray[n];
+        parentGroup.addChild(curTg);
+        parentGroup = curTg;
+      }
+
+      tgArray[tgArray.length - 1].addChild(vp);
+    } else
+      vpBranchGroup.addChild(vp);
+
+    return vpBranchGroup;
+  }
+
+  protected void addCanvas3D(Canvas3D c3d) {
+    setLayout(new BorderLayout());
+    add(c3d, BorderLayout.CENTER);
+    doLayout();
+  }
+
+  protected VirtualUniverse createVirtualUniverse() {
+    return new VirtualUniverse();
+  }
+
+  protected void saveCommandLineArguments(String[] szArgs) {
+    m_szCommandLineArray = szArgs;
+  }
+
+  protected String[] getCommandLineArguments() {
+    return m_szCommandLineArray;
+  }
+}
+
