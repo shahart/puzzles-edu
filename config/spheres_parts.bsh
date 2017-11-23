@@ -1,0 +1,255 @@
+// usage caseId 0,1-test/2/805/800/801/900
+
+import edu.generalpuzzle.examples.spheresPyramid.PartSphere;
+import edu.generalpuzzle.examples.spheresPyramid.Parts_Spheres;
+
+import edu.generalpuzzle.examples.spheresPyramid.EdgeSphere;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts_Spheres('A');
+
+PartSphere part;
+
+if (bsh.args.length == 0) {
+//    System.out.println(" error: missing caseId. ");
+    error = "error: missing caseId 0/1/2/805/800/801/900";
+    return;
+}
+
+switch (Integer.parseInt(bsh.args[0])) {
+
+case 800: // golfpuzzle
+
+//front_north,back_north, east - from 2
+
+        int i;
+		for (i=0; i<2; i++) { // the blue
+            part = new PartSphere('N');
+	        part.anotherOne(i);
+            part.prepareRotations(4);
+            part.addEdge(1, EdgeSphere.EAST, 2);
+            part.addEdge(1, EdgeSphere.BACK_NORTH, 3);
+            part.addEdge(1, EdgeSphere.BACK_M150, 4);
+            part.addEdge(3, EdgeSphere.EAST_60 , 4);
+            parts.add(part);
+        }
+	    parts.anotherOne(i);
+
+
+        for (i=0; i<3; i++) { // the red
+            part = new PartSphere('I');
+	        part.anotherOne(i);
+            part.prepareRotations(4);
+            part.addEdge(1, EdgeSphere.BACK_M30, 2);
+            part.addEdge(1, EdgeSphere.BACK_M150, 3);
+            part.addEdge(1, EdgeSphere.FRONT_EAST_30, 4);
+            part.addEdge(2, EdgeSphere.EAST, 3);
+            parts.add(part);
+        }
+	    parts.anotherOne(i);
+
+		break;
+
+case 801: // gaya 2 - http://www.gaya-game.co.il/?categoryId=26954
+		part = new PartSphere('A');
+		part.prepareRotations(4);
+		part.addEdge(1, EdgeSphere.BACK_M30, 2);
+		part.addEdge(2, EdgeSphere.BACK_M30, 3);
+		part.addEdge(3, EdgeSphere.BACK_M30, 4);
+		parts.add(part);
+
+		part = new PartSphere('B');
+		part.prepareRotations(2);
+		part.addEdge(1, EdgeSphere.EAST_60, 2);
+		parts.add(part);
+
+		part = new PartSphere('C');
+		part.prepareRotations(3);
+		part.addEdge(1, EdgeSphere.EAST_120, 2);
+		part.addEdge(2, EdgeSphere.EAST_120, 3);
+		parts.add(part);
+
+		part = new PartSphere('D');
+		part.prepareRotations(4);
+		part.addEdge(1, EdgeSphere.EAST_120, 2);
+		part.addEdge(2, EdgeSphere.EAST_120, 3);
+		part.addEdge(3, EdgeSphere.EAST_120, 4);
+		parts.add(part);
+
+		part = new PartSphere('E');
+		part.prepareRotations(4);
+		part.addEdge(1, EdgeSphere.EAST_60, 2);
+		part.addEdge(2, EdgeSphere.EAST_60, 3);
+		part.addEdge(1, EdgeSphere.BACK_M30, 4);
+		parts.add(part);
+
+		part = new PartSphere('F');
+		part.prepareRotations(3);
+		part.addEdge(1, EdgeSphere.EAST_60, 2);
+		part.addEdge(2, EdgeSphere.BACK_M30, 3);
+		parts.add(part);
+		break;
+
+case 1:
+    part = new PartSphere('F');
+    part.prepareRotations(3);
+    part.addEdge(1, EdgeSphere.EAST, 2);
+    part.addEdge(1, EdgeSphere.FRONT_EAST_30, 3); // TODO: catch something like 1, EAST_60, 2!! - two diff connections
+    parts.add(part);
+
+    part = new PartSphere('E');
+    part.prepareRotations(1);
+    parts.add(part);
+
+    break;
+    
+case 0: // TODO invent it :) - needs 10 cells
+    part = new PartSphere('F');
+    part.prepareRotations(3);
+    part.addEdge(1, EdgeSphere.EAST, 2);
+    part.addEdge(1, EdgeSphere.FRONT_EAST_30, 3); // TODO: catch something like 1, EAST_60, 2!! - two diff connections
+    parts.add(part);
+
+    part = new PartSphere('E');
+    part.prepareRotations(1);
+    parts.add(part);
+
+    break;
+
+// pyramid puzzle # 805
+case 805:
+    int i;
+    for (i=0; i<2; i++) {
+        part = new PartSphere('I');
+        part.anotherOne(i);
+        part.prepareRotations(4);
+        part.addEdge(1, EdgeSphere.BACK_EAST_30, 2);
+        part.addEdge(2, EdgeSphere.BACK_EAST_30, 3);
+        part.addEdge(3, EdgeSphere.BACK_EAST_30, 4);
+        parts.add(part);
+    }
+    parts.anotherOne(i);
+
+    for (i=0; i<4; i++) {
+        part = new PartSphere('J');
+        part.anotherOne(i);
+        part.prepareRotations(3);
+        part.addEdge(1, EdgeSphere.EAST, 2);
+        part.addEdge(2, EdgeSphere.EAST, 3);
+        parts.add(part);
+    }
+    parts.anotherOne(i);
+    
+    break;
+
+// gaya (WADS example)
+case 2:    
+    part = new PartSphere('A');
+    part.prepareRotations(4);
+    part.addEdge(1, EdgeSphere.FRONT_NORTH, 2);
+    part.addEdge(2, EdgeSphere.FRONT_NORTH, 3);
+    part.addEdge(3, EdgeSphere.FRONT_NORTH, 4);
+    parts.add(part);
+
+    part = new PartSphere('B');
+    part.prepareRotations(4);
+    part.addEdge(1, EdgeSphere.BACK_NORTH, 2);
+    part.addEdge(2, EdgeSphere.BACK_NORTH, 3);
+    part.addEdge(3, EdgeSphere.BACK_NORTH, 4);
+    parts.add(part);
+
+    for (int i=0; i<2; i++) {
+        part = new PartSphere('C');
+        part.anotherOne(i);
+        part.prepareRotations(3);
+        part.addEdge(1, EdgeSphere.EAST, 2);
+        part.addEdge(2, EdgeSphere.EAST, 3);
+        parts.add(part);
+    }
+    parts.anotherOne(2);
+
+    for (int i=0; i<2; i++) {
+        part = new PartSphere('E');
+        part.anotherOne(i);
+        part.prepareRotations(3);
+        part.addEdge(1, EdgeSphere.BACK_NORTH, 2);
+        part.addEdge(2, EdgeSphere.BACK_NORTH, 3);
+        parts.add(part);
+    }
+    parts.anotherOne(2);
+
+    break;
+
+case 900: // balls pyramid...png
+		part = new PartSphere('A'); // TODO A- fig 3
+		part.prepareRotations(4);//5);//4);
+/*		part.addEdge(1, EdgeSphere.EAST_120, 2);
+		part.addEdge(3, EdgeSphere.FRONT_EAST_150, 1);
+		part.addEdge(2, EdgeSphere.BACK_M30, 4);
+*/		part.addEdge(1, EdgeSphere.FRONT_NORTH, 2);
+		part.addEdge(2, EdgeSphere.EAST_60, 3);
+		part.addEdge(3, EdgeSphere.BACK_EAST_30, 4);
+		parts.add(part);
+
+		part = new PartSphere('B'); // fig 5
+		part.prepareRotations(3);
+/*		part.addEdge(1, EdgeSphere.FRONT_EAST_150, 2);
+		part.addEdge(2, EdgeSphere.FRONT_EAST_150, 3);
+*/		part.addEdge(1, EdgeSphere.FRONT_NORTH, 2);
+		part.addEdge(2, EdgeSphere.FRONT_NORTH, 3);
+		parts.add(part);
+
+		part = new PartSphere('C'); // fig 2
+		part.prepareRotations(4);//3);//4);
+		// part.addEdge(1, EdgeSphere.EAST_60, 2);
+/*		part.addEdge(3, EdgeSphere.EAST_60, 4);
+		part.addEdge(1, EdgeSphere.EAST, 4);
+*/		part.addEdge(1, EdgeSphere.FRONT_NORTH, 2);
+		part.addEdge(1, EdgeSphere.EAST, 3);
+		part.addEdge(4, EdgeSphere.EAST, 2);
+		parts.add(part);
+
+		part = new PartSphere('D'); // fig 4
+		part.prepareRotations(4);
+/*		part.addEdge(1, EdgeSphere.BACK_EAST_30, 2);
+		part.addEdge(3, EdgeSphere.BACK_EAST_30, 1);
+		part.addEdge(3, EdgeSphere.EAST_60, 4);
+*/		part.addEdge(1, EdgeSphere.FRONT_NORTH, 2);
+		part.addEdge(2, EdgeSphere.FRONT_NORTH, 3);
+		part.addEdge(3, EdgeSphere.EAST_60, 4);
+		parts.add(part);
+
+		part = new PartSphere('E'); // fig 1
+		part.prepareRotations(4);
+/*		part.addEdge(1, EdgeSphere.EAST_60, 2);
+		part.addEdge(2, EdgeSphere.EAST_60, 3);
+		part.addEdge(1, EdgeSphere.EAST, 4);
+		part.addEdge(4, EdgeSphere.EAST_120, 2);
+*/		part.addEdge(1, EdgeSphere.EAST_60, 2);
+		part.addEdge(2, EdgeSphere.EAST, 3);
+		part.addEdge(1, EdgeSphere.EAST_120, 4);
+		part.addEdge(4, EdgeSphere.EAST_60, 2);
+		parts.add(part);
+
+		part = new PartSphere('F'); // fig 6
+		part.prepareRotations(1);
+		parts.add(part);
+		break;
+
+    
+default:
+//    System.out.println(" error: wrong caseId. ");
+    error = "error: wrong caseId 0,1-test/2/805/800/801";
+    return;
+}
+
+// end of user code
+///////////////////
+
+return parts;

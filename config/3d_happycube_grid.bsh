@@ -1,0 +1,22 @@
+import edu.generalpuzzle.examples.cube.dimension3.happycube.GridHappyCube;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+if (bsh.args.length < 1) {
+//    System.out.println(" error: invalid caseId. 0-2 easy-hard");
+    error = "error: invalid caseId. 0-2 easy-hard";
+    return;
+}
+
+grid = new GridHappyCube();
+grid.build();
+                
+// end of user code
+///////////////////
+
+return grid;

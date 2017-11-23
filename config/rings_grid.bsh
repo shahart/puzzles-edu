@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.pie.GridCylinder;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+grid = new GridCylinder(); 
+grid.build(12);  //3/ 12
+        
+// end of user code
+///////////////////
+
+return grid;

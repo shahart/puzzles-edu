@@ -1,0 +1,4 @@
+import edu.generalpuzzle.examples.cube.dimension3.Edge3D;
+
+parts.get('F').putKey(5, Edge3D.DOWN, 1);
+parts.get('X').putKey(1, Edge3D.UP,  -1);

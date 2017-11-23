@@ -1,0 +1,104 @@
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Examples;
+
+import edu.generalpuzzle.examples.cube.dimension3.Part3D;
+import edu.generalpuzzle.examples.cube.Parts_Poly5;
+import edu.generalpuzzle.examples.cube.dimension3.Edge3D;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Examples('A');
+
+Part3D part;
+
+parts.add(Parts_Poly5.poly(new Part3D('F'))); // A
+parts.add(Parts_Poly5.poly(new Part3D('X'))); // B
+parts.add(Parts_Poly5.poly(new Part3D('W'))); // C
+
+part = new Part3D('D');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.RIGHT, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(3, Edge3D.FRONT, 4);
+part.addEdge(4, Edge3D.DOWN, 5);
+parts.add(part);
+
+part = new Part3D('E');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(2, Edge3D.RIGHT, 4);
+part.addEdge(2, Edge3D.FRONT, 5);
+parts.add(part);
+
+part = new Part3D('A'); // F
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.RIGHT, 2);
+part.addEdge(2, Edge3D.UP, 3);
+part.addEdge(2, Edge3D.FRONT, 4);
+part.addEdge(4, Edge3D.DOWN, 5);
+parts.add(part);
+
+part = new Part3D('G');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(2, Edge3D.LEFT, 4);
+part.addEdge(4, Edge3D.FRONT, 5);
+parts.add(part);
+
+part = new Part3D('H');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(3, Edge3D.FRONT, 4);
+part.addEdge(3, Edge3D.LEFT, 5);
+parts.add(part);
+
+part = new Part3D('I');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.RIGHT, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(3, Edge3D.DOWN, 4);
+part.addEdge(4, Edge3D.FRONT, 5);
+parts.add(part);
+
+part = new Part3D('J');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(1, Edge3D.FRONT, 4);
+part.addEdge(4, Edge3D.LEFT, 5);
+parts.add(part);
+
+part = new Part3D('K');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.RIGHT, 2);
+part.addEdge(1, Edge3D.UP, 3);
+part.addEdge(2, Edge3D.FRONT, 4);
+part.addEdge(4, Edge3D.DOWN, 5);
+parts.add(part);
+
+part = new Part3D('L');
+part.prepareRotations(5);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.DOWN, 3);
+part.addEdge(2, Edge3D.LEFT, 4);
+part.addEdge(3, Edge3D.FRONT, 5);
+parts.add(part);
+
+part = new Part3D('M');
+part.prepareRotations(4);
+part.addEdge(1, Edge3D.DOWN, 2);
+part.addEdge(2, Edge3D.FRONT, 3);
+part.addEdge(3, Edge3D.LEFT, 4);
+parts.add(part);
+
+// end of user code
+///////////////////
+
+return parts;

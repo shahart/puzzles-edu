@@ -1,0 +1,22 @@
+// usage: caseId (3-whole stairs, 4-strip, 5-T, 6-"KAF", 7-Y, 8-stairs (only by BT)
+
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Poly5;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Poly5('F');
+parts.buildPoly5();
+
+int color = Integer.parseInt(bsh.args[0]);
+if (color == 8)
+    parts.setPartsInSolution(1);
+
+// end of user code
+///////////////////
+
+return parts;

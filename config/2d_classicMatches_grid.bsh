@@ -1,0 +1,18 @@
+import edu.generalpuzzle.examples.cube.dimension2.Grid2D;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+grid = new Grid2D();
+// grid.build2d( 4,4);
+grid.build2d( 6,6);        
+
+
+// end of user code
+///////////////////
+
+return grid;

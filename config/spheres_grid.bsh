@@ -1,0 +1,28 @@
+import edu.generalpuzzle.examples.spheresPyramid.GridSpheresPyramid;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+if (bsh.args.length == 0) {
+//    System.out.println(" error: missing caseId. ");
+    error = "error: missing caseId. ";
+    return;
+}
+
+grid = new GridSpheresPyramid();
+
+int size = 4;
+int param = Integer.parseInt(bsh.args[0]);
+if (param == 1) size=2;
+if (param == 0) size =3;
+
+grid.buildPyramid(size); // Integer.parseInt(bsh.args[0])); // TODO: depth DLX = 1 when 1 part
+                
+// end of user code
+///////////////////
+
+return grid;

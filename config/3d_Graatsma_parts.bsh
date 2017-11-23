@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Examples;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Examples(0); // should be 1 unique. found 34560
+parts.build_Graatsma(); // The Slothouber–Graatsma puzzle is a packing problem that calls for packing six 1 ª 2 ª 2 blocks and three 1 ª 1 ª 1 blocks into a 3 ª 3 ª 3 box. The solution to this puzzle is unique (up to mirror reflections and rotations).
+
+// end of user code
+///////////////////
+
+return parts;

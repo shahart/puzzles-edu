@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.pie.Parts_Pie;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts_Pie('A'); // 'A'
+parts.build(); // buildTest/ Test2
+
+// end of user code
+///////////////////
+
+return parts;

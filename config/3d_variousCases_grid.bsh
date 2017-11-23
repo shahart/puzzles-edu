@@ -1,0 +1,34 @@
+import edu.generalpuzzle.examples.cube.dimension3.GridExamples;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+if (bsh.args.length < 1) {
+//    System.out.println(" error: invalid caseId. 3-8");
+    error = "error: invalid caseId. 3-8";
+    return;
+}
+
+grid = new GridExamples();
+int color = Integer.parseInt(bsh.args[0]);
+switch (color) {
+    case 3: grid.buildCase3(); break; // whole stairs
+    case 4: grid.buildCase4(); break; // strip
+    case 5: grid.buildCase5(); break; // big T
+    case 6: grid.buildCase6(); break; // big "KAF"
+    case 7: grid.buildCase7(); break; // big Y
+    case 8: System.out.println("STAIRS- only by BT or DL-SZ\n"); grid.buildCase8(); break; // stairs
+    default:
+//      System.out.println(" error: invalid caseId. 3-8");
+      error = "error: invalid caseId. 3-8";
+      return;
+}
+                
+// end of user code
+///////////////////
+
+return grid;

@@ -1,0 +1,24 @@
+import edu.generalpuzzle.examples.cube.dimension3.Grid3D;
+
+import edu.generalpuzzle.infra.IGrid;
+
+                  // at it is "3d param" the args starts at index 2
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+if (bsh.args.length < 3) {
+//    System.out.println(" error: invalid caseId. x y z");
+    error = "error: invalid caseId. x y z";
+    return;
+}
+
+grid = new Grid3D();
+grid.build3d( Integer.parseInt(bsh.args[0]), Integer.parseInt(bsh.args[1]), Integer.parseInt(bsh.args[2]));
+                
+// end of user code
+///////////////////
+
+return grid;

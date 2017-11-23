@@ -1,0 +1,26 @@
+// usage: caseId (the color/ model 0-1-2)
+
+import edu.generalpuzzle.examples.cube.dimension3.happycube.Parts3D_HappyCube;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_HappyCube('A');
+int color = Integer.parseInt(bsh.args[0]); // reads grid.bsh first
+switch (color) {
+    case 0: parts.buildGreen();break;
+    case 1: parts.buildRed();break;
+    case 2: parts.buildOrange();break;
+//    default: System.out.println(" error: invalid caseId, 0-2 easy-hard");
+      error = "error: invalid caseId, 0-2 easy-hard";
+      return;
+}
+
+// end of user code
+///////////////////
+
+return parts;

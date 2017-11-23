@@ -1,0 +1,21 @@
+// usage x y z
+
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Poly5;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Poly5('F');
+parts.buildPoly5();
+
+// parts.get('F').putKey(5, Edge3D.DOWN, 1);
+// parts.get('X').putKey(1, Edge3D.UP,  -1);
+
+// end of user code
+///////////////////
+
+return parts;

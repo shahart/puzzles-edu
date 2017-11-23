@@ -1,0 +1,17 @@
+import edu.generalpuzzle.examples.cube.dimension2.polysticks.Parts_Poly;
+
+Parts_Poly parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts_Poly('A');
+// parts.buildTest();
+
+// parts.add(Parts_Poly.poly(new Part3D('F'))); // A
+parts.build72();
+
+// end of user code
+///////////////////
+
+return parts;

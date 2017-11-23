@@ -1,0 +1,14 @@
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Examples;
+
+Parts3D_Examples parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Examples('I');
+parts.build_pairs();
+
+// end of user code
+///////////////////
+
+return parts;

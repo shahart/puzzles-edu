@@ -1,0 +1,12 @@
+import edu.generalpuzzle.examples.cube.dimension3.Grid3D;
+
+// user code //////
+///////////////////
+
+Grid3D grid = new Grid3D();
+grid.build3d(4,4,5);
+
+// end of user code
+///////////////////
+
+return grid;

@@ -1,0 +1,40 @@
+// usage x y {corner, or 0}
+
+import edu.generalpuzzle.examples.cube.dimension2.Parts2D_Poly5;
+import edu.generalpuzzle.examples.cube.dimension2.Part2D;
+import edu.generalpuzzle.examples.cube.dimension2.Edge2D;
+import edu.generalpuzzle.examples.cube.dimension2.Edge1D;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts2D_Poly5('F');
+parts.buildPoly5();
+
+
+    int corner = -1;
+	if (bsh.args.length > 2) {
+		corner = Integer.parseInt(bsh.args[2]);
+		if (corner == 0) {
+			Part2D part;
+			part = new Part2D('D');
+			part.prepareRotations(4);
+			part.addEdge(1, Edge1D.RIGHT, 2);
+			part.addEdge(2, Edge2D.DOWN, 3);
+			part.addEdge(3, Edge1D.LEFT, 4);
+			part.addEdge(4, Edge2D.UP, 1);
+			parts.add(part);
+		}
+	}
+
+// parts.get('F').putKey(5, Edge3D.DOWN, 1);
+// parts.get('X').putKey(1, Edge3D.UP,  -1);
+
+// end of user code
+///////////////////
+
+return parts;

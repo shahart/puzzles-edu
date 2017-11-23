@@ -1,0 +1,42 @@
+import edu.generalpuzzle.examples.cube.dimension2.Grid2D;
+
+import edu.generalpuzzle.infra.IGrid;
+import edu.generalpuzzle.infra.CellId;
+
+//class x2d_grid{void main() {
+IGrid grid;
+
+// user code //////
+///////////////////
+
+if (bsh.args.length < 2) {
+ //    System.out.println(" error: invalid caseId. x y {corner}");
+    error = "error: invalid caseId. x y {corner}";
+	return;
+}
+
+grid = new Grid2D();
+grid.build2d( Integer.parseInt(bsh.args[0]), Integer.parseInt(bsh.args[1]));
+
+if (bsh.args.length > 2) {
+    int corner = Integer.parseInt(bsh.args[2]);
+	if (corner > 0) {
+		grid.remove(new CellId(grid.calcId(0,0)));
+		grid.remove(new CellId(grid.calcId(corner,0)));
+		grid.remove(new CellId(grid.calcId(0,corner)));
+		grid.remove(new CellId(grid.calcId(corner, corner)));
+	}
+}
+else if (grid.getRows() == 8 && grid.getColumns() == 8) {
+    grid.setPlaceHolder(grid.calcId(3,3));
+    grid.setPlaceHolder(grid.calcId(3,4));
+    grid.setPlaceHolder(grid.calcId(4,3));
+    grid.setPlaceHolder(grid.calcId(4,4));
+}
+
+                
+// end of user code
+///////////////////
+
+return grid;
+//}}

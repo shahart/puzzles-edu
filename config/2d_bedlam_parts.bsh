@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.cube.dimension3.Parts3D_Examples;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts3D_Examples('F'); // // 19,186 //  44370 found, 1100 seconds no gridPart. with 1884, 124 seconds
+parts.build_Bedlam();
+
+// end of user code
+///////////////////
+
+return parts;

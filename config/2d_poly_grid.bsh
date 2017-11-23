@@ -1,0 +1,18 @@
+import edu.generalpuzzle.infra.IGrid;
+import edu.generalpuzzle.examples.cube.dimension2.polysticks.GridPoly;
+import edu.generalpuzzle.infra.CellId;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+
+grid = new GridPoly();
+// grid.build(2,2);
+grid.build(10,10);
+
+// end of user code
+///////////////////
+
+return grid;

@@ -1,0 +1,20 @@
+import edu.generalpuzzle.examples.hexPrism.Parts_HexPrism;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts_HexPrism('A');
+parts.buildSnowFlake();
+
+// end of user code
+///////////////////
+
+//import infra.IPart;
+//int partIndex = parts.getParts().size()-1;
+//IPart part = parts.getParts().get(partIndex);
+
+return parts;

@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.hexPrism.GridHexaPyramid;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+grid = new GridHexaPyramid(); 
+grid.buildHexCluster();
+
+// end of user code
+///////////////////
+
+return grid;
