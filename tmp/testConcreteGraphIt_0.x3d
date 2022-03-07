@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE X3D SYSTEM "x3dViewer/Xj3D/DTD/x3d-3.0.dtd">
+<X3D profile="Interchange">
+<!--solution #0 null-->
+<Scene>
+<Transform rotation="0 1 0 -1">
+<Shape DEF="PIECE_A"><IndexedFaceSet coordIndex="                6 7 8 9 10 11 -1&#10;                5 4 3 2 1 0 -1&#10;                1 7 6 0 -1&#10;                3 9 8 2 -1&#10;                1 2 8 7 -1&#10;                3 4 10 9 -1&#10;                4 5 11 10 -1&#10;                0 6 11 5"><Coordinate point="              5 0 -2, 2.5 4.33 -2, -2.5 4.33 -2, -5 0 -2,  -2.5 -4.33  -2, 2.5 -4.33 -2, &#10;              5 0 2, 2.5 4.33 2, -2.5 4.33 2, -5 0 2,  -2.5 -4.33  2, 2.5 -4.33 2"/></IndexedFaceSet><IndexedFaceSet coordIndex="                6 7 8 9 10 11 -1&#10;                5 4 3 2 1 0 -1&#10;                1 7 6 0 -1&#10;                3 9 8 2 -1&#10;                1 2 8 7 -1&#10;                3 4 10 9 -1&#10;                4 5 11 10 -1&#10;                0 6 11 5"><Coordinate point="              5 0 -2, 2.5 4.33 -2, -2.5 4.33 -2, -5 0 -2,  -2.5 -4.33  -2, 2.5 -4.33 -2, &#10;              5 0 2, 2.5 4.33 2, -2.5 4.33 2, -5 0 2,  -2.5 -4.33  2, 2.5 -4.33 2"/></IndexedFaceSet><Appearance><Material diffuseColor="1 0 0"/></Appearance></Shape><!--red-->
+<Shape DEF="PIECE_A2"><Box size="7 7 2"/><Appearance><Material diffuseColor="1 0 0"/></Appearance></Shape>
+<Transform DEF="POINT0_id_10101" translation="0 0 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT1_id_20101" translation="0 0 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT2_id_30101" translation="0 0 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT3_id_30102" translation="10 0 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT4_id_20102" translation="10 0 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT5_id_10102" translation="10 0 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT6_id_10103" translation="20 0 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT7_id_20103" translation="20 0 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT8_id_30103" translation="20 0 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT9_id_30104" translation="30 0 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT10_id_20104" translation="30 0 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT11_id_10104" translation="30 0 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT12_id_10105" translation="40 0 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT13_id_20105" translation="40 0 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT14_id_30105" translation="40 0 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT15_id_30204" translation="35 8.66 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT16_id_20204" translation="35 8.66 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT17_id_10204" translation="35 8.66 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT18_id_10303" translation="30 17.321 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT19_id_20303" translation="30 17.321 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT20_id_30303" translation="30 17.321 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT21_id_30402" translation="25 25.981 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT22_id_20402" translation="25 25.981 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT23_id_10402" translation="25 25.981 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT24_id_10501" translation="20 34.641 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT25_id_20501" translation="20 34.641 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT26_id_30501" translation="20 34.641 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT27_id_30401" translation="15 25.981 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT28_id_20401" translation="15 25.981 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT29_id_10401" translation="15 25.981 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT30_id_10301" translation="10 17.321 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT31_id_20301" translation="10 17.321 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT32_id_30301" translation="10 17.321 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT33_id_30302" translation="20 17.321 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT34_id_20302" translation="20 17.321 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT35_id_10302" translation="20 17.321 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT36_id_10202" translation="15 8.66 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT37_id_20202" translation="15 8.66 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT38_id_30202" translation="15 8.66 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT39_id_30203" translation="25 8.66 20"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT40_id_20203" translation="25 8.66 10"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT41_id_10203" translation="25 8.66 0"><Shape USE="PIECE_A2"/></Transform>
+<Transform DEF="POINT42_id_30201" translation="5 8.66 20"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT43_id_20201" translation="5 8.66 10"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT44_id_10201" translation="5 8.66 0"><Shape USE="PIECE_A"/></Transform>
+</Transform>
+</Scene></X3D>

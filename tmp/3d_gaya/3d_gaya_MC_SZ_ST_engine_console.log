@@ -1,0 +1,234 @@
+note: assertsDisabled
+
+error: myPzl.properties not found - using defaults.
+
+custom (3d_gaya) loaded - starting...
+
+Part L 4 cells: L #0 edges [ DOWN:3>>1] L #1 edges [ UP:2>>0 DOWN:3>>2] L #2 edges [ RIGHT:1>>3 UP:2>>1] L #3 edges [ LEFT:0>>2]  rotations: 24
+Part M (=L) 
+Part N (=L) 
+Part O (=L) 
+Part A 3 cells: A #0 edges [ RIGHT:1>>1 DOWN:3>>2] A #1 edges [ LEFT:0>>0] A #2 edges [ UP:2>>0]  rotations: 12
+Part P 4 cells: P #0 edges [ LEFT:0>>2 UP:2>>1 DOWN:3>>3] P #1 edges [ DOWN:3>>0] P #2 edges [ RIGHT:1>>0] P #3 edges [ UP:2>>0]  rotations: 12
+Part X 4 cells: X #0 edges [ DOWN:3>>3] X #1 edges [ UP:2>>2] X #2 edges [ RIGHT:1>>3 DOWN:3>>1] X #3 edges [ LEFT:0>>2 UP:2>>0]  rotations: 12 <- unique
+
+shuffle result: XALMPNO
+
+solving Type: edu.generalpuzzle.examples.cube.dimension3.CellPart3D
+parts: 7
+grid cells: 27
+
+custom loaded - successfully
+
+AUTO_DEBUG: false
+initializing engine0
+
+Part X 4 cells: X #0 edges [ DOWN:3>>3] X #1 edges [ UP:2>>2] X #2 edges [ RIGHT:1>>3 DOWN:3>>1] X #3 edges [ LEFT:0>>2 UP:2>>0]  rotations: 1 <- unique, after processing
+
+initializing engine1
+initializing engine2
+initializing engine3
+initializing engine4
+initializing engine5
+initializing engine6
+
+
+args - total solutions
+
+not found (for time estimations)
+
+
+GraphIt.x3d generated, from Engine0, for solution #0
+
+Engine3 - DONE
+
+7 parts, 'working' on 3..3
+DL: split 1,444/1,444 - X0,6 Mc,7 N9,2 
+elapsed time 799 seconds
+number of unique solutions 0 
+tried 29,376 parts
+pool-1-thread-4
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 11 	per branch 242
+	level 4 - branches 3,030 	% 9 	per branch 258
+	level 5 - branches 10,683 	% 32 	per branch 111
+	level 6 - branches 12,056 	% 36 	per branch 36
+	level 7 - branches 3,246 	% 9 	per branch 0
+	total branches - 33,130
+
+
+Engine6 - DONE
+
+7 parts, 'working' on 6..6
+DL: split 2,528/2,528 - X0,8 O4,7 N1,0 
+elapsed time 824 seconds
+number of unique solutions 0 
+tried 33,282 parts
+pool-1-thread-7
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,976 	% 10 	per branch 243
+	level 4 - branches 3,337 	% 9 	per branch 256
+	level 5 - branches 11,123 	% 30 	per branch 111
+	level 6 - branches 13,966 	% 37 	per branch 36
+	level 7 - branches 4,494 	% 12 	per branch 0
+	total branches - 37,039
+
+
+Engine5 - DONE
+
+7 parts, 'working' on 5..5
+DL: split 2,166/2,166 - X0,8 Lb,21 O5,11 
+elapsed time 837 seconds
+number of unique solutions 0 
+tried 20,917 parts
+pool-1-thread-6
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 16 	per branch 243
+	level 4 - branches 2,103 	% 8 	per branch 244
+	level 5 - branches 7,465 	% 30 	per branch 114
+	level 6 - branches 8,258 	% 33 	per branch 36
+	level 7 - branches 2,730 	% 11 	per branch 0
+	total branches - 24,671
+
+
+
+timeTo1st: 0.863
+Solution #1
+
+1st solution statistics
+
+7 parts, 'working' on 2..2
+DL: split 731/1,083 - X0,4 P2,8 A9,3 
+elapsed time 863 seconds
+number of unique solutions 1 
+tried 0 parts
+pool-1-thread-3
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 4 	per branch 8252
+	level 3 - branches 2,564 	% 91 	per branch 9
+	level 4 - branches 31 	% 1 	per branch 182
+	level 5 - branches 16 	% 0 	per branch 114
+	level 6 - branches 43 	% 1 	per branch 44
+	level 7 - branches 19 	% 0 	per branch 0
+	total branches - 2,816
+
+
+Engine1 - DONE
+
+7 parts, 'working' on 1..1
+DL: split 722/722 - X0,4 P2,7 Mn,0 
+elapsed time 867 seconds
+number of unique solutions 0 
+tried 28,500 parts
+pool-1-thread-2
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 12 	per branch 243
+	level 4 - branches 2,371 	% 7 	per branch 249
+	level 5 - branches 9,470 	% 29 	per branch 114
+	level 6 - branches 12,144 	% 37 	per branch 37
+	level 7 - branches 4,154 	% 12 	per branch 0
+	total branches - 32,254
+
+
+Parts order L6 Mk X0 A4 N8 Oe Pb 
+
+ L L M X A A N O O X L M X A M N O M X L P N P P N O P
+
+ L X N
+ X X N
+ X N N
+
+ L A O
+ L A O
+ L P O
+
+ M A O
+ M M M
+ P P P
+
+Engine4 - DONE
+
+7 parts, 'working' on 4..4
+DL: split 1,805/1,805 - X0,7 P8,0 Aa,15 
+elapsed time 917 seconds
+number of unique solutions 0 
+tried 34,151 parts
+pool-1-thread-5
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 10 	per branch 242
+	level 4 - branches 3,099 	% 8 	per branch 258
+	level 5 - branches 11,107 	% 29 	per branch 112
+	level 6 - branches 14,686 	% 38 	per branch 36
+	level 7 - branches 4,898 	% 12 	per branch 0
+	total branches - 37,905
+
+
+Engine0 - DONE
+
+7 parts, 'working' on 0..0
+DL: split 361/361 - X0,3 N6,0 Oh,2 
+elapsed time 1,089 seconds
+number of unique solutions 1 
+tried 32,097 parts
+pool-1-thread-1
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 11 	per branch 242
+	level 4 - branches 2,982 	% 8 	per branch 258
+	level 5 - branches 10,732 	% 29 	per branch 113
+	level 6 - branches 14,184 	% 39 	per branch 36
+	level 7 - branches 3,838 	% 10 	per branch 0
+	total branches - 35,851
+
+
+Engine2 - DONE
+
+7 parts, 'working' on 2..2
+DL: split 1,083/1,083 - X0,5 Nn,1 L8,8 
+elapsed time 1,096 seconds
+number of unique solutions 1 
+tried 29,857 parts
+pool-1-thread-3
+
+	level 0 - branches 1 	% 0 	per branch 7750
+	level 1 - branches 6 	% 0 	per branch 16617
+	level 2 - branches 136 	% 0 	per branch 8252
+	level 3 - branches 3,972 	% 11 	per branch 242
+	level 4 - branches 2,718 	% 8 	per branch 256
+	level 5 - branches 9,824 	% 29 	per branch 114
+	level 6 - branches 13,242 	% 39 	per branch 36
+	level 7 - branches 3,712 	% 11 	per branch 0
+	total branches - 33,611
+
+total 6 seconds
+3d_gaya, , 27, 7, 121, 121, 2, 24, MC+SZ+ST, 234461, 0.863, 1.125,  L M M A X N A A P L X M L X N L P P O X M O N N O O P, Lk M6 A9 X0 Nc P2 Oj , 7/3/2022
+
+number of unique solutions 2 
+tried 234,461 parts
+
+symmetries: 24 ==>
+number of total solutions 48
+
+NOT FINISHED (maybe)
+
+DONE
+

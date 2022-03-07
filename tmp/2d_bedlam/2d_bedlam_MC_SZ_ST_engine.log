@@ -1,0 +1,85 @@
+        0 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy0 - sparse matrix rows 3774
+      130 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy1 - sparse matrix rows 3774
+      245 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy2 - sparse matrix rows 3774
+      356 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy3 - sparse matrix rows 3774
+      439 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy4 - sparse matrix rows 3774
+      558 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy5 - sparse matrix rows 3774
+      659 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy6 - sparse matrix rows 3774
+      775 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy7 - sparse matrix rows 3774
+      882 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy8 - sparse matrix rows 3774
+      971 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy9 - sparse matrix rows 3774
+     1065 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy10 - sparse matrix rows 3774
+     1144 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy11 - sparse matrix rows 3774
+     1239 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy12 - sparse matrix rows 3774
+     1244 [thread1] INFO (Main.go:383) - 2d_bedlam
+     1245 [thread1] INFO (Main.go:384) - using edu.generalpuzzle.infra.engines.dlx_hadoop.DlxEngineStrategy
+     1669 [thread21] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy0 using thread pool-1-thread-1
+     1669 [thread24] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy3 using thread pool-1-thread-4
+     1669 [thread22] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy1 using thread pool-1-thread-2
+     1669 [thread23] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy2 using thread pool-1-thread-3
+     1670 [thread28] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy7 using thread pool-1-thread-8
+     1670 [thread27] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy6 using thread pool-1-thread-7
+     1670 [thread26] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy5 using thread pool-1-thread-6
+     1670 [thread25] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy4 using thread pool-1-thread-5
+     2317 [thread28] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2343 [thread21] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2360 [thread24] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2431 [thread23] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2444 [thread25] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2445 [thread27] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2453 [thread26] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2509 [thread22] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+     2554 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 0.882
+     2554 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 6,740
+    22235 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 20.563
+    22235 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 1,476,658
+    22235 [thread24] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy3
+    22235 [thread24] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy8 using thread pool-1-thread-4
+    22883 [thread24] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+    42189 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 19.954
+    42189 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 1,165,274
+    42189 [thread24] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy8
+    42189 [thread24] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy9 using thread pool-1-thread-4
+    42845 [thread24] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+    46052 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 44.38
+    46052 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 2,647,355
+    46053 [thread21] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy0
+    46053 [thread21] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy10 using thread pool-1-thread-1
+    48156 [thread21] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+    68035 [thread25] INFO (IEngineStrategy.showSummary:214) - time: 66.363
+    68035 [thread25] INFO (IEngineStrategy.showSummary:215) - branches: 3,569,220
+    68035 [thread25] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy4
+    68035 [thread25] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy11 using thread pool-1-thread-5
+    68936 [thread25] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+    75509 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 33.319
+    75509 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 1,818,059
+    75509 [thread24] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy9
+    75509 [thread24] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy12 using thread pool-1-thread-4
+    76522 [thread24] INFO (DlxEngineStrategy.solve:408) - splits.size: 4931
+    81558 [thread23] INFO (IEngineStrategy.showSummary:214) - time: 79.886
+    81558 [thread23] INFO (IEngineStrategy.showSummary:215) - branches: 4,852,576
+    81558 [thread23] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy2
+    84302 [thread26] INFO (IEngineStrategy.showSummary:214) - time: 82.63
+    84302 [thread26] INFO (IEngineStrategy.showSummary:215) - branches: 3,883,681
+    84303 [thread26] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy5
+   102639 [thread28] INFO (IEngineStrategy.showSummary:214) - time: 100.967
+   102639 [thread28] INFO (IEngineStrategy.showSummary:215) - branches: 5,579,840
+   102639 [thread28] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy7
+   103136 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 57.082
+   103136 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 3,317,682
+   103136 [thread21] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy10
+   114544 [thread27] INFO (IEngineStrategy.showSummary:214) - time: 112.872
+   114544 [thread27] INFO (IEngineStrategy.showSummary:215) - branches: 6,263,484
+   114544 [thread27] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy6
+   117351 [thread22] INFO (IEngineStrategy.showSummary:214) - time: 115.679
+   117351 [thread22] INFO (IEngineStrategy.showSummary:215) - branches: 8,074,037
+   117351 [thread22] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy1
+   124256 [thread25] INFO (IEngineStrategy.showSummary:214) - time: 56.22
+   124256 [thread25] INFO (IEngineStrategy.showSummary:215) - branches: 3,991,058
+   124256 [thread25] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy11
+   134184 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 58.674
+   134184 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 5,630,210
+   134184 [thread24] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy12
+   134185 [thread1] INFO (Main.go:440) - finished
+   134186 [thread1] INFO (Main.go:442) - parallel time: 132.521
+   134196 [thread1] INFO (Main.go:490) - unique solutions: 19186

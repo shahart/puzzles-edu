@@ -1,0 +1,35 @@
+        0 [thread1] INFO (Main.go:383) - 3d_gaya
+        1 [thread1] INFO (Main.go:384) - using edu.generalpuzzle.infra.engines.trivial.TrivialRecursiveEngineStrategy
+       42 [thread21] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy0 using thread pool-1-thread-1
+       42 [thread24] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy3 using thread pool-1-thread-4
+       42 [thread22] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy1 using thread pool-1-thread-2
+       42 [thread23] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy2 using thread pool-1-thread-3
+      114 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 0.067
+      114 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 3,285
+     1104 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 1.061
+     1104 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 448,592
+     1106 [thread21] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy0
+     1106 [thread21] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy4 using thread pool-1-thread-1
+     1106 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 0
+     1107 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 0
+     1107 [thread21] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy4
+     1107 [thread21] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy5 using thread pool-1-thread-1
+     1392 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 1.349
+     1393 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 473,771
+     1393 [thread24] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy3
+     1393 [thread24] INFO (ParallelEngineStrategy.call:53) - starting EngineStrategy6 using thread pool-1-thread-4
+     1578 [thread22] INFO (IEngineStrategy.showSummary:214) - time: 1.535
+     1578 [thread22] INFO (IEngineStrategy.showSummary:215) - branches: 721,427
+     1578 [thread22] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy1
+     1655 [thread23] INFO (IEngineStrategy.showSummary:214) - time: 1.612
+     1656 [thread23] INFO (IEngineStrategy.showSummary:215) - branches: 721,427
+     1656 [thread23] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy2
+     2201 [thread21] INFO (IEngineStrategy.showSummary:214) - time: 1.094
+     2201 [thread21] INFO (IEngineStrategy.showSummary:215) - branches: 721,427
+     2201 [thread21] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy5
+     2268 [thread24] INFO (IEngineStrategy.showSummary:214) - time: 0.875
+     2268 [thread24] INFO (IEngineStrategy.showSummary:215) - branches: 721,427
+     2268 [thread24] INFO (ParallelEngineStrategy.call:64) - finished EngineStrategy6
+     2269 [thread1] INFO (Main.go:440) - finished
+     2270 [thread1] INFO (Main.go:442) - parallel time: 2.234
+     2276 [thread1] INFO (Main.go:490) - unique solutions: 2

@@ -1,0 +1,4 @@
+        0 [thread1] INFO (IEngineStrategy.showSummary:214) - time: 0.009
+        0 [thread1] INFO (IEngineStrategy.showSummary:215) - branches: 8
+       47 [thread1] INFO (IEngineStrategy.showSummary:214) - time: 0.045
+       47 [thread1] INFO (IEngineStrategy.showSummary:215) - branches: 64

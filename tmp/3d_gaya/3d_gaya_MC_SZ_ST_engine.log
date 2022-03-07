@@ -1,0 +1,49 @@
+        0 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy0 - sparse matrix rows 798
+      102 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy1 - sparse matrix rows 798
+      143 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy2 - sparse matrix rows 798
+      188 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy3 - sparse matrix rows 798
+      228 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy4 - sparse matrix rows 798
+      263 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy5 - sparse matrix rows 798
+      311 [thread1] INFO (DlxEngineStrategy.<init>:305) - EngineStrategy6 - sparse matrix rows 798
+      326 [thread1] INFO (Main.go:383) - 3d_gaya
+      326 [thread1] INFO (Main.go:384) - using edu.generalpuzzle.infra.engines.dlx_hadoop.DlxEngineStrategy
+      398 [thread13] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy0 using thread pool-1-thread-1
+      399 [thread15] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy2 using thread pool-1-thread-3
+      398 [thread14] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy1 using thread pool-1-thread-2
+      399 [thread17] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy4 using thread pool-1-thread-5
+      399 [thread16] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy3 using thread pool-1-thread-4
+      400 [thread19] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy6 using thread pool-1-thread-7
+      400 [thread18] INFO (ParallelEngineStrategy.call:54) - starting EngineStrategy5 using thread pool-1-thread-6
+      481 [thread19] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      489 [thread17] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      504 [thread16] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      525 [thread15] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      670 [thread14] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      715 [thread18] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+      786 [thread13] INFO (DlxEngineStrategy.solve:408) - splits.size: 2528
+     1204 [thread16] INFO (IEngineStrategy.showSummary:214) - time: 0.802
+     1204 [thread16] INFO (IEngineStrategy.showSummary:215) - branches: 33,130
+     1206 [thread16] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy3
+     1227 [thread19] INFO (IEngineStrategy.showSummary:214) - time: 0.825
+     1227 [thread19] INFO (IEngineStrategy.showSummary:215) - branches: 37,039
+     1227 [thread19] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy6
+     1244 [thread18] INFO (IEngineStrategy.showSummary:214) - time: 0.842
+     1245 [thread18] INFO (IEngineStrategy.showSummary:215) - branches: 24,671
+     1245 [thread18] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy5
+     1266 [thread15] INFO (IEngineStrategy.showSummary:214) - time: 0.864
+     1266 [thread15] INFO (IEngineStrategy.showSummary:215) - branches: 2,816
+     1274 [thread14] INFO (IEngineStrategy.showSummary:214) - time: 0.872
+     1274 [thread14] INFO (IEngineStrategy.showSummary:215) - branches: 32,254
+     1274 [thread14] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy1
+     1322 [thread17] INFO (IEngineStrategy.showSummary:214) - time: 0.92
+     1322 [thread17] INFO (IEngineStrategy.showSummary:215) - branches: 37,905
+     1322 [thread17] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy4
+     1492 [thread13] INFO (IEngineStrategy.showSummary:214) - time: 1.09
+     1493 [thread13] INFO (IEngineStrategy.showSummary:215) - branches: 35,851
+     1493 [thread13] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy0
+     1503 [thread15] INFO (IEngineStrategy.showSummary:214) - time: 1.101
+     1503 [thread15] INFO (IEngineStrategy.showSummary:215) - branches: 33,611
+     1503 [thread15] INFO (ParallelEngineStrategy.call:65) - finished EngineStrategy2
+     1508 [thread1] INFO (Main.go:440) - finished
+     1508 [thread1] INFO (Main.go:442) - parallel time: 1.124
+     1520 [thread1] INFO (Main.go:490) - unique solutions: 2

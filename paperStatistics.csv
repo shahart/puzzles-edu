@@ -1,0 +1,4 @@
+.Lattice, puzzle name, puzzle size, Parts orig., Parts total, parts reduced, Solutions unique, symmetries, method, branches, Time to first, time to all, solution, short solution, date
+2d_bedlam, , 64, 13, 208, 208, 19186, 24, MC+SZ+ST, 52191929, 0.877, 132.522,  D F A G D C C G C C J G C B J J F F A A D F G G D D M M B B B J I A A H L F K M L L K M L B E J I K H H I K K H I I E H L E E E, Dk F0 Ad Gh Cb Jc B2 M9 Ib Hl Li K8 E5 , 7/3/2022
+3d_gaya, , 27, 7, 121, 121, 2, 24, BT+SZ+ST, 3808071, 0.063, 2.234,  P P P A O X M M L N P X A O X A M L N O X N O L N M L,  P3 A2 O8 X0 M6 L8 Nk, 7/3/2022
+
