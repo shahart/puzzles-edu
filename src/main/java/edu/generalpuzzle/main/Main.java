@@ -11,8 +11,8 @@ import edu.generalpuzzle.infra.engines.*;
 import edu.generalpuzzle.infra.engines.trivial.TrivialRecursiveEngineStrategy;
 import edu.generalpuzzle.infra.engines.trivial.TrivialIterativeEngineStrategy;
 import edu.generalpuzzle.infra.engines.dlx_hadoop.DlxEngineStrategy;
-//import org.apache.log4j.Logger;
-//import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.io.*;
 import java.text.NumberFormat;
@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
 
 //import jsr166y.ForkJoinPool;
 //import extra166y.ParallelArray;
@@ -248,40 +247,7 @@ public final class Main {
         if (! assertsEnabled)
             System.out.println("note: assertsDisabled\n");
 
-        // Console.println("blabla");
-
-//        PropertyConfigurator.configure("myLog.properties");
-        boolean logInit;
-        try {
-            LogManager.getLogManager().readConfiguration(new FileInputStream("myLog.properties"));
-            logInit = true;
-        }
-        catch (IOException e) {
-            logInit = false;
-        }
-
-        if (! logInit)
-        try {
-            System.err.println("myLog.properties not found"); // TODO default settings
-            // should be called after all classes were (lazy) created
-            FileHandler fileHandler = new FileHandler("GraphLayout.log");
-            fileHandler.setFormatter(new ShortFormatter());
-            fileHandler.setLevel(Level.INFO);
-            LogManager logManager = LogManager.getLogManager();
-            Enumeration<String> loggerNames = logManager.getLoggerNames();
-            while (loggerNames.hasMoreElements()) {
-                String loggerName = loggerNames.nextElement();
-                Logger logger = logManager.getLogger(loggerName);
-                if (logger.getHandlers().length > 0 && logger.getHandlers()[0] instanceof ConsoleHandler)
-                    logger.removeHandler(logger.getHandlers()[0]);
-                logger.addHandler(fileHandler);
-                logger.setUseParentHandlers(false);
-            }
-        }
-        catch (IOException e) {
-            // nop - no logging except console
-            System.err.println("no log at all");
-        }
+        PropertyConfigurator.configure("myLog.properties");
 
         readINI(false); // true
 

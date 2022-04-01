@@ -1,4 +1,29 @@
-        0 [thread1] INFO (IEngineStrategy.showSummary:214) - time: 0.009
-        0 [thread1] INFO (IEngineStrategy.showSummary:215) - branches: 8
-       47 [thread1] INFO (IEngineStrategy.showSummary:214) - time: 0.045
-       47 [thread1] INFO (IEngineStrategy.showSummary:215) - branches: 64
+13:58:09.465 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy0 - sparse matrix rows 242
+13:58:09.807 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy1 - sparse matrix rows 242
+13:58:10.128 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy2 - sparse matrix rows 242
+13:58:10.415 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy3 - sparse matrix rows 242
+13:58:10.707 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy4 - sparse matrix rows 242
+13:58:11.031 [main] INFO  dlx_hadoop.DlxEngineStrategy  - EngineStrategy5 - sparse matrix rows 242
+13:58:11.036 [main] INFO  main.Main  - 3d_happycube_1
+13:58:11.036 [main] INFO  main.Main  - using edu.generalpuzzle.infra.engines.dlx_hadoop.DlxEngineStrategy
+13:58:11.069 [pool-1-thread-5] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy4 using thread pool-1-thread-5
+13:58:11.069 [pool-1-thread-3] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy2 using thread pool-1-thread-3
+13:58:11.069 [pool-1-thread-2] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy1 using thread pool-1-thread-2
+13:58:11.069 [pool-1-thread-6] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy5 using thread pool-1-thread-6
+13:58:11.069 [pool-1-thread-4] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy3 using thread pool-1-thread-4
+13:58:11.069 [pool-1-thread-1] INFO  engines.ParallelEngineStrategy  - starting EngineStrategy0 using thread pool-1-thread-1
+13:58:11.089 [pool-1-thread-5] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.090 [pool-1-thread-3] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.092 [pool-1-thread-2] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.092 [pool-1-thread-1] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.092 [pool-1-thread-6] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.092 [pool-1-thread-4] INFO  dlx_hadoop.DlxEngineStrategy  - splits.size: 36
+13:58:11.165 [pool-1-thread-5] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy4
+13:58:11.166 [pool-1-thread-4] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy3
+13:58:11.169 [pool-1-thread-3] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy2
+13:58:11.170 [pool-1-thread-2] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy1
+13:58:11.172 [pool-1-thread-1] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy0
+13:58:11.177 [pool-1-thread-6] INFO  engines.ParallelEngineStrategy  - finished EngineStrategy5
+13:58:11.178 [main] INFO  main.Main  - finished
+13:58:11.179 [main] INFO  main.Main  - parallel time: 0.119
+13:58:11.180 [main] INFO  main.Main  - unique solutions: 4

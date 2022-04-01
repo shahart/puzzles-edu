@@ -1,10 +1,8 @@
 package edu.generalpuzzle.infra;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.Arrays;
-import java.util.logging.Logger;
 
 import edu.generalpuzzle.main.PuzzleException;
 import edu.generalpuzzle.examples.tangram.CellPartTang;
@@ -422,9 +420,9 @@ public class IPart {
 
                     // check for non real duplicate
                     if (identical && getId() == IGrid.GRID_ID) {
-                        LOG.fine(preparedRotations[rotationIndex][j].toString());
-                        LOG.fine(preparedRotations[i][z].toString());
-                        LOG.fine(rotationIndex + " " + i);
+                        LOG.debug(preparedRotations[rotationIndex][j].toString());
+                        LOG.debug(preparedRotations[i][z].toString());
+                        LOG.debug(rotationIndex + " " + i);
 
 
 //                        System.out.println("iden");
@@ -436,7 +434,7 @@ public class IPart {
                     // check for unique implied
                     if (identical) {
                         if (partId == ICellPart.CLEAR_PIECE_ID)
-                            LOG.fine("f");
+                            LOG.debug("f");
 
 identicalFound = true;
 

@@ -17,16 +17,12 @@
  */
 package edu.generalpuzzle.infra.engines.dlx_hadoop;
 
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import edu.generalpuzzle.infra.engines.ParallelEngineStrategy;
-
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
 /**
  * A generic solver for tile laying problems using Knuth's dancing link

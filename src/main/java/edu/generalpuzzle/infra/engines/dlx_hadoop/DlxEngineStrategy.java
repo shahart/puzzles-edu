@@ -18,20 +18,17 @@
 
 package edu.generalpuzzle.infra.engines.dlx_hadoop;
 
-//import org.apache.log4j.PropertyConfigurator;
-
   import edu.generalpuzzle.infra.ICellPart;
   import edu.generalpuzzle.infra.IGrid;
   import edu.generalpuzzle.infra.IPart;
   import edu.generalpuzzle.infra.Parts;
   import edu.generalpuzzle.infra.engines.EngineStrategy;
   import edu.generalpuzzle.infra.engines.ParallelEngineStrategy;
-//  import org.apache.log4j.Logger;
+  import org.apache.log4j.Logger;
 
   import java.util.ArrayList;
   import java.util.List;
   import java.text.NumberFormat;
-  import java.util.logging.Logger;
 
   public final class DlxEngineStrategy extends ParallelEngineStrategy {
 

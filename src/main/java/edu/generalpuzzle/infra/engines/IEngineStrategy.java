@@ -3,13 +3,9 @@ package edu.generalpuzzle.infra.engines;
 import edu.generalpuzzle.infra.ICellPart;
 import edu.generalpuzzle.infra.IGrid;
 import edu.generalpuzzle.infra.Parts;
-import edu.generalpuzzle.infra.IPart;
 
 import java.text.NumberFormat;
-import java.util.Calendar;
 import java.util.logging.Logger;
-
-//import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.

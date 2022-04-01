@@ -1,12 +1,11 @@
 package edu.generalpuzzle.infra.engines;
 
 import edu.generalpuzzle.infra.*;
-//import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -246,7 +245,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
 
         if (parts.keysUsed.size() > 0 || parts.locksUsed.size() > 0) {
             grid.considerKeys = true;
-            LOG.fine("considerKeys = true");
+            LOG.debug("considerKeys = true");
         }
         
         if (grid.getLeftCells() != parts.getTotalFill() // TODO 2d_poly
@@ -270,7 +269,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
 
         boolean preSolved = preSolved();
         if (! preSolved) {
-            // LOG.fine("solved, but keys not match");
+            // LOG.debug("solved, but keys not match");
             return;
         }
 
@@ -299,7 +298,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
         }
 
 //        if (LOG.isDebugEnabled()) {
-            LOG.fine("EngineStrategy" + id + " - found solution " + (uniqueSolutions+1) + " - branches " + nf.format(triedParts) + " - " + lastSolution + " - " + grid.presentation((implied[0])));
+            LOG.debug("EngineStrategy" + id + " - found solution " + (uniqueSolutions+1) + " - branches " + nf.format(triedParts) + " - " + lastSolution + " - " + grid.presentation((implied[0])));
 //        }
 
         // parts.getUnique()) { // && /* leftParts= */ partsAmount - i <= partsAmount_half) { // in > we continued, so the <= can be solutions
@@ -317,7 +316,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
 //                synchronized (set) { //uniqsFoundSolutions[newLocation][uniqueRot]) {
 
                     if (set.get(sDup.toString()) != null) {
-                        LOG.fine("duplicate found at EngineStrategy" + id);
+                        LOG.debug("duplicate found at EngineStrategy" + id);
                         return;
                     }
 
@@ -359,14 +358,14 @@ public abstract class EngineStrategy extends IEngineStrategy {
 //        if (timeTo1st == -1) {
 //            timeTo1st =  (System.currentTimeMillis()- startTime) / 1000.0;
 //            System.out.println("\ntimeTo1st: " + timeTo1st);
-//            LOG.fine("timeTo1st: " + timeTo1st);
+//            LOG.debug("timeTo1st: " + timeTo1st);
 //        }
 
         if (uniqueSolutions == 1 && // TODO as before - unique_Solutions?
                 timeTo1st == -1 && ! showAll) {// time to first solution
             timeTo1st =  (System.currentTimeMillis()- startTime) / 1000.0;
             System.out.println("\ntimeTo1st: " + timeTo1st);
-            LOG.fine("timeTo1st: " + timeTo1st);
+            LOG.debug("timeTo1st: " + timeTo1st);
             first_sol = grid.presentation(implied[0]).toString();
             first_sol_short = lastSolution;
 
@@ -424,7 +423,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
             IPart part = parts.getParts().get(p);
             int origRotations = part.getTotalRotations();
             total += origRotations;
-            if (id == 0) LOG.fine( part.toString());
+            if (id == 0) LOG.debug( part.toString());
             for (int r=part.getTotalRotations()-1;r>=0; r--) {// while (! currPart.rotate()) {
                 part.rotate(r);
                 int failures = 0;
@@ -467,7 +466,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
             }
 
             if (part.getTotalRotations() < origRotations && id == 0)
-                LOG.fine("  global reduced to " + part.getTotalRotations());
+                LOG.debug("  global reduced to " + part.getTotalRotations());
             totalReduced += part.getTotalRotations();
         }
 
@@ -475,8 +474,8 @@ public abstract class EngineStrategy extends IEngineStrategy {
         totalReducedOrientations = totalReduced;
 
         if (id == 0) {
-            LOG.fine("total orientations: " + total);
-            LOG.fine("total reduced orientations: " + totalReduced);
+            LOG.debug("total orientations: " + total);
+            LOG.debug("total reduced orientations: " + totalReduced);
         }
 
         grid.setCurrCellIndex(realCellIndex);
@@ -568,7 +567,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
 
 
             if (id == 0)
-                LOG.fine("Unique " + unique);
+                LOG.debug("Unique " + unique);
         }
 
         // calc the duplications of the unique part in the implied
@@ -625,12 +624,12 @@ public abstract class EngineStrategy extends IEngineStrategy {
                 grid.canPut(unique);
 
                 // show the implied
-                if (LOG.isLoggable(Level.FINE) /*DebugEnabled() */&& id == 0) {
-                    LOG.fine("all implied of rotation " + u);
+                if (LOG.isDebugEnabled() && id == 0) {
+                    LOG.debug("all implied of rotation " + u);
                     for (int z=0; z<impliedSize; z++) {
-                        LOG.fine("implied " + z);
+                        LOG.debug("implied " + z);
 //                        if (LOG.isDebugEnabled())
-                            LOG.fine(grid.showBuf(implied[z]).toString());
+                            LOG.debug(grid.showBuf(implied[z]).toString());
                     }
                 }
 
@@ -781,7 +780,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
                 }
 
                 if (same) {
-//                    LOG.fine("duplicate found, current solution [" + s + " implied " + i + "] equals to [" + orig + "]");
+//                    LOG.debug("duplicate found, current solution [" + s + " implied " + i + "] equals to [" + orig + "]");
                     return true;
                 }
             }
