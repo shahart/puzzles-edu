@@ -17,8 +17,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -214,7 +216,7 @@ public final class GraphIt {
 
         System.out.println("\nGraphIt.x3d generated, from Engine0, for solution #" + EngineStrategy.getLastSolutionNumber());
         // new File("tmp").mkdir();
-        String filename = "tmp/" + folderArgs + args + "_" + EngineStrategy.getLastSolutionNumber() + ".x3d";
+        String filename = "tmp/" + folderArgs + args + "_" + EngineStrategy.getLastSolutionNumber();
 
         boolean specialExists = false; 
         for (int j=0; j<points.size(); j++)
@@ -332,10 +334,13 @@ public final class GraphIt {
                     shape = doc.createElement("Shape");
                     shape.setAttribute("DEF","PIECE_"+ row);
 
-                    shape.appendChild(breadCrumb.get(0).graphCell(doc));
+                    // shape.appendChild(breadCrumb.get(0).graphCell(doc));
 //                }
 
                         // end TODO 2010
+
+                Element appearance = doc.createElement("Appearance");
+                shape.appendChild(appearance);
 
                 if (this.shape == Shape.SPHERE) {
                     Element sphere = doc.createElement("Sphere");
@@ -382,9 +387,6 @@ public final class GraphIt {
                     cyl.setAttribute("height","2");
                     shape.appendChild(cyl);
                 }
-
-                Element appearance = doc.createElement("Appearance");
-                shape.appendChild(appearance);
 
                 Element material = doc.createElement("Material");
 
@@ -564,8 +566,27 @@ public final class GraphIt {
             idTransform.setOutputProperty(javax.xml.transform.OutputKeys.DOCTYPE_SYSTEM, x3d.getSystemId());
             Source input = new DOMSource(doc);
 
-            Result output = new StreamResult(new File(filename));
+            StringWriter writer = new StringWriter();
+            Result output = new StreamResult(writer);
             idTransform.transform(input, output);
+
+            String html =
+
+                "<html>\n" +
+                "<head>\n" +
+                "    <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>\n" +
+                "    <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />\n" +
+                "</head>\n" +
+                "<body>\n"
+
+                + writer +
+
+                "\n</body>\n" +
+                "</html>\n";
+
+            Files.writeString(Path.of(filename + ".html"), html, StandardCharsets.UTF_8);
+            Files.writeString(Path.of(filename + ".x3d"), writer);
+
 
 //            String pfiles;
 //            try {
@@ -574,20 +595,20 @@ public final class GraphIt {
 //            catch (SecurityException e) {
 //                pfiles = "C:\\Program Files";
 //            }
-//            Runtime.getRuntime().exec(pfiles + "\\Pinecoast\\SwirlViewer\\SwirlVw.exe " + filename);
+//            Runtime.getRuntime().exec(pfiles + "\\Pinecoast\\SwirlViewer\\SwirlVw.exe " + filename + ".x3d");
 
 //            if (process != null)
 //                process.destroy();
 
             if (EngineStrategy.graphIt ) {// || EngineStrategy.GRAPH_FOR_ALL)
                 if (! EngineStrategy.INTERNAL_VIEWER) {
-					System.out.println(filename);
-                    process = Runtime.getRuntime().exec("windows\\SwirlVw2.8.4.exe " + filename);
+					System.out.println(filename + ".x3d");
+                    process = Runtime.getRuntime().exec("windows\\SwirlVw2.8.4.exe " + filename  + ".x3d");
 				}
                 else
                 {
 
-                    final String fname = filename;
+                    final String fname = filename + ".x3d";
 //                    if (jf != null)
 //                        jf.dispose();
 
