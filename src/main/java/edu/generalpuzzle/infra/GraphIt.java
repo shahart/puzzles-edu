@@ -585,7 +585,7 @@ public final class GraphIt {
                 "</html>\n";
 
             Files.writeString(Path.of(filename + ".html"), html, StandardCharsets.UTF_8);
-            Files.writeString(Path.of(filename + ".x3d"), writer);
+            Files.writeString(Path.of(filename + ".x3d"), writer.toString());
 
 
 //            String pfiles;
