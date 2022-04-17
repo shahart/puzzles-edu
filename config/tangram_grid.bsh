@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.tangram.GridTang;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+grid = new GridTang();
+grid.buildSquare( 2,2);
+
+// end of user code
+///////////////////
+
+return grid;

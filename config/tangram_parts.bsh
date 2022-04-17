@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.tangram.Parts_Tang;
+
+import edu.generalpuzzle.infra.Parts;
+
+Parts parts;
+
+// user code //////
+///////////////////
+
+parts = new Parts_Tang('R');
+parts.buildRealTangram();
+
+// end of user code
+///////////////////
+
+return parts;
