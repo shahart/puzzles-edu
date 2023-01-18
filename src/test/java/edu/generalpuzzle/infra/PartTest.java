@@ -3,10 +3,9 @@ package edu.generalpuzzle.infra;
 import edu.generalpuzzle.examples.cube.dimension2.Edge2D;
 import edu.generalpuzzle.examples.cube.dimension2.Part2D;
 import edu.generalpuzzle.examples.cube.dimension2.Parts2D_Poly5;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +20,7 @@ public class PartTest {
 
     private Part2D part;
 
-//    @Before
+//    @BeforeEach
     public void setUp(int reflective) {
 
         part = new Part2D();

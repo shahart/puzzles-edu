@@ -14,6 +14,8 @@ public class ShowSol { // show solution like \"A A A B B C\" without dangling ed
 
     public static void main(String args[]) throws bsh.EvalError {
 
+        System.setProperty("log4j1.compatibility","true");
+
         String argsToScript[];
 
         if (args.length == 0) {
@@ -25,8 +27,7 @@ public class ShowSol { // show solution like \"A A A B B C\" without dangling ed
         }
 
         argsToScript = new String[args.length-1];
-        for (int i=1; i<args.length; i++)
-            argsToScript[i-1] = args[i]; //
+        System.arraycopy(args, 1, argsToScript, 0, args.length - 1);
 
         Interpreter interpreter = new Interpreter();
 

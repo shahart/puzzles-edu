@@ -14,6 +14,8 @@ public class ShowSol2 { // show solution like \"A A A B B C\" wit dangling edges
 
     public static void main(String args[]) throws bsh.EvalError {
 
+        System.setProperty("log4j1.compatibility","true");
+
         String argsToScript[];
 
         if (args.length == 0) {
@@ -70,7 +72,8 @@ public class ShowSol2 { // show solution like \"A A A B B C\" wit dangling edges
             String sol = "";
            for (int i=0; i<solInput.length(); i+=3) {
                 char partId = solInput.charAt(i);
-               if (i+1 == solInput.length()) break;
+               if (i+1 == solInput.length())
+                   break;
                 parts.get(partId).rotate(rotationChar(solInput.charAt(i+1)));
 
                 grid.canPut(parts.get(partId));

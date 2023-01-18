@@ -10,7 +10,7 @@ import edu.generalpuzzle.examples.hexPrism.HexagonalEdge;
 import edu.generalpuzzle.infra.GraphIt;
 import edu.generalpuzzle.infra.ICellPart;
 import edu.generalpuzzle.infra.Parts;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by IntelliJ IDEA.

@@ -172,6 +172,8 @@ public final class Main {
 
     public static void main(String args[]) {
 
+        System.setProperty("log4j1.compatibility","true");
+
         Main main = new Main();
         main.buildCases();
         try {
@@ -247,7 +249,7 @@ public final class Main {
         if (! assertsEnabled)
             System.out.println("note: assertsDisabled\n");
 
-        PropertyConfigurator.configure("myLog.properties");
+//        PropertyConfigurator.configure("myLog.properties");
 
         readINI(false); // true
 

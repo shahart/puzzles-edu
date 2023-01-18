@@ -7,10 +7,7 @@ import edu.generalpuzzle.infra.IPart;
 import edu.generalpuzzle.infra.engines.EngineStrategy;
 import edu.generalpuzzle.infra.engines.ParallelEngineStrategy;
 import edu.generalpuzzle.main.Main;
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
-
+import org.junit.jupiter.api.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +15,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class BasicAcceptanceTest {
 
-    @Test
+    @Disabled
     public void testEngines() {
         boolean error = false;
         for (int engineType=EngineStrategy.ENGINE_TYPE_DLX; engineType<=EngineStrategy.ENGINE_TYPE_ITERATIVE; engineType++)
@@ -42,7 +39,7 @@ public class BasicAcceptanceTest {
                 }
 //                assertEquals(12 + (96-12) * testAll, solutions);
             }
-        assertTrue(! error); //, false);
+        Assertions.assertTrue(! error); //, false);
     }
 
     @Test

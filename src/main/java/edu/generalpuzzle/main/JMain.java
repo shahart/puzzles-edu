@@ -49,6 +49,8 @@ final class JMain extends JFrame {
 
     public static void main(final String arguments[]) {
 
+        System.setProperty("log4j1.compatibility","true");
+
 //        SwingUtilities.invokeLater(
 //                        new Runnable() {
 //                            public void run() {

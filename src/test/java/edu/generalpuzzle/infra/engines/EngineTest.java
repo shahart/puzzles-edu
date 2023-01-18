@@ -5,9 +5,9 @@ import edu.generalpuzzle.examples.cube.dimension2.Grid2D;
 import edu.generalpuzzle.examples.cube.dimension2.Part2D;
 import edu.generalpuzzle.infra.Parts;
 import edu.generalpuzzle.infra.engines.trivial.TrivialRecursiveEngineStrategy;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
@@ -100,7 +100,7 @@ public class EngineTest {
         assertEquals(4, engine.getUniqueSolutions());
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
 //        BasicConfigurator.configure();
     }
