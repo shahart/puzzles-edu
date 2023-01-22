@@ -1,0 +1,35 @@
+<html>
+<head>
+    <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>
+    <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />
+</head>
+<body>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE X3D SYSTEM "x3dViewer/Xj3D/DTD/x3d-3.0.dtd">
+<X3D profile="Interchange">
+<!--solution #0 Parts order  A0 B0 C2
+
+ A B C B B C C C C
+
+ A B C
+ B B C
+ C C C
+
+-->
+<Scene>
+<Transform rotation="0 1 0 -1">
+<Shape DEF="PIECE_A"><Appearance><Material diffuseColor="1 0 0"/></Appearance><Box size="7 7 7"/></Shape><!--red-->
+<Shape DEF="PIECE_B"><Appearance><Material diffuseColor="1 0.686 0.686"/></Appearance><Box size="7 7 7"/></Shape><!--pink-->
+<Shape DEF="PIECE_C"><Appearance><Material diffuseColor="1 0.784 0"/></Appearance><Box size="7 7 7"/></Shape><!--orange-->
+<Transform DEF="POINT0_id_101" translation="0 0 0"><Shape USE="PIECE_A"/></Transform>
+<Transform DEF="POINT1_id_102" translation="0 10 0"><Shape USE="PIECE_B"/></Transform>
+<Transform DEF="POINT2_id_103" translation="0 20 0"><Shape USE="PIECE_C"/></Transform>
+<Transform DEF="POINT3_id_203" translation="0 20 10"><Shape USE="PIECE_C"/></Transform>
+<Transform DEF="POINT4_id_202" translation="0 10 10"><Shape USE="PIECE_B"/></Transform>
+<Transform DEF="POINT5_id_201" translation="0 0 10"><Shape USE="PIECE_B"/></Transform>
+<Transform DEF="POINT6_id_301" translation="0 0 20"><Shape USE="PIECE_C"/></Transform>
+<Transform DEF="POINT7_id_302" translation="0 10 20"><Shape USE="PIECE_C"/></Transform>
+<Transform DEF="POINT8_id_303" translation="0 20 20"><Shape USE="PIECE_C"/></Transform>
+</Transform>
+</Scene></X3D>
+</body>
+</html>

@@ -55,7 +55,10 @@ public abstract class EngineStrategy extends IEngineStrategy {
     public static boolean ST_HEURISTIC = true;
 
     public static void set_ST_HEURI(boolean b) { ST_HEURISTIC = b; }
-    public static void set_AUTO_GRAPH_IT(boolean b) { graphIt = b;}
+
+    public static void set_AUTO_GRAPH_IT(boolean b) {
+        graphIt = b;
+    }
 
     protected static boolean toSave = false;
     protected int fromPart;
@@ -301,6 +304,10 @@ public abstract class EngineStrategy extends IEngineStrategy {
             LOG.debug("EngineStrategy" + id + " - found solution " + (uniqueSolutions+1) + " - branches " + nf.format(triedParts) + " - " + lastSolution + " - " + grid.presentation((implied[0])));
 //        }
 
+        if (uniqueSolutions == 0) {
+            System.out.println("\nFound a solution: EngineStrategy" + id + " - found solution " + (uniqueSolutions+1) + " - branches " + nf.format(triedParts) + " - " + lastSolution + " - " + grid.presentation((implied[0])));
+        }
+
         // parts.getUnique()) { // && /* leftParts= */ partsAmount - i <= partsAmount_half) { // in > we continued, so the <= can be solutions
         int uniqueRot = unique != null ? unique.getRotationIndex() : 0;
         if (uniqueInImplied[uniqueRot] != 0) {
@@ -333,10 +340,10 @@ public abstract class EngineStrategy extends IEngineStrategy {
 
 //        lastSolution = solutionSoFarBuffer.toString();
 
-        if ((GRAPH_FOR_ALL || graphIt)) { //&& id == 0) { // var8
+//        if ((GRAPH_FOR_ALL || graphIt)) { //&& id == 0) { // var8
 //        if (id==0 && uniqueSolutions%10 == 0) { // keys debug
             synchronized(shared) {
-                if (graphIt || GRAPH_FOR_ALL) {
+                if (uniqueSolutions == 0 || graphIt || GRAPH_FOR_ALL) {
                     EngineStrategy.solutionPresentation =
                             "Parts order " + lastSolution + "\n" +
 //                    grid.presentation(implied[0]).toString() + "\n" +
@@ -348,7 +355,7 @@ public abstract class EngineStrategy extends IEngineStrategy {
                     graphIt = false; // shoule be synchronized
                 }
             }
-        }
+//        }
 
         uniqueSolutions++;
         static_uniqueSolutions++;

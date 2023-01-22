@@ -4,15 +4,17 @@ import bsh.EvalError;
 import bsh.Interpreter;
 import bsh.TargetError;
 
-import edu.generalpuzzle.examples.tangram.GridTang;
-import edu.generalpuzzle.examples.tangram.Parts_Tang;
+import edu.generalpuzzle.examples.cube.dimension2.Grid2DExamples;
+import edu.generalpuzzle.examples.cube.dimension2.Parts2D_Examples;
+//import edu.generalpuzzle.examples.tangram.GridTang;
+//import edu.generalpuzzle.examples.tangram.Parts_Tang;
 import edu.generalpuzzle.infra.*;
 import edu.generalpuzzle.infra.engines.*;
 import edu.generalpuzzle.infra.engines.trivial.TrivialRecursiveEngineStrategy;
 import edu.generalpuzzle.infra.engines.trivial.TrivialIterativeEngineStrategy;
 import edu.generalpuzzle.infra.engines.dlx_hadoop.DlxEngineStrategy;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+//import org.apache.log4j.PropertyConfigurator;
 
 import java.io.*;
 import java.text.NumberFormat;
@@ -22,7 +24,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//import jsr166y.ForkJoinPool;
+//import java.util.concurrent.ForkJoinPool;
 //import extra166y.ParallelArray;
 //import extra166y.Ops;
 
@@ -489,7 +491,9 @@ public final class Main {
                 Runtime.getRuntime().exec("/bin/cp " + Tee.TEE_FILE + "  tmp" + File.separator + argsBuffer.toString() /*Args.args[0] */+ File.separator + file + "_console.log" );
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return null;
@@ -787,11 +791,11 @@ public final class Main {
 
             // from 3d_grid.bsh - note the casting into the concrete IGrid impl.
 
-//            grid = new Grid2DExamples();
-//            ((Grid2DExamples)grid).buildCheckers();
+            grid = new Grid2DExamples();
+            ((Grid2DExamples)grid).buildFromFile();
 //
-            grid = new GridTang();
-            ((GridTang)grid).buildAnother(); // TODO remove the grid.reorder in the EngineStrategy
+//            grid = new GridTang();
+//            ((GridTang)grid).buildAnother(); // TODO remove the grid.reorder in the EngineStrategy
 //            grid.buildSquare(2,2);
 
             int newLoc[] = new int[grid.getCells().size()];
@@ -801,16 +805,16 @@ public final class Main {
 
             // end
 
-//            parts = new Parts2D_Examples();
-//            ((Parts2D_Examples)parts).build_Checkers();
+            parts = new Parts2D_Examples();
+            ((Parts2D_Examples)parts).buildFromFile(); // was build_Checkers
 
 //            if (engine.length == 1) {
 //                int partsSize = parts.getParts().size();
 //                engine = new ParallelEngineStrategy[partsSize];
 //            }
 //
-            parts = new Parts_Tang();
-            ((Parts_Tang)parts).buildRealTangram();
+//            parts = new Parts_Tang();
+//            ((Parts_Tang)parts).buildRealTangram();
 
             for (IPart p:parts.getParts()) {
                 parts.complete(p);

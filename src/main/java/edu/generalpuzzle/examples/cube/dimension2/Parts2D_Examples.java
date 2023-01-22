@@ -1,9 +1,13 @@
 package edu.generalpuzzle.examples.cube.dimension2;
 
-import edu.generalpuzzle.infra.IPart;
-import edu.generalpuzzle.infra.IGrid;
-import edu.generalpuzzle.infra.Parts;
+import edu.generalpuzzle.examples.cube.dimension3.Edge3D;
+import edu.generalpuzzle.infra.*;
 import edu.generalpuzzle.examples.cube.Parts_Poly5;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -246,6 +250,87 @@ public class Parts2D_Examples extends Parts {
         part.specialCell(1);
         part.specialCell(3);
         add(part);
+
+    }
+
+    public void buildFromFile() {
+        parts.clear();
+        totalFill = 0;
+
+        try {
+            List<String> lines = Files.readAllLines(Path.of("myPzl.txt"));
+            Part2D part = null;
+            int [][] partGrid = new int[9][9]; // for now we support max of 9 cells per Piece - charAt // todo
+            int foundCells = 0;
+            int i;
+            // skip the grid
+            for (i=0; i<lines.size(); ++i) {
+                String line = lines.get(i);
+                if (line.toLowerCase().startsWith("#piece")) {
+                    break;
+                }
+            }
+            int row = 0;
+            for (; i<lines.size(); ++i) {
+                String line = lines.get(i);
+                if (line.toLowerCase().startsWith("#piece")) {
+                    if (part != null) {
+                        row = 0;
+                        if (part.getCellsAmount() != foundCells) {
+                            throw new IllegalStateException("error: invalid config, size of part " + foundCells + " vs. defined in file " + part.getCellsAmount());
+                        }
+                        foundCells = 0;
+                        for (int r=0; r<8; r++) {
+                            for (int c=0; c<8; c++) {
+                                if (partGrid[r][c] > 0) {
+                                    if (partGrid[r+1][c] > 0) {
+                                        part.addEdge(partGrid[r][c], Edge3D.DOWN, partGrid[r+1][c]);
+                                    }
+                                    if (partGrid[r][c+1] > 0) {
+                                        part.addEdge(partGrid[r][c], Edge3D.RIGHT, partGrid[r][c+1]);
+                                    }
+                                }
+                            }
+                        }
+                        // todo alert if part is not fully connected
+                        add(part);
+                    }
+                    if (line.toLowerCase().startsWith("#piece-end")) {
+                        break;
+                    }
+                    partGrid = new int[9][9];
+                    part = new Part2D(line.charAt("#Piece".length()));
+                    part.prepareRotations(Integer.parseInt(line.substring("#Piece".length()+1)));
+                    System.out.println("Parsing piece " + (char)part.getId());
+                    if (part.getCellsAmount() == 0) {
+                        throw new IllegalStateException("error: invalid config, size of part can't be zero");
+                    }
+                }
+                else if (line.length() > 0) {
+                    int col;
+                    for (col = 0; col < line.length(); ++col) {
+                        if (line.charAt(col) == 'X' || line.charAt(col) == 'x') {
+                            partGrid[row][col] = ++ foundCells;
+                        } else if (line.charAt(col) != ' ') {
+                            System.err.println("Invalid char "+ line.charAt(col));
+                        }
+                    }
+                    ++row;
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Found " + parts.size() + " parts");
+        System.out.println("TotalFill " + totalFill);
+
+        // we won't do a lot of validations, but at least the basic
+        // this exists also later in the code
+//        if (totalFill != getGridPart().getCellsAmount()) {
+//            throw new IllegalStateException("error: invalid config, size of parts " + totalFill + " vs. grid " + getGridPart().getCellsAmount());
+//        }
 
     }
 }

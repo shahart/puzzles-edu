@@ -602,8 +602,8 @@ public final class GraphIt {
 
             if (EngineStrategy.graphIt ) {// || EngineStrategy.GRAPH_FOR_ALL)
                 if (! EngineStrategy.INTERNAL_VIEWER) {
-					System.out.println(filename + ".x3d");
-                    process = Runtime.getRuntime().exec("windows\\SwirlVw2.8.4.exe " + filename  + ".x3d");
+					System.out.println(filename + ".x3d - open with Chrome");
+                    // process = Runtime.getRuntime().exec("windows\\SwirlVw2.8.4.exe " + filename  + ".x3d");
 				}
                 else
                 {
@@ -636,8 +636,8 @@ public final class GraphIt {
             System.out.println("Could not locate a JAXP DocumentBuilder class");
         }
         catch (IOException e) {
-            System.out.println("Could not locate the x3d viewer\n");
-            System.out.println("please download http://www.pinecoast.com/SwirlVw_2804_setup.exe");
+            System.out.println("Could not locate the x3d viewer - open with Chrome\n");
+//            System.out.println("please download http://www.pinecoast.com/SwirlVw_2804_setup.exe");
         }
         catch (Exception e) { // DOMException/ TransformerConfigurationException/ TransformerException
             e.printStackTrace();

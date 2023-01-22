@@ -1,0 +1,16 @@
+import edu.generalpuzzle.examples.cube.dimension2.Grid2DExamples;
+
+import edu.generalpuzzle.infra.IGrid;
+
+IGrid grid;
+
+// user code //////
+///////////////////
+
+grid = new Grid2DExamples();
+grid.buildFromFile(); // todo another argument
+        
+// end of user code
+///////////////////
+
+return grid;

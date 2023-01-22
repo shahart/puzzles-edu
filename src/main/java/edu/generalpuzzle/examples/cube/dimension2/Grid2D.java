@@ -63,6 +63,10 @@ public class Grid2D extends IGrid {
         for (int row=0; row<rows; ++ row) {
             for (int col=0;  col<columns; ++col) {
                 ICellPart cell;// = grid.get(new CellId(calcId(row,col)));
+                if (cellIdToIndex.get(calcId(row,col)) == null) {
+                    System.err.println("Something bad, no calcId row " + row + " col " + col); // todo why ?!
+                    return sb;
+                }
                 int newLocation = newLoc[ cellIdToIndex.get(calcId(row,col))];
                 cell = cells.get(newLocation); //grid.get(new CellId(newLocation));
                 String s = showId(cell);

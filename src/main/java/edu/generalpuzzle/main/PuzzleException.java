@@ -6,11 +6,11 @@ package edu.generalpuzzle.main;
  */
 public class PuzzleException extends RuntimeException {
 
-    public static boolean addTrace = true;
+    public static boolean addTrace = false;
 
     private static String myArrays_toString() {
         StringBuffer str = new StringBuffer("\n\n");
-
+        // todo 3rd party, like commons-lang3:3.12.0, ExceptionUtils
         if (addTrace) {
             StackTraceElement[] stackTraceElement = new Exception().getStackTrace();
             for (int i=2; i<stackTraceElement.length; i++)
