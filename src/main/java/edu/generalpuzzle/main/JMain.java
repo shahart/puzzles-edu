@@ -64,7 +64,7 @@ final class JMain extends JFrame {
     public JMain() throws HeadlessException {
 //        super(resourceBundle.getString("puzzles"));
 
-        super("puzzles 1.0.1");
+        super("puzzles 1.0.2");
         setResizable(true); // due to linux
 
         addWindowListener(new WindowListener(){
