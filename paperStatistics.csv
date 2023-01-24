@@ -1,4 +1,6 @@
 .Lattice, puzzle name, puzzle size, Parts orig., Parts total, parts reduced, Solutions unique, symmetries, method, branches, Time to first, time to all, solution, short solution, date
+2d_SIMPLE_10_6, , 60, 12, 57, 57, 2339, 4, MC+SZ+ST, 1477999, 0.285, 12.203,  I Y F V V V I Y F F F V I Y Y F X V I Y W X X X I P W W X L P P T W W L P P T T T L U U T Z L L U N N Z Z Z U U N N N Z, I1 Y5 F1 V1 X0 W3 P4 L4 T2 U1 Z2 N1 , 7/3/2022
+2d_SIMPLE_12_5, , 60, 12, 57, 57, 1010, 4, MC+SZ+ST, 825773, 0.334, 5.352,  L L V V V L U U U V L U F U V L X F F F X X X F Z N X Z Z Z N N Z W W I N W W Y I N W Y Y I P P T Y I P P T Y I P T T T, L6 V1 U0 F1 X0 Z0 N4 W2 I1 Y7 P6 T3 , 7/3/2022
+2d_ascii_6_6, , 36, 10, 28, 28, 41288, 8, MC+SZ+ST, 1111619, 0.68, 2.9,  G G C C F F A A B C C H A B B H H H A A B D D E I I D D E E I I J J J J, G0 C2 F0 A3 B1 H0 D0 E0 I0 J0 , 24/1/2023
 2d_bedlam, , 64, 13, 208, 208, 19186, 24, MC+SZ+ST, 52191929, 0.877, 132.522,  D F A G D C C G C C J G C B J J F F A A D F G G D D M M B B B J I A A H L F K M L L K M L B E J I K H H I K K H I I E H L E E E, Dk F0 Ad Gh Cb Jc B2 M9 Ib Hl Li K8 E5 , 7/3/2022
 3d_gaya, , 27, 7, 121, 121, 2, 24, BT+SZ+ST, 3808071, 0.063, 2.234,  P P P A O X M M L N P X A O X A M L N O X N O L N M L,  P3 A2 O8 X0 M6 L8 Nk, 7/3/2022
-

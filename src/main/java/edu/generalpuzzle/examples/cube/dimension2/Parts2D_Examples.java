@@ -307,15 +307,21 @@ public class Parts2D_Examples extends Parts {
                     }
                 }
                 else if (line.length() > 0) {
-                    int col;
-                    for (col = 0; col < line.length(); ++col) {
-                        if (line.charAt(col) == 'X' || line.charAt(col) == 'x') {
-                            partGrid[row][col] = ++ foundCells;
-                        } else if (line.charAt(col) != ' ') {
-                            System.err.println("Invalid char "+ line.charAt(col));
-                        }
+                    if (line.toLowerCase().startsWith("#unique=")) {
+                        uniqueId = line.charAt("#unique=".length());
+                        System.out.println(line);
                     }
-                    ++row;
+                    else {
+                        int col;
+                        for (col = 0; col < line.length(); ++col) {
+                            if (line.charAt(col) == 'X' || line.charAt(col) == 'x') {
+                                partGrid[row][col] = ++foundCells;
+                            } else if (line.charAt(col) != ' ') {
+                                System.err.println("Invalid char " + line.charAt(col));
+                            }
+                        }
+                        ++row;
+                    }
                 }
             }
         }

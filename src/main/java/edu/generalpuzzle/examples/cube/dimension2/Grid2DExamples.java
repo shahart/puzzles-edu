@@ -52,6 +52,7 @@ public class Grid2DExamples extends Grid2D {
         leftCells = -1;
 
         try {
+            // jdk8 -> Paths.get
             List<String> lines = Files.readAllLines(Path.of("myPzl.txt")); // todo another argument
             int foundCells = 0;
             for (int row = 0; row < lines.size(); ++row) {
@@ -76,7 +77,7 @@ public class Grid2DExamples extends Grid2D {
             }
 
             currCell = cells.get(0);
-            System.out.println("Found " + rows + " rows, " + columns + " cols, with total of cells " + foundCells);
+            System.out.println("Found " + (rows-1) + " rows, " + columns + " cols, with total of cells " + foundCells);
             int edges = 0;
 
             for (int row = 0; row < rows; ++row) {
