@@ -266,6 +266,7 @@ public class Parts2D_Examples extends Parts {
             // skip the grid
             for (i=0; i<lines.size(); ++i) {
                 String line = lines.get(i);
+                // todo handle #end of grid. Pieces
                 if (line.toLowerCase().startsWith("#piece")) {
                     break;
                 }
@@ -300,7 +301,7 @@ public class Parts2D_Examples extends Parts {
                     }
                     partGrid = new int[9][9];
                     part = new Part2D(line.charAt("#Piece".length()));
-                    part.prepareRotations(Integer.parseInt(line.substring("#Piece".length()+1)));
+                    part.prepareRotations(Integer.parseInt(line.substring("#Piece".length()+1, "#Piece".length()+2)));
                     System.out.println("Parsing piece " + (char)part.getId());
                     if (part.getCellsAmount() == 0) {
                         throw new IllegalStateException("error: invalid config, size of part can't be zero");

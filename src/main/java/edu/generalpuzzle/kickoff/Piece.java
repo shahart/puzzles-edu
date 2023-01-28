@@ -1,7 +1,7 @@
 package edu.generalpuzzle.kickoff;
 
 public class Piece {
-    private static int totalFill = 0;
+    protected static int totalFill = 0;
     static public int getTotalFill() { return totalFill; }
 
     private int totalThisFill = 0;
@@ -76,19 +76,26 @@ public class Piece {
                 layouts[2] = realRotate(layouts[1], layout.length, maxColumns,2);
                 if (availRotations > 3) {
                     layouts[3] = realRotate(layouts[2], maxColumns, layout.length,3);
+                    if (availRotations > 4) {
+                        System.err.println("rotations is up to 4");
+                    }
                 }
             }
         }
 
-        if (symmetric == 2)
-            for (int i=0; i<availRotations; i++) {
-                layouts[i+availRotations] = copySymmetric(layouts[i]);
+        if (symmetric == 2) {
+            for (int i = 0; i < availRotations; i++) {
+                layouts[i + availRotations] = copySymmetric(layouts[i]);
 
-                firstSquarePos[i+availRotations] = 0;
-                while (firstSquarePos[i+availRotations]<layouts[i+availRotations][0].length && layouts[i+availRotations][0][firstSquarePos[i+availRotations]] == 0) {
+                firstSquarePos[i + availRotations] = 0;
+                while (firstSquarePos[i + availRotations] < layouts[i + availRotations][0].length && layouts[i + availRotations][0][firstSquarePos[i + availRotations]] == 0) {
                     firstSquarePos[i + availRotations]++;
                 }
             }
+        }
+        else if (symmetric > 2) {
+            System.err.println("symmetric is up to 2");
+        }
 
         for (int rot=0; rot<availRotations*symmetric; rot++) {
             rowsSet[rot]= new int [totalThisFill];

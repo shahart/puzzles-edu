@@ -1,3 +1,4 @@
+#6,6
 xxxxxx
 xxxxxx
 xxxxxx
@@ -5,7 +6,7 @@ xxxxxx
 xxxxxx
 xxxxxx
 
-#end of grid
+#end of grid. Pieces10
 #PieceA5
 x x
 xxx
@@ -26,10 +27,10 @@ xx
  x
 xx
 
-#pieceF2
+#pieceF2 R2
 xx
 
-#pieceG2
+#pieceG2 R2
 xx
 
 #unique=H
@@ -37,11 +38,11 @@ xx
   x
 xxx
 
-#pieceI4
+#pieceI4 R1
 xx
 xx
 
-#pieceJ4
+#pieceJ4 R2
 xxxx
 
 #piece-End

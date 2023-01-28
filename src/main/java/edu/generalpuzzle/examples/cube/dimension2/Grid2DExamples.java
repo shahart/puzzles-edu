@@ -55,9 +55,15 @@ public class Grid2DExamples extends Grid2D {
             // jdk8 -> Paths.get
             List<String> lines = Files.readAllLines(Path.of("myPzl.txt")); // todo another argument
             int foundCells = 0;
+            String header = lines.get(0);
+            if (!header.startsWith("#")) {
+                System.err.println("Found no grid header");
+            }
+            int declardColumns = Integer.parseInt(header.substring(1).split(",")[0]);
+            int declardRows= Integer.parseInt(header.substring(1).split(",")[1]);
             for (int row = 0; row < lines.size(); ++row) {
                 boolean cellFound = false;
-                String line = lines.get(row);
+                String line = lines.get(row+1);
                 int col;
                 for (col = 0; col < line.length(); ++col) {
                     if (line.charAt(col) == 'X' || line.charAt(col) == 'x') {
@@ -75,9 +81,12 @@ public class Grid2DExamples extends Grid2D {
                     break;
                 }
             }
-
+            rows -= 1;
             currCell = cells.get(0);
-            System.out.println("Found " + (rows-1) + " rows, " + columns + " cols, with total of cells " + foundCells);
+            if (rows != declardRows || columns != declardColumns) {
+                System.err.println("Declared rows/columns misconfig");
+            }
+            System.out.println("Found " + (rows) + " rows, " + columns + " cols, with total of cells " + foundCells);
             int edges = 0;
 
             for (int row = 0; row < rows; ++row) {

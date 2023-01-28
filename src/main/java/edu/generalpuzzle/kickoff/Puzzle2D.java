@@ -1,5 +1,8 @@
 package edu.generalpuzzle.kickoff;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.text.NumberFormat;
 
@@ -36,7 +39,7 @@ import java.text.NumberFormat;
  * tried 3,537,414 pieces
  * at 76,900 pieces per second
  * TODO concurrency
- * 5 12 -> Minutes, TODO auto swap
+ * 5 12 -> Minutes
  * <b>Profiling results</b>
  * 39.7% Puzzle2D.canPut
  * 19    Puzzle2D.put
@@ -48,7 +51,7 @@ import java.text.NumberFormat;
  * </pre>
  */
 public class Puzzle2D {
-    public final int PIECES = 12; // 12 polyominoes of 5
+    public int PIECES = 12; // 12 polyominoes of 5
 
     // target: 12*5 + 4 = 8 * 8
 
@@ -62,7 +65,7 @@ public class Puzzle2D {
     public int row = 0;
     public int column = 0;
 
-    public List<Integer>  piecesIndices = new LinkedList<Integer>();
+    public List<Integer>  piecesIndices = new LinkedList<>();
     public Integer []solution = new Integer[PIECES];
     public Piece []pieces = new Piece[PIECES];
     String names;
@@ -85,6 +88,18 @@ public class Puzzle2D {
         // prepare pieces
 
         int [][][]allPieces = {
+
+//                {{1,1},{1},{1,1}},
+//                {{0,1,1},{1,1}},
+//                {{1,1,1},{0,1}},
+//                {{0,1,1},{1,1}},
+//                {{1,1},{1}},
+//                {{1,1}},
+//                {{0,0,1},{1,1,1}},
+//                {{1,1},{1,1}},
+//                {{1,1}},
+//                {{1,1,1,1}},
+
                 {{1},{1},{1},{1,1}},        //4-2 (2)   L sym = indicates it is symmetric // TODO write flip
                 {{1,1},{1},{1,1}},          //4-1 (5)   U
                 {{0,1,1},{1,1},{0,1}},      //4-2 (9)   F sym - used to elimination "dups"
@@ -101,16 +116,10 @@ public class Puzzle2D {
 
         int []rotations = { 4,4,2/*4*/,1,4,4,4,4,2,4,4,2 };
         int []symmetric = { 2,1,1/*2*/,1,2,2,1,2,2,1,1,1 };
-        names =  "LUFXYNWPZVTI";
+        names = "LUFXYNWPZVTI";
 
-        if (ROWS == COLUMNS) {
+        if (ROWS == COLUMNS && ROWS == 8) {
             rotations[2] = 1;
-        }
-
-        for (int i=0; i<PIECES/*allPieces.length*/; i++) {
-            int piece = i;
-            piecesIndices.add(piece);
-            pieces[i]= new Piece(piece, allPieces[i], rotations[i], symmetric[i], names.charAt(i));
         }
 
         if (allPieces.length > PIECES) {
@@ -119,15 +128,24 @@ public class Puzzle2D {
 
         // prepare grid (the board)
 
-        if (ROWS == COLUMNS) {
-            grid[0][0]=-1;
-            grid[7][0]=-1;
-            grid[0][7]=-1;
-            grid[7][7]=-1;
+        if (ROWS == 0 && COLUMNS == 0) {
+            buildFromFile();
         }
-
-        while (grid[0][column] == -1) {
-            column++;
+        else {
+            for (int i=0; i<PIECES/*allPieces.length*/; i++) {
+                int piece = i;
+                piecesIndices.add(piece);
+                pieces[i]= new Piece(piece, allPieces[i], rotations[i], symmetric[i], names.charAt(i));
+            }
+            if (ROWS == COLUMNS && ROWS == 8) {
+                grid[0][0]=-1;
+                grid[7][0]=-1;
+                grid[0][7]=-1;
+                grid[7][7]=-1;
+            }
+            while (grid[0][column] == -1) {
+                column++;
+            }
         }
 
         totalFillInGrid = ROWS * COLUMNS;
@@ -140,7 +158,125 @@ public class Puzzle2D {
         }
 
         availInGrid = totalFillInGrid;
+        System.out.println("Found " + ROWS + " rows, " + COLUMNS + " cols, with total of cells " + availInGrid);
+        showGrid();
     }
+
+    private void buildFromFile() {
+
+        try {
+            List<String> lines = Files.readAllLines(Path.of("myPzl.txt")); // todo another argument
+            // Grid2DExamples
+            String header = lines.get(0);
+            if (!header.startsWith("#")) {
+                System.err.println("Found no grid header");
+            }
+            ROWS = Integer.parseInt(header.substring(1).split(",")[0]);
+            COLUMNS = Integer.parseInt(header.substring(1).split(",")[1]);
+            grid = new int[ROWS][COLUMNS];
+            for (int row = 0; row < ROWS; ++row) {
+                boolean cellFound = false;
+                String line = lines.get(row+1);
+                int col;
+                for (col = 0; col < line.length(); ++col) {
+                    if (line.charAt(col) == 'X' || line.charAt(col) == 'x') {
+                        grid[row][col] = 0;
+                        cellFound = true;
+                    } else if (line.charAt(col) == ' ') {
+                        grid[row][col] = -1;
+                    }
+                }
+                if (col > COLUMNS) {
+                    System.err.println("Declared rows " + COLUMNS + "/columns " + ROWS + " misconfig");
+                }
+                if (!cellFound) {
+                    if (col < COLUMNS) {
+                        System.err.println("Declared rows " + COLUMNS + "/columns " + ROWS + " misconfig");
+                    }
+                    break;
+                }
+            }
+            // Parts2D_Examples
+            names = "";
+            int pieceIdx = 0;
+            int rotations = 4;
+            int symmetric = 2;
+            List<String> pieceLines = new ArrayList<>();
+            for (int i=ROWS+1; i<lines.size(); ++i) {
+                String line = lines.get(i);
+                if (line.startsWith("#end of grid. Pieces")) {
+                    PIECES = Integer.parseInt(line.substring("#end of grid. Pieces".length()));
+                    System.out.println("Found pieces " + PIECES);
+                    pieces = new Piece[PIECES];
+                    for (int k=0; k<PIECES; ++k) {
+                        piecesIndices.add(k);
+                    }
+                }
+                else if (line.toLowerCase().startsWith("#piece")) {
+                    if (! pieceLines.isEmpty()) {
+                        int[][] layout;
+                        layout = new int[pieceLines.size()][];
+                        for (int j = 0; j < pieceLines.size(); ++j) {
+                            layout[j] = new int[pieceLines.get(j).length()];
+                            for (int k = 0; k < pieceLines.get(j).length(); ++k) {
+                                layout[j][k] = pieceLines.get(j).charAt(k) != ' ' ? 1 : 0;
+                            }
+                        }
+                        pieces[pieceIdx] = new Piece(pieceIdx, layout, rotations, symmetric, names.charAt(pieceIdx));
+                        ++pieceIdx;
+                        pieceLines.clear();
+                    }
+                    String[] s = line.split(" ");
+                    if (s.length > 1) {
+                        if (s[1].startsWith("R")) {
+                            rotations = Integer.parseInt(s[1].substring("R".length()));
+                            if (rotations < 1 || rotations > 4) {
+                                System.err.println("Wrong rotations 1..4");
+                            }
+
+                        }
+                        if (s.length > 2) {
+                            if (s[2].startsWith("S")) {
+                                symmetric = Integer.parseInt(s[2].substring("S".length()));
+                                if (symmetric != 1 && symmetric != 2) {
+                                    System.err.println("Wrong symmetric 1..2");
+                                }
+                            }
+                        }
+                    }
+                    if (line.toLowerCase().startsWith("#piece-end")) {
+                        break;
+                    }
+                    names += line.charAt("#Piece".length());
+                    System.out.println("Parsing piece " + line.charAt("#Piece".length()));
+                }
+                else if (line.length() > 0) {
+                    if (line.toLowerCase().startsWith("#unique=")) {
+                        char uniqueId = line.charAt("#unique=".length());
+                        System.out.println(line);
+                        rotations = 1;
+                        symmetric = 1;
+                    }
+                    else {
+                        pieceLines.add(line);
+                    }
+                }
+            }
+            Collections.shuffle(piecesIndices);
+            System.out.println("shuffle: " + piecesIndices);
+            Piece []piecesCopy = new Piece[PIECES];
+            for (int i=0; i<piecesIndices.size(); ++i) {
+                piecesCopy[i] = pieces[i];
+            }
+            for (int i=0; i<piecesIndices.size(); ++i) {
+                pieces[i]= piecesCopy[piecesIndices.get(i)];
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 /*
     public void putIter()
     {
@@ -181,6 +317,8 @@ public class Puzzle2D {
             for (int j=0;  j<COLUMNS; j++) {
                 if (grid[i][j] == -1) {
                     System.out.print("*  ");
+                } else if (totalSolutions == 0) {
+                    System.out.print("-  ");
                 } else {
                     System.out.print(names.charAt(grid[i][j] - 1) + " ");
                 }
@@ -202,13 +340,18 @@ public class Puzzle2D {
 
         if (leftPieces == 0) { //  && availInGrid == 0) {
             totalSolutions++;
-            // if (totalSolutions == 10) System.exit(1); // for the hprof(iler)!
             System.out.println("\n"+ totalSolutions);
-            showGrid();
-            showPieces();
+//            if (totalSolutions == 1) {
+                showGrid();
+                showPieces();
+//            }
         }
 
-         int []rowsSet = new int[5]; // TODO chng 5 to const
+        if (totalSolutions >= 1) {
+            return;
+        }
+
+        int []rowsSet = new int[5]; // TODO chng 5 to const
          int []columnsSet = new int[5];
 
         for (int i=0; i< leftPieces; i++) {
@@ -315,14 +458,12 @@ public class Puzzle2D {
         return true;
     }
 
-    public void solve()
-    {
+    public boolean solve() {
         long start = System.currentTimeMillis();
 
         if (totalFillInGrid != Piece.getTotalFill()) {
-            System.out.println("invalid config");
-        }
-        else {
+            System.out.println("invalid config, grid " + totalFillInGrid + " pieces " + Piece.getTotalFill());
+        } else {
             put();
         }
 
@@ -331,10 +472,15 @@ public class Puzzle2D {
 
         System.out.println("\nelapsed time in seconds " + elapsedTime);
         System.out.println("tried " + nf.format(triedPieces) + " pieces");
-        System.out.println("at " + nf.format(triedPieces/elapsedTime) + " pieces per second");
+
+        if (elapsedTime > 0) {
+            System.out.println("at " + nf.format(triedPieces / elapsedTime) + " pieces per second");
+        }
 
         System.out.print("number of solutions ");
         System.out.println(totalSolutions * ((ROWS == COLUMNS) ? 8 : 4)); // TODO compute this symmetric magic number
+
+        return totalSolutions >= 1;
     }
 
     public static void main(String[] args)
