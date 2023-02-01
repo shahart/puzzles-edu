@@ -149,9 +149,9 @@ public class Puzzle2D {
         }
 
         totalFillInGrid = ROWS * COLUMNS;
-        for (int i=0; i<grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == -1) {
+        for (int[] ints : grid) {
+            for (int anInt : ints) {
+                if (anInt == -1) {
                     totalFillInGrid--;
                 }
             }
@@ -171,8 +171,9 @@ public class Puzzle2D {
             if (!header.startsWith("#")) {
                 System.err.println("Found no grid header");
             }
-            ROWS = Integer.parseInt(header.substring(1).split(",")[0]);
-            COLUMNS = Integer.parseInt(header.substring(1).split(",")[1]);
+            header = header.substring(header.lastIndexOf("#")+1).trim();
+            ROWS = Integer.parseInt(header.split(",")[0].trim());
+            COLUMNS = Integer.parseInt(header.split(",")[1].trim());
             grid = new int[ROWS][COLUMNS];
             for (int row = 0; row < ROWS; ++row) {
                 boolean cellFound = false;
@@ -252,7 +253,7 @@ public class Puzzle2D {
                 }
                 else if (line.length() > 0) {
                     if (line.toLowerCase().startsWith("#unique=")) {
-                        char uniqueId = line.charAt("#unique=".length());
+                        // char uniqueId = line.charAt("#unique=".length());
                         System.out.println(line);
                         rotations = 1;
                         symmetric = 1;
@@ -262,12 +263,11 @@ public class Puzzle2D {
                     }
                 }
             }
+            // todo ChatGPT said to sort by piece size
             Collections.shuffle(piecesIndices);
             System.out.println("shuffle: " + piecesIndices);
             Piece []piecesCopy = new Piece[PIECES];
-            for (int i=0; i<piecesIndices.size(); ++i) {
-                piecesCopy[i] = pieces[i];
-            }
+            System.arraycopy(pieces, 0, piecesCopy, 0, piecesIndices.size());
             for (int i=0; i<piecesIndices.size(); ++i) {
                 pieces[i]= piecesCopy[piecesIndices.get(i)];
             }
@@ -425,7 +425,7 @@ public class Puzzle2D {
     public boolean canPut(int []rowsSet, int []columnsSet) {
         try {
             int setSoFar = 0;
-            int columnj = column;
+            int columnj;
             int j = currPiece.getFirstSquarePos();
             int columnjj = column - j;
             int rowi;

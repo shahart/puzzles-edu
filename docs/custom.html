@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="#">
+    <title>Naive Solver</title>
+</head>
+<body>
+<script src="http://code.jquery.com/jquery-1.12.4.js" type="text/javascript"></script>
+<!--<script src="https://raw.github.com/gorbiz/mobile-console.log/master/console.js" type="text/javascript"></script>--> <!-- Cross-Origin Read Blocking (CORB) -->
+<script>
+    $(document).ready(function() {
+        // Make a custom log for mobile devices
+        if (isMobile()) {
+            console.log = function(message) {
+                if ($("#console-log").length === 0) {
+                    $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.85); color:white; font-family: monospace;"><li>Mobile console.log</li></ul>'));
+                }
+                $("#console-log").append($('<li style="margin-left:none;">' + message + '</li>'));
+            }
+        }
+    });
+
+    function isMobile() {
+        var useragent = navigator.userAgent;
+        return useragent.indexOf('Android') != -1
+            || useragent.indexOf('iPhone') != -1
+            || useragent.indexOf('iPod') != -1
+            || useragent.indexOf('iPad') != -1;
+    }
+</script>
+<h1>Naïve 2D Solver</h1>
+<textarea id="input" rows="50">
+#just a demo input for now #6,6
+xxxxxx
+xxxxxx
+xxxxxx
+xxxxxx
+xxxxxx
+xxxxxx
+
+#end of grid. Pieces10
+#PieceA5
+x x
+xxx
+
+#pieceB4
+ x
+xxx
+
+#pieceC4
+ xx
+xx
+
+#pieceD4
+ xx
+xx
+
+#pieceE3
+ x
+xx
+
+#pieceF2 R2
+xx
+
+#pieceG2 R2
+xx
+
+#unique=H
+#pieceH4
+  x
+xxx
+
+#pieceI4 R1
+xx
+xx
+
+#pieceJ4 R2
+xxxx
+
+#piece-End
+</textarea>
+<p>
+<button id="solveButton" type="button">Solve</button>
+<h3>Solution...</h3>
+<textarea id="output" disabled="true" rows="20">
+Found 6 rows, 6 cols, with total of cells 36
+30 [msec] showGrid. TriedPieces 348
+ 1  A  A  C  C  C  J
+ 2  A  F  F  C  I  J
+ 3  A  A  H  H  I  J
+ 4  G  B  H  H  D  J
+ 5  G  B  B  E  D  D
+ 6  G  G  B  E  E  D
+32 [msec] pieces A C J F I H G B D E
+</textarea>
+<p>
+<script src="kickoff/source.js" type='module'></script>
+<h4><a href="index.html">Back ...</a></h4>
+</body>
+</html>
