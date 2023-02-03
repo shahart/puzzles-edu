@@ -5,6 +5,7 @@ window.globalTotalFill = 0;
 class Puzzle2d {
     constructor(pieces, rows, columns) {
         window.globalTotalFill = 0;
+        this.allLines = '';
         this.start = new Date().getTime();
         this.PIECES = pieces; // 3; // 12 Poly // 10 6x6
         this.ROWS = rows;
@@ -38,7 +39,14 @@ class Puzzle2d {
             [[1,1,1,1,1]]               //2-1 (1)   I
         ];
 
-        if (pieces === 10) {
+        if (pieces === 3) {
+            this.allPieces = [
+                [[0,0,1],[1,1,1],[1]],
+                [[1,1],[1]],
+                [[1]]
+            ];
+        }
+        else if (pieces === 10) {
         this.allPieces = [
             // 6x6
             [[1, 1], [1], [1, 1]],
@@ -71,6 +79,12 @@ class Puzzle2d {
             this.names = "LUFXYNWPZVTI"; // Poly
             this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
             this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
+        }
+        else if (pieces === 3) {
+            console.log("3x3");
+            this.names = "XYZ";
+            this.rotations = [4, 4, 1];
+            this.symmetric = [2, 1, 1];
         }
 
         if (this.ROWS === this.COLUMNS && this.ROWS === 8) {
@@ -121,7 +135,7 @@ class Puzzle2d {
     }
 
     showGrid() {
-        console.debug(new Date().getTime() - this.start + " [msec] showGrid. Tried Pieces " + this.triedPieces + " leftPieces " + this.piecesIndices.length);
+        console.info(new Date().getTime() - this.start + " [msec] showGrid. Tried Pieces " + this.triedPieces + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
         for (let i=0; i<this.ROWS; i++) {
             let line = "";
@@ -199,36 +213,31 @@ class Puzzle2d {
                 this.showGrid();
                 this.showPieces();
                 this.totalSolutions = 100000;
-                let notif = new Date().getTime() - this.start + " [msec] Found a solution, check the browser's console";
-                if (window.Notification) {
-                    navigator.serviceWorker.register('sw.js');
-                    Notification.requestPermission(function (result) {
-                        if (result === 'granted') {
-                            navigator.serviceWorker.ready.then(function (registration) {
-                                registration.showNotification(notif);
-                            });
-                        }
-                    });
-                    navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification(this.allLines)
-                    });
-                }
+                let notif = new Date().getTime() - this.start + " [msec] Found a solution, check the browser's console " + this.allLines;
+                navigator.serviceWorker.register('sw.js');
+                Notification.requestPermission(function (result) {
+                    if (result === 'granted') {
+                        navigator.serviceWorker.ready.then(function (registration) {
+                            registration.showNotification(notif);
+                        });
+                    }
+                });
                 alert(notif);
-                // throw new Error(notif);
+                // throw new Error(notif); // todo? if !isMobile() /* at custom .html */ continue to find all solutions
             }
         }
 
         // this.showGrid();
 
         // firefox's dom.max_script_run_time = 20 sec // todo async..
-        if (new Date().getTime() - this.start > 9000) {
+        if (new Date().getTime() - this.start > 1500) {
             this.showGrid();
             console.error(new Date() + " Timeout");
             alert(new Date().getTime() - this.start + " [msec] Timeout, check the browser's console");
             throw new Error(new Date() + " Timeout, check the browser's console");
         }
 
-        if (this.totalSolutions > 1) {
+        if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
             return;
         }
 
@@ -245,7 +254,14 @@ class Puzzle2d {
                     this.solution[this.PIECES-leftPieces] = piece; // solution.add(piece);
                     this.putCurrPiece(rowsSet, columnsSet);
 
-                    if (this.triedPieces % 10000 === 0 /* || leftPieces <= 2 */) {
+                    // Chrome speeds
+                    //      core i7 - 160k pieces per sec,
+                    //      Mediatek MT6769T Helio G80 - todo
+                    // Firefox:
+                    //      i7 - 70k,
+                    //      Cell -
+                    // Samsung Internet:
+                    if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) {
                         this.showGrid();
                         this.showPieces();
                     }
@@ -267,7 +283,7 @@ class Puzzle2d {
         for (let i=0; i<this.PIECES - this.piecesIndices.length; i++) {
             line += this.names.charAt(this.solution[i]) + " ";
         }
-        console.log(new Date().getTime() - this.start + " [msec] pieces " + line);
+        console.log(new Date().getTime() - this.start + " [msec] pieces " + line + " tried pieces " + this.triedPieces);
     }
 
     putCurrPiece(rowsSet, columnsSet) {
@@ -332,8 +348,8 @@ class Puzzle2d {
             this.put();
         }
 
-        console.log(new Date().getTime() - this.start + " [msec] Ended") ;
-        // log also the triedPieces says nothing as we did return immediately when found a solution.
+        console.log(new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces);
+        // triedPieces is an estimate, because of the back-track from the recursive put, note also the shuffle impacts the results.
         return this.allLines;
     }
 }

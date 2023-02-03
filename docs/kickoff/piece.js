@@ -39,6 +39,10 @@ class Piece {
             }
         }
 
+        if (this.totalThisFill === 0) {
+            throw new Error('empty piece');
+        }
+
         if (availRotations > 1) {
             this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length,1);
             if (availRotations > 2) {
@@ -46,7 +50,7 @@ class Piece {
                 if (availRotations > 3) {
                     this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length,3);
                     if (availRotations > 4) {
-                        console.error("rotations is up to 4");
+                        throw new Error("rotations is up to 4");
                     }
                 }
             }
@@ -63,7 +67,7 @@ class Piece {
             }
         }
         else if (this.symmetric > 2) {
-            console.error("symmetric is up to 2");
+            throw new Error("symmetric is up to 2");
         }
 
         for (let rot=0; rot<availRotations*symmetric; rot++) {
