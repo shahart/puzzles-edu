@@ -75,7 +75,7 @@ class Puzzle2d {
 
         // Poly
         if (pieces === 12) {
-            console.log("Poly");
+            console.log("Polyominos");
             this.names = "LUFXYNWPZVTI"; // Poly
             this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
             this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
@@ -230,7 +230,7 @@ class Puzzle2d {
         // this.showGrid();
 
         // firefox's dom.max_script_run_time = 20 sec // todo async..
-        if (new Date().getTime() - this.start > 1500) {
+        if (new Date().getTime() - this.start > 1500) { // mocha's _slow indication = 75 msec, but it's way too far as a threshold
             this.showGrid();
             console.error(new Date() + " Timeout");
             alert(new Date().getTime() - this.start + " [msec] Timeout, check the browser's console");
@@ -254,13 +254,17 @@ class Puzzle2d {
                     this.solution[this.PIECES-leftPieces] = piece; // solution.add(piece);
                     this.putCurrPiece(rowsSet, columnsSet);
 
-                    // Chrome speeds
-                    //      core i7 - 160k pieces per sec,
-                    //      Mediatek MT6769T Helio G80 - todo
-                    // Firefox:
-                    //      i7 - 70k,
-                    //      Cell -
+                    // "benchmarks", thanks to a Poly solution not found bug. avg of 3 runs, because of the shuffle. Timeout of 1.5 sec
+                    // Chrome:
+                    //      Core i7, 8th Gen, 8665U (Q2 2019) - 220, 227, 217 -> 221k pieces per sec,
+                    //      Mediatek MT6769T Helio G80 (Q1 2020) - 108, 119, 110-> ~112k
+                    // Firefox Focus:
+                    //      i7 - 80, 76, 73 -> ~76k
+                    //      Cell - 79, 72, 90 -> ~80k
                     // Samsung Internet:
+                    //      no desktop.
+                    //      Cell - 180, 176, 169  -> ~175k
+
                     if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) {
                         this.showGrid();
                         this.showPieces();

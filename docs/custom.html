@@ -23,10 +23,10 @@
 
     function isMobile() {
         var useragent = navigator.userAgent;
-        return useragent.indexOf('Android') != -1
-            || useragent.indexOf('iPhone') != -1
-            || useragent.indexOf('iPod') != -1
-            || useragent.indexOf('iPad') != -1;
+        return useragent.indexOf('Android') !== -1
+            || useragent.indexOf('iPhone') !== -1
+            || useragent.indexOf('iPod') !== -1
+            || useragent.indexOf('iPad') !== -1;
     }
 </script>
 <h1>Naïve 2D Solver</h1>
@@ -99,7 +99,10 @@ Found 6 rows, 6 cols, with total of cells 36
 32 [msec] pieces A C J F I H G B D E
 </textarea>
 <p>
+<button id="restoreButton" type="button">Restore</button>
+<p>
 <script src="kickoff/source.js" type='module'></script>
 <h4><a href="index.html">Back ...</a></h4>
+<h6><a href="kickoff/test/test.html">(Tests)</a></h6>
 </body>
 </html>
