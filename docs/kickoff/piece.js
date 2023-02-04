@@ -14,14 +14,14 @@ class Piece {
         for (let i=0; i<this.layouts.length; i++) {
             this.layouts[i]= [];
         }
-        this.firstSquarePos = [availRotations*symmetric];
+        this.firstSquarePos = new Array(availRotations*symmetric).fill(0);
         this.layouts[0] = layout;
 
-        this.rowsSet = new Array(availRotations*symmetric);
-        this.columnsSet = new Array(availRotations*symmetric); //[];
+        this.rowsSet = new Array(availRotations*symmetric).fill(0);
+        this.columnsSet = new Array(availRotations*symmetric).fill(0); //[];
 
         this.firstSquarePos[0] = 0;
-        while (this.firstSquarePos[0]<this.layouts[0][0].length && this.layouts[0][this.firstSquarePos[0]] === 0) {
+        while (this.firstSquarePos[0]<this.layouts[0][0].length && this.layouts[0][0][this.firstSquarePos[0]] === 0) {
             this.firstSquarePos[0]++;
         }
 
@@ -43,12 +43,16 @@ class Piece {
             throw new Error('empty piece');
         }
 
+        this.printPart(0, this.layouts[0]);
         if (availRotations > 1) {
             this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length,1);
+            this.printPart(1, this.layouts[1]);
             if (availRotations > 2) {
                 this.layouts[2] = this.realRotate(this.layouts[1], layout.length, this.maxColumns,2);
+                this.printPart(2, this.layouts[2]);
                 if (availRotations > 3) {
                     this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length,3);
+                    this.printPart(3, this.layouts[3]);
                     if (availRotations > 4) {
                         throw new Error("rotations is up to 4");
                     }
@@ -59,6 +63,7 @@ class Piece {
         if (symmetric === 2) {
             for (let i = 0; i < availRotations; i++) {
                 this.layouts[i + availRotations] = this.copySymmetric(this.layouts[i]);
+                this.printPart(i + availRotations, this.layouts[i + availRotations]);
 
                 this.firstSquarePos[i + availRotations] = 0;
                 while (this.firstSquarePos[i + availRotations] < this.layouts[i + availRotations][0].length && this.layouts[i + availRotations][0][this.firstSquarePos[i + availRotations]] === 0) {
@@ -108,10 +113,10 @@ class Piece {
 
     copySymmetric(original) {
         let rows = original.length;
-        let result = [rows];
+        let result = new Array(rows).fill(0);
 
         for (let i=0; i<rows; i++) {
-            result[i] = [original[rows-i-1].length];
+            result[i] = new Array(original[rows-i-1].length).fill(0);
             for (let j=0; j<result[i].length; j++) {
                 result[i][j] = original[rows - i - 1][j];
             }
@@ -125,7 +130,7 @@ class Piece {
 
         for (let i=0; i<columns; i++) {
             for (let j = 0; j < rows; j++) {
-                result[rows - j - 1][i] = original[i][j];
+                result[rows - j - 1][i] = (original[i][j] === 1 ? 1 : 0);
             }
         }
 
@@ -156,6 +161,18 @@ class Piece {
     getColumn() {
         return this.column;
     }
+
+    printPart(l, layout) {
+        // console.debug("    layout=" + l);
+        for (let i=0; i<layout.length; ++i) {
+            let line = "    ";
+            for (let j=0; j<layout[i].length; ++j) {
+                line += layout[i][j];
+            }
+            // console.debug(line);
+        }
+    }
+
 }
 
 export { Piece };

@@ -27,16 +27,20 @@ solveButton.addEventListener('click', () => {
         setCookie("input", input, 3);
     }
 
-    let header = input.split('\n');
+    let header = input.split('\n')[0];
 
-    if (header[0].indexOf('#6,6') >= 0) {
+    if (header.indexOf('#6,6') >= 0) {
         // todo move into buildFromFile
-        puzzle = new Puzzle2d(10,6,6);
+        puzzle = new Puzzle2d(10, 6, 6);
         output.innerHTML = '10';
     } // 3,3,3; 12,12,5; 12,10,6; 10,6,6
-    else {
-        puzzle = new Puzzle2d(12,6,10);
+    else if (header.indexOf('12,') >= 0) {
+        puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
         output.innerHTML = 'Poly';
+    }
+    else {
+        puzzle = new Puzzle2d(0,0,0, input);
+        output.innerHTML = 'Custom';
     }
 
     output.innerHTML = puzzle.solve(); // todo async

@@ -12,7 +12,19 @@
     $(document).ready(function() {
         // Make a custom log for mobile devices
         if (isMobile()) {
+            // console.debug = function(message) {
+            //     mylog(message);
+            // }
             console.log = function(message) {
+                mylog(message);
+            }
+            console.warn = function(message) {
+                mylog(message);
+            }
+            console.error = function(message) {
+                mylog(message);
+            }
+            mylog = function(message) {
                 if ($("#console-log").length === 0) {
                     $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.85); color:white; font-family: monospace;"><li>Mobile console.log</li></ul>'));
                 }
@@ -99,7 +111,7 @@ Found 6 rows, 6 cols, with total of cells 36
 32 [msec] pieces A C J F I H G B D E
 </textarea>
 <p>
-<button id="restoreButton" type="button">Restore</button>
+<button id="restoreButton" type="button">🔃 Previous config</button>
 <p>
 <script src="kickoff/source.js" type='module'></script>
 <h4><a href="index.html">Back ...</a></h4>

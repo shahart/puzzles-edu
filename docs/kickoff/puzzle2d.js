@@ -3,7 +3,13 @@ import { Piece } from "./piece.js";
 window.globalTotalFill = 0;
 
 class Puzzle2d {
-    constructor(pieces, rows, columns) {
+    constructor(pieces, rows, columns, input) {
+        if (columns > rows) {
+            console.warn('Switched dimensions.');
+            let h = rows;
+            rows = columns;
+            columns = h;
+        }
         window.globalTotalFill = 0;
         this.allLines = '';
         this.start = new Date().getTime();
@@ -41,9 +47,14 @@ class Puzzle2d {
 
         if (pieces === 3) {
             this.allPieces = [
+                /* no solution - test
                 [[0,0,1],[1,1,1],[1]],
                 [[1,1],[1]],
                 [[1]]
+                 */
+                 [[0,1]],
+                 [[1,1],[1]],
+                 [[1,1,1],[1],[1]]
             ];
         }
         else if (pieces === 10) {
@@ -97,8 +108,8 @@ class Puzzle2d {
 
         // prepare grid (the board)
 
-        if (this.ROWS === 0 && this.COLUMNS === 0) {
-            buildFromFile();
+        if (input) {
+            this.buildFromFile(input);
         }
         else {
             for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
@@ -129,9 +140,6 @@ class Puzzle2d {
         this.availInGrid = this.totalFillInGrid;
         console.info("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.availInGrid);
         // this.showGrid();
-
-        // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java
-        this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
     showGrid() {
@@ -164,9 +172,11 @@ class Puzzle2d {
         this.solutionFound = true;
     }
 
-    buildFromFile() {
+    buildFromFile(input) {
         // next todo
-        console.debug('buildFromFile');
+        console.debug('buildFromFile, lines ' + input.split('\n').length);
+        // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java - irrelevant at Poly
+        this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
     canPut(rowsSet, columnsSet) {
@@ -269,6 +279,7 @@ class Puzzle2d {
                         this.showGrid();
                         this.showPieces();
                     }
+                    // this.showPieces();
 
                     // this.showGrid();
                     this.put(); // the recurse

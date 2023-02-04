@@ -313,11 +313,12 @@ public class Puzzle2D {
 
     public void showGrid()
     {
+        System.out.println(/*(new Date().getTime() - this.start +*/ " [msec] showGrid. Tried Pieces " + this.triedPieces + " leftPieces " + this.piecesIndices.size());
         for (int i=0; i<ROWS; i++) {
             for (int j=0;  j<COLUMNS; j++) {
                 if (grid[i][j] == -1) {
                     System.out.print("*  ");
-                } else if (totalSolutions == 0) {
+                } else if (/*totalSolutions == 0 || */ grid[i][j] == 0) {
                     System.out.print("-  ");
                 } else {
                     System.out.print(names.charAt(grid[i][j] - 1) + " ");
@@ -329,9 +330,11 @@ public class Puzzle2D {
 
     public void showPieces()
     {
-        for (int i=0; i<PIECES; i++) {
-            System.out.print(names.charAt(solution[i]) + " ");
+        String line = "";
+        for (int i=0; i<this.PIECES - this.piecesIndices.size(); i++) {
+            line += names.charAt(solution[i]) + " ";
         }
+        System.out.println(line);
     }
 
     public void put()
@@ -341,10 +344,11 @@ public class Puzzle2D {
         if (leftPieces == 0) { //  && availInGrid == 0) {
             totalSolutions++;
             System.out.println("\n"+ totalSolutions);
-//            if (totalSolutions == 1) {
+            if (totalSolutions == 1) {
+                System.out.println("Found a solution");
                 showGrid();
                 showPieces();
-//            }
+            }
         }
 
         if (totalSolutions >= 1) {
@@ -363,6 +367,13 @@ public class Puzzle2D {
                     piecesIndices.remove(i);
                     solution[PIECES-leftPieces] = piece; // solution.add(piece);
                     putCurrPiece(rowsSet, columnsSet);
+
+                    if (triedPieces % 50000 == 0 /* || leftPieces <= 2 */) {
+                        this.showGrid();
+                        this.showPieces();
+                    }
+                    // this.showPieces();
+
                     put(); // the recurse
                     removeLast(piece, rowsSet, columnsSet);
                     //solution.remove(piece); // like removeLast

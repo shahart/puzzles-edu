@@ -40,6 +40,8 @@ public class Piece {
     private int column = -1;
 
     public Piece(int index, int [][]layout, int availRotations, int symmetric, char name) {
+        System.out.println();
+        System.out.println(name);
         this.index = index;
         this.name = name;
         currRotation = 0;
@@ -70,12 +72,16 @@ public class Piece {
             }
         }
 
+        printPart(0, layouts[0]);
         if (availRotations > 1) {
             layouts[1] = realRotate(layouts[0], maxColumns, layout.length,1);
+            printPart(1, layouts[1]);
             if (availRotations > 2) {
                 layouts[2] = realRotate(layouts[1], layout.length, maxColumns,2);
+                printPart(2, layouts[2]);
                 if (availRotations > 3) {
                     layouts[3] = realRotate(layouts[2], maxColumns, layout.length,3);
+                    printPart(3, layouts[3]);
                     if (availRotations > 4) {
                         System.err.println("rotations is up to 4");
                     }
@@ -86,6 +92,7 @@ public class Piece {
         if (symmetric == 2) {
             for (int i = 0; i < availRotations; i++) {
                 layouts[i + availRotations] = copySymmetric(layouts[i]);
+                printPart(i + availRotations, layouts[i + availRotations]);
 
                 firstSquarePos[i + availRotations] = 0;
                 while (firstSquarePos[i + availRotations] < layouts[i + availRotations][0].length && layouts[i + availRotations][0][firstSquarePos[i + availRotations]] == 0) {
@@ -162,4 +169,13 @@ public class Piece {
     public int getRow() { return row; }
     public int getColumn() { return column; }
 
+    private void printPart(int l, int [][]layout) {
+        System.out.println("    layout=" + l);
+        for (int i=0; i<layout.length; ++i) {
+            for (int j=0; j<layout[i].length; ++j) {
+                System.out.print(layout[i][j]);
+            }
+            System.out.println();
+        }
+    }
 }
