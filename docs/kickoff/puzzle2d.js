@@ -5,10 +5,10 @@ window.globalTotalFill = 0;
 class Puzzle2d {
     constructor(pieces, rows, columns, input) {
         if (columns > rows) {
-            console.warn('Switched dimensions.');
-            let h = rows;
-            rows = columns;
-            columns = h;
+            console.info('You might need to switch dimensions.');
+            // let h = rows;
+            // rows = columns;
+            // columns = h;
         }
         window.globalTotalFill = 0;
         this.allLines = '';
@@ -140,6 +140,9 @@ class Puzzle2d {
         this.availInGrid = this.totalFillInGrid;
         console.info("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.availInGrid);
         // this.showGrid();
+
+        // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java - irrelevant at Poly
+        this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
     showGrid() {
@@ -166,7 +169,7 @@ class Puzzle2d {
             }
             console.log(line);
             if (!this.solutionFound) {
-                this.allLines += line;
+                this.allLines += line + "\n";
             }
         }
         this.solutionFound = true;
@@ -175,8 +178,6 @@ class Puzzle2d {
     buildFromFile(input) {
         // next todo
         console.debug('buildFromFile, lines ' + input.split('\n').length);
-        // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java - irrelevant at Poly
-        this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
     canPut(rowsSet, columnsSet) {
@@ -223,7 +224,7 @@ class Puzzle2d {
                 this.showGrid();
                 this.showPieces();
                 this.totalSolutions = 100000;
-                let notif = new Date().getTime() - this.start + " [msec] Found a solution, check the browser's console " + this.allLines;
+                let notif = new Date().getTime() - this.start + " [msec] Found a solution, check the browser's console \n" + this.allLines;
                 navigator.serviceWorker.register('sw.js');
                 Notification.requestPermission(function (result) {
                     if (result === 'granted') {

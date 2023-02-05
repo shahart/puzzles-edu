@@ -38,12 +38,25 @@ solveButton.addEventListener('click', () => {
         puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
         output.innerHTML = 'Poly';
     }
+    // As I fixed the Poly bug, still have a way to measure the cpu speed.
+    // see "benchmarks" at puzzle2d.js
+    else if (header.indexOf('measureSpeed') >= 0) {
+        let dt = new Date();
+        console.log('start ' + (dt.getSeconds() + dt.getMilliseconds()/1000));
+        var amount = 1500000000; // 3.2s on my PC
+        for (var i = amount; i > 0; i--) {}
+        dt = new Date();
+        console.log('end ' + (dt.getSeconds() + dt.getMilliseconds()/1000));
+        output.innerHTML = header;
+    }
     else {
         puzzle = new Puzzle2d(0,0,0, input);
         output.innerHTML = 'Custom';
     }
 
-    output.innerHTML = puzzle.solve(); // todo async
+    if (puzzle) {
+        output.innerHTML = puzzle.solve(); // todo async
+    }
 });
 
 function setCookie(cname, cvalue, exdays) {
