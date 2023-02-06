@@ -89,6 +89,30 @@ class Piece {
                 }
             }
         }
+
+        let indices = [this.layouts.length];
+        for (let i = 0; i < this.layouts.length; ++i) {
+            indices[i] = i;
+        }
+        indices = indices.sort(function () { return Math.random() - 0.5; });
+        // just for debugging
+        let indices2 = [this.layouts.length];
+        for (let i = 0; i < this.layouts.length; ++i) {
+            indices2[i] = i;
+        }
+        for (let i = 0; i < this.layouts.length-1; ++i) {
+            this.swap(indices2, i, indices[i]);
+            this.swap(this.layouts, i, indices[i]);
+            this.swap(this.firstSquarePos, i, indices[i]);
+            this.swap(this.rowsSet, i, indices[i]);
+            this.swap(this.columnsSet, i, indices[i]);
+        }
+    }
+
+    swap(arr, first, second) {
+        let h = arr[first];
+        arr[first] = arr[second];
+        arr[second] = h;
     }
 
     getFirstSquarePos() {

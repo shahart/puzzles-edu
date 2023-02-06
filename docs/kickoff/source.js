@@ -33,20 +33,25 @@ solveButton.addEventListener('click', () => {
         // todo move into buildFromFile
         puzzle = new Puzzle2d(10, 6, 6);
         output.innerHTML = '10';
-    } // 3,3,3; 12,12,5; 12,10,6; 10,6,6
+    }
     else if (header.indexOf('12,') >= 0) {
         puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
         output.innerHTML = 'Poly';
     }
     // As I fixed the Poly bug, still have a way to measure the cpu speed.
     // see "benchmarks" at puzzle2d.js
-    else if (header.indexOf('measureSpeed') >= 0) {
+    // Chrome: most users don't use other browser
+    //      Core i7, 8th Gen, 8665U (Q2 2019) - 3.2 sec - 53 sec with DevTools
+    //      Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
+    //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
+    //      Mediatek MT6572M (2013) -
+    else if (header.toLowerCase().trim() === 'speed') {
         let dt = new Date();
-        console.log('start ' + (dt.getSeconds() + dt.getMilliseconds()/1000));
-        var amount = 1500000000; // 3.2s on my PC
+        var amount = 1500000000;
+        console.log('for-loop till ' + amount + ' started at ' + dt + "." + dt.getMilliseconds()/1000);
         for (var i = amount; i > 0; i--) {}
         dt = new Date();
-        console.log('end ' + (dt.getSeconds() + dt.getMilliseconds()/1000));
+        console.log('ended at ' + dt.getHours() + ":" + dt + "." + dt.getMilliseconds()/1000);
         output.innerHTML = header;
     }
     else {
