@@ -3,12 +3,12 @@ import { Piece } from "../piece.js";
 
 // todo in tests mode, no serviceWorker, no notification, etc.
 
-describe('Puz tests', function () {
+describe('Mocha Puzzle2D tests', function () {
 
     it('6x6-10 pieces', function () {
         let puzzle2d = new Puzzle2d(10, 6, 6);
         let res = puzzle2d.solve();
-        console.log("6x6-10 pieces>>" + res); // race condition?! sometimes it fails, is it on slow response
+        console.log("6x6-10 pieces>>" + res);
         chai.assert.include(res, ' 1  ');
     });
 
@@ -55,7 +55,7 @@ describe('Puz tests', function () {
         let res = puzzle2d.solve();
         console.log("12x5-Poly>>" + res);
         chai.assert.equal(res, '');
-    }); // .timeout(9200) // mocha's timeout 2 sec, app timeout 9s, firefox 20s - trim now for 1.5 for 0.5 sec for user to hit okay
+    }); // .timeout(9200) // mocha's timeout 2 sec, app timeout (was) 9s, firefox 20s - trim now for 1.5 for 0.5 sec for user to hit okay
 
     it('12x5-Poly-2000-timeout', function () {
         let res;

@@ -5,10 +5,7 @@ window.globalTotalFill = 0;
 class Puzzle2d {
     constructor(pieces, rows, columns, input) {
         if (columns > rows) {
-            console.info('You might need to switch dimensions.');
-            // let h = rows;
-            // rows = columns;
-            // columns = h;
+            console.warn('You might want to switch dimensions.');
         }
         window.globalTotalFill = 0;
         this.allLines = '';
@@ -199,7 +196,7 @@ class Puzzle2d {
                 return false;
             }
             if (gridRowiColumnJ !== 0) {
-                // not included as in comments at Puzzle2D
+                // not included as in comments at Puzzle2D.java
                 return false;
             }
             else {
@@ -241,18 +238,18 @@ class Puzzle2d {
         // this.showGrid();
 
         // firefox's dom.max_script_run_time = 20 sec // todo async..
-        if (new Date().getTime() - this.start > 1500) { // mocha's _slow indication = 75 msec, but it's way too far as a threshold
+        if (new Date().getTime() - this.start > 1500) {
             this.showGrid();
-            console.error(new Date() + " Timeout");
+            console.warn(new Date().toISOString() + " Timeout");
             alert(new Date().getTime() - this.start + " [msec] Timeout, check the browser's console");
-            throw new Error(new Date() + " Timeout, check the browser's console");
+            throw new Error(new Date().toISOString() + " Timeout, check the browser's console");
         }
 
         if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
             return;
         }
 
-        let rowsSet = new Array(5).fill(0); // TODO chng 5 to const
+        let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
         let columnsSet = new Array(5).fill(0);
 
         for (let i=0; i< leftPieces; i++) {
@@ -355,7 +352,7 @@ class Puzzle2d {
     solve() {
         this.start = new Date().getTime();
         this.triedPieces = 0;
-        console.log(new Date());
+        console.log(new Date().toISOString());
         console.log(new Date().getTime() - this.start + " [msec] Started");
 
         if (this.totalFillInGrid !== window.globalTotalFill) {
