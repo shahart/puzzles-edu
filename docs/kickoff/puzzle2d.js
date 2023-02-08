@@ -14,6 +14,7 @@ class Puzzle2d {
         this.ROWS = rows;
         this.COLUMNS = columns;
         this.totalSolutions = 0;
+        this.EXIT_SIGN = 100000;
         this.triedPieces = 0;
         this.solutionFound = false;
         this.row = 0;
@@ -22,6 +23,10 @@ class Puzzle2d {
         this.solution = new Array(this.PIECES).fill(0);
         this.pieces = [this.PIECES];
         this.names;
+        if (rows !== rows || columns !== columns) { // NaN check, result of parseInt of Not-a-Number
+            console.error('RangeError: Invalid array length');
+            alert('RangeError: Invalid array length');
+        }
         this.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
         this.currPiece;
         this.totalFillInGrid = 0;
@@ -77,7 +82,8 @@ class Puzzle2d {
         ];
         }
 
-        this.names = "ABCDEFGHIJ"; // 6x6
+        // 6x6, 10 pieces
+        this.names = "ABCDEFGHIJ";
         this.rotations = [ 4,4,4/*4*/,4,4,2,4,1,2,2 ];
         this.symmetric = [ 1,2,1/*2*/,2,1,1,2,1,1,1 ];
 
@@ -135,7 +141,7 @@ class Puzzle2d {
         }
 
         this.availInGrid = this.totalFillInGrid;
-        console.info("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.availInGrid);
+        console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.availInGrid);
         // this.showGrid();
 
         // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java - irrelevant at Poly
@@ -143,7 +149,7 @@ class Puzzle2d {
     }
 
     showGrid() {
-        console.info(new Date().getTime() - this.start + " [msec] showGrid. Tried Pieces " + this.triedPieces + " leftPieces " + this.piecesIndices.length);
+        console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
         for (let i=0; i<this.ROWS; i++) {
             let line = "";
@@ -169,7 +175,9 @@ class Puzzle2d {
                 this.allLines += line + "\n";
             }
         }
-        this.solutionFound = true;
+        if (this.totalSolutions > 0 && this.totalSolutions < this.EXIT_SIGN) {
+            this.solutionFound = true;
+        }
     }
 
     buildFromFile(input) {
@@ -211,6 +219,11 @@ class Puzzle2d {
     }
 
     put() {
+
+        if (this.totalSolutions === this.EXIT_SIGN) {
+            return;
+        }
+
         let leftPieces = this.piecesIndices.length;
         // console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
         if (leftPieces === 0) { //  && availInGrid == 0) {
@@ -220,33 +233,37 @@ class Puzzle2d {
             if (this.totalSolutions === 1) {
                 this.showGrid();
                 this.showPieces();
-                this.totalSolutions = 100000;
-                let notif = new Date().getTime() - this.start + " [msec] Found a solution, check the browser's console \n" + this.allLines;
-                navigator.serviceWorker.register('sw.js');
-                Notification.requestPermission(function (result) {
-                    if (result === 'granted') {
-                        navigator.serviceWorker.ready.then(function (registration) {
-                            registration.showNotification(notif);
-                        });
-                    }
-                });
-                alert(notif);
+                this.totalSolutions = this.EXIT_SIGN;
+                // let notif = new Date().getTime() - this.start + " [msec] Found a solution\n" + this.allLines;
+                // console.log(this.allLines);
+                // navigator.serviceWorker.register('sw.js');
+                // Notification.requestPermission(function (result) {
+                //     if (result === 'granted') {
+                //         navigator.serviceWorker.ready.then(function (registration) {
+                //             registration.showNotification(notif);
+                //         });
+                //     }
+                // });
+                // alert(notif);
                 // throw new Error(notif); // todo? if !isMobile() /* at custom .html */ continue to find all solutions
             }
         }
 
         // this.showGrid();
 
-        // firefox's dom.max_script_run_time = 20 sec // todo async..
-        if (new Date().getTime() - this.start > 1500) {
-            this.showGrid();
-            console.warn(new Date().toISOString() + " Timeout");
-            alert(new Date().getTime() - this.start + " [msec] Timeout, check the browser's console");
-            throw new Error(new Date().toISOString() + " Timeout, check the browser's console");
-        }
-
         if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
             return;
+        }
+
+        // firefox's dom.max_script_run_time = 20 sec
+        let timeoutThreshold = 1500;
+        if (new Date().getTime() - this.start > timeoutThreshold && timeoutThreshold > 0) {
+            this.showGrid();
+            let msg = new Date().toISOString() + ' Timeout, pieces per sec ' + Math.trunc(this.triedPieces / timeoutThreshold) + 'K';
+            console.warn(msg);
+            // alert(new Date().getTime() - this.start + " [msec] Timeout, check the browser's console");
+            this.totalSolutions = this.EXIT_SIGN; // fake exit - throw new Error(new Date().toISOString() + " Timeout, check the browser's console");
+            this.allLines = msg;
         }
 
         let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
@@ -352,11 +369,11 @@ class Puzzle2d {
     solve() {
         this.start = new Date().getTime();
         this.triedPieces = 0;
-        console.log(new Date().toISOString());
-        console.log(new Date().getTime() - this.start + " [msec] Started");
 
         if (this.totalFillInGrid !== window.globalTotalFill) {
-            console.error("invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill);
+            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill;
+            console.error(msg);
+            alert(msg);
         } else {
             this.put();
         }

@@ -3,48 +3,48 @@ import { Puzzle2d } from "./puzzle2d.js";
 let solveButton = document.getElementById('solveButton');
 
 // a "library" of puzzles, we got 4k for that
-let restoreButtonLatest = document.getElementById('restoreButtonLatest');
+let restoreButton1 = document.getElementById('restoreButton1');
 let restoreButton2 = document.getElementById('restoreButton2');
 let restoreButton3 = document.getElementById('restoreButton3');
 let restoreButton4 = document.getElementById('restoreButton4');
 
-let puzzle;
-
-restoreButtonLatest.addEventListener('click', () => {
-    let input = getCookie("presetLatest");
-    if (input !== "") {
+function restoreButton(id) {
+    let input = getCookie("preset" + id);
+    console.log('cls');
+    document.getElementById('output').innerHTML = '';
+    // if (input !== "") {
         document.getElementById('input').value = input;
-    }
+    // }
+}
+
+restoreButton1.addEventListener('click', () => {
+    restoreButton(1);
 });
 
 restoreButton2.addEventListener('click', () => {
-    let input = getCookie("preset2");
-    if (input !== "") {
-        document.getElementById('input').value = input;
-    }
+    restoreButton(2);
 });
 
 restoreButton3.addEventListener('click', () => {
-    let input = getCookie("preset3");
-    if (input !== "") {
-        document.getElementById('input').value = input;
-    }
+    restoreButton(3);
 });
 
 restoreButton4.addEventListener('click', () => {
-    let input = getCookie("preset4");
-    if (input !== "") {
-        document.getElementById('input').value = input;
-    }
+    restoreButton(4);
 });
 
 solveButton.addEventListener('click', () => {
 
+    // todo async, otherwise we got the output only in the end,
+    // this allows timeout > 1.5 sec as user will see the progress.
+
     let output = document.getElementById('output');
+    console.log('Started'); //  at ' + new Date().toISOString());
 
     let input = document.getElementById('input').value;
 
     let header = input.split('\n')[0];
+    let puzzle;
 
     // As I fixed the Poly bug, still have a way to measure the cpu speed.
     // see "benchmarks" at puzzle2d.js
@@ -52,37 +52,49 @@ solveButton.addEventListener('click', () => {
     //      Core i7, 8th Gen, 8665U (Q2 2019) - 3.2 sec - 53 sec with DevTools
     //      Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
     //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
+    // in fact, there's a way, with input = 12,3,20 (vs 12,20,3)
     if (header.toLowerCase().trim() === 'speed') {
         let dt = new Date();
         var amount = 1500000000;
         console.log('For-loop till ' + amount);
-        console.log('Started at ' + dt.toISOString());
-        for (var i = amount; i > 0; i--) {}
+        let start = dt.getTime();
+        for (var i = amount; i > 0; i--) {
+            // do nothing
+        }
         dt = new Date();
         console.log('Ended at ' + dt.toISOString());
-        output.innerHTML = header;
+        output.innerHTML = 'For-loop till ' + amount +
+            '\nTime taken [sec] ' + (dt.getTime() - start) / 1000;
     }
-    else {
-        if (input !== "") {
+    else if (input !== "" && input.indexOf(',') !== -1) {
+        if (input !== getCookie("preset1")) {
             setCookie("preset4", getCookie("preset3"), 365);
             setCookie("preset3", getCookie("preset2"), 365);
-            setCookie("preset2", getCookie("presetLatest"), 365);
-            setCookie("presetLatest", input, 365);
+            setCookie("preset2", getCookie("preset1"), 365);
+            setCookie("preset1", input, 365);
         }
 
         if (header.indexOf('#6,6') >= 0) {
             // todo move into buildFromFile
             puzzle = new Puzzle2d(10, 6, 6);
-            output.innerHTML = '10';
+            output.innerHTML = '10 pieces';
         } else if (header.indexOf('12,') >= 0) {
             puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
             output.innerHTML = 'Poly';
         }
-        else {
+        else if (header.trim().startsWith('#')) {
             puzzle = new Puzzle2d(0, 0, 0, input);
-            output.innerHTML = 'Custom';
+            output.innerHTML = 'Custom puzzle';
         }
-        output.innerHTML = puzzle.solve(); // todo async
+        if (puzzle != null) {
+            output.innerHTML = puzzle.solve();
+        }
+        else {
+            output.innerHTML = new Date().toISOString() + ' Invalid input';
+        }
+    }
+    else {
+        output.innerHTML = new Date().toISOString() + ' Invalid input';
     }
 });
 

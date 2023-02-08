@@ -40,6 +40,7 @@ class Piece {
         }
 
         if (this.totalThisFill === 0) {
+            alert("empty piece");
             throw new Error('empty piece');
         }
 
@@ -54,6 +55,7 @@ class Piece {
                     this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length,3);
                     this.printPart(3, this.layouts[3]);
                     if (availRotations > 4) {
+                        alert("rotations is up to 4");
                         throw new Error("rotations is up to 4");
                     }
                 }
@@ -72,6 +74,7 @@ class Piece {
             }
         }
         else if (this.symmetric > 2) {
+            alert("symmetric is up to 2");
             throw new Error("symmetric is up to 2");
         }
 

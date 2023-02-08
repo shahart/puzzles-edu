@@ -18,9 +18,9 @@
             console.log = function(message) {
                 mylog(message);
             }
-            console.info = function(message) {
-                mylog(message);
-            }
+            // console.info = function(message) {
+            //     mylog(message); // allows to test mobile and non mobile on the same time
+            // }
             console.warn = function(message) {
                 mylog("[WARN] " + message);
             }
@@ -28,6 +28,14 @@
                 mylog("ERROR " + message);
             }
             mylog = function(message) {
+                console.info(message);
+                if (message.toLowerCase().startsWith("started")) {
+                    $("#console-log").empty();
+                }
+                if (message === 'cls') {
+                    $("#console-log").empty();
+                    return;
+                }
                 if ($("#console-log").length === 0) {
                     $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.85); color:white; font-family: monospace;"></ul>'));
                 }
@@ -51,6 +59,7 @@ for a planar orthogonal lattice.
 <p>
 <img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 10%;">
 <p>
+<h3>Puzzle</h3>
 <textarea id="input" rows="20" cols="30">
 #just a demo input for now #6,6
 xxxxxx
@@ -106,21 +115,21 @@ xxxx
 <h3>Solution...</h3>
 <textarea id="output" disabled="true" rows="20" cols="30">
 Found 6 rows, 6 cols, with total of cells 36
-30 [msec] showGrid. TriedPieces 348
+30 [msec] grid:
  1  A  A  C  C  C  J
  2  A  F  F  C  I  J
  3  A  A  H  H  I  J
  4  G  B  H  H  D  J
  5  G  B  B  E  D  D
  6  G  G  B  E  E  D
-32 [msec] pieces A C J F I H G B D E
+32 [msec] pieces A C J F I H G B D E  tried pieces 348
 </textarea>
 <p>
-📝&nbsp;Presets:
+📝&nbsp;Preset puzzles:
 <p>
 ('Solve' moves the preset to the right)
 <p>
-<button id="restoreButtonLatest" type="button">Latest</button>
+<button id="restoreButton1" type="button">Latest</button>
     &nbsp;==>&nbsp;
 <button id="restoreButton2" type="button">2</button>
     &nbsp;==>&nbsp;
