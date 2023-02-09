@@ -1,4 +1,5 @@
 import { Piece } from "./piece.js";
+import { Builder } from "./builder.js";
 
 window.globalTotalFill = 0;
 
@@ -112,13 +113,13 @@ class Puzzle2d {
         // prepare grid (the board)
 
         if (input) {
-            this.buildFromFile(input);
+            new Builder(this, input);
         }
         else {
             for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
                 let piece = i;
                 this.piecesIndices.push(piece);
-                this.pieces[i]= (new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i)));
+                this.pieces[i]= new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
             }
             if (this.ROWS === this.COLUMNS && this.ROWS === 8) {
                 this.grid[0][0]=-1;

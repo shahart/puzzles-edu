@@ -77,14 +77,11 @@ solveButton.addEventListener('click', () => {
         if (header.indexOf('#6,6') >= 0) {
             // todo move into buildFromFile
             puzzle = new Puzzle2d(10, 6, 6);
-            output.innerHTML = '10 pieces';
-        } else if (header.indexOf('12,') >= 0) {
+        } else if (header.toLowerCase().indexOf('poly,') >= 0) {
             puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
-            output.innerHTML = 'Poly';
         }
         else if (header.trim().startsWith('#')) {
             puzzle = new Puzzle2d(0, 0, 0, input);
-            output.innerHTML = 'Custom puzzle';
         }
         if (puzzle != null) {
             output.innerHTML = puzzle.solve();
