@@ -74,14 +74,11 @@ solveButton.addEventListener('click', () => {
             setCookie("preset1", input, 365);
         }
 
-        if (header.indexOf('#6,6') >= 0) {
-            // todo move into buildFromFile
-            puzzle = new Puzzle2d(10, 6, 6);
-        } else if (header.toLowerCase().indexOf('poly,') >= 0) {
+        if (header.toLowerCase().indexOf('poly,') >= 0) {
             puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
         }
         else if (header.trim().startsWith('#')) {
-            puzzle = new Puzzle2d(0, 0, 0, input);
+            puzzle = new Puzzle2d(12, 0, 0, input);
         }
         if (puzzle != null) {
             output.innerHTML = puzzle.solve();

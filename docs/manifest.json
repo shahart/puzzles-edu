@@ -1,0 +1,16 @@
+{
+  "name": "Puzzle Solver",
+  "short_name": "Puzzle",
+  "description": "Solve 2D (Planer Orthogonal Lattice) Puzzles",
+  "scope": "/puzzles-edu/",
+  "id": "/puzzles-edu/",
+  "start_url": "/puzzles-edu/",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif",
+      "type": "image/png",
+      "sizes": "189x122"
+    }
+  ]
+}

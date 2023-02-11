@@ -114,22 +114,16 @@ class Puzzle2d {
 
         if (input) {
             new Builder(this, input);
+            this.ROWS = this.grid.length;
+            this.COLUMNS = this.grid[0].length;
         }
-        else {
-            for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
-                let piece = i;
-                this.piecesIndices.push(piece);
-                this.pieces[i]= new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
-            }
-            if (this.ROWS === this.COLUMNS && this.ROWS === 8) {
-                this.grid[0][0]=-1;
-                this.grid[7][0]=-1;
-                this.grid[0][7]=-1;
-                this.grid[7][7]=-1;
-            }
-            while (this.grid[0][this.column] === -1) {
-                this.column++;
-            }
+        for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
+            let piece = i;
+            this.piecesIndices.push(piece);
+            this.pieces[i]= new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
+        }
+        while (this.grid[0][this.column] === -1) {
+            this.column++;
         }
 
         this.totalFillInGrid = this.ROWS * this.COLUMNS;

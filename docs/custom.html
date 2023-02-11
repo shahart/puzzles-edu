@@ -1,17 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <link rel="manifest" href="/puzzles-edu/docs/manifest.json"/>
     <meta charset="utf-8">
+    <meta name="author" content="Shahar">
+    <meta name="description" content="Solve 2D (Planer Orthogonal Lattice) Puzzles">
+    <meta name="keywords" content="puzzle,solver,backtrack">
+    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
     <link rel="shortcut icon" href="#">
     <title>Naive Solver</title>
 </head>
 <body>
+<noscript>
+    <p style="color:red">JavaScript shoule be enabled!</p>
+</noscript>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
 <!--<script src="https://raw.github.com/gorbiz/mobile-console.log/master/console.js" type="text/javascript"></script>--> <!-- Cross-Origin Read Blocking (CORB) -->
 <script>
     $(document).ready(function() {
         // Make a custom log for mobile devices
-        if (isMobile()) {
+        if (navigator.userAgentData?.mobile ||
+            isMobile()) {
             console.debug = function(message) {
                 // mylog("[DEBUG] " + message);
             }
@@ -57,7 +66,7 @@ Solve your puzzle on your device,<p>
 with a simple back-tracking algorithm<p>
 for a planar orthogonal lattice.
 <p>
-<img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 10%;">
+<img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 10%;" alt="a puzzle">
 <p>
 Another possible input is
 <p>
@@ -65,8 +74,8 @@ Another possible input is
 <p>
 for the predefined 12 Polyominos.
 <h3>Puzzle</h3>
-<textarea id="input" rows="20" cols="30">
-#just a demo input for now #6,6
+<textarea id="input" rows="20" cols="30" aria-label="input">
+#6,6
 xxxxxx
 xxxxxx
 xxxxxx
@@ -118,7 +127,7 @@ xxxx
 <p>
 <button id="solveButton" type="button">Solve</button>
 <h3>Solution...</h3>
-<textarea id="output" disabled="true" rows="20" cols="30">
+<textarea id="output" disabled="true" rows="20" cols="30" aria-label="Solution">
 </textarea>
 <p>
 📝&nbsp;Preset puzzles:
