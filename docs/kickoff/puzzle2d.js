@@ -114,8 +114,8 @@ class Puzzle2d {
 
         if (input) {
             new Builder(this, input);
-            this.ROWS = this.grid.length;
-            this.COLUMNS = this.grid[0].length;
+            this.COLUMNS = this.grid.length;
+            this.ROWS = this.grid[0].length;
         }
         for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
             let piece = i;
