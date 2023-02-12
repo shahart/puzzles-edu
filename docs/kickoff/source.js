@@ -12,9 +12,9 @@ function restoreButton(id) {
     let input = getCookie("preset" + id);
     console.log('cls');
     document.getElementById('output').innerHTML = '';
-    // if (input !== "") {
+    if (input !== "") {
         document.getElementById('input').value = input;
-    // }
+    }
 }
 
 restoreButton1.addEventListener('click', () => {
@@ -68,10 +68,10 @@ solveButton.addEventListener('click', () => {
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         if (input !== getCookie("preset1")) {
-            setCookie("preset4", getCookie("preset3"), 365);
-            setCookie("preset3", getCookie("preset2"), 365);
-            setCookie("preset2", getCookie("preset1"), 365);
-            setCookie("preset1", input, 365);
+            setCookie("preset4", getCookie("preset3"));
+            setCookie("preset3", getCookie("preset2"));
+            setCookie("preset2", getCookie("preset1"));
+            setCookie("preset1", input);
         }
 
         if (header.toLowerCase().indexOf('poly,') >= 0) {
@@ -84,34 +84,47 @@ solveButton.addEventListener('click', () => {
             output.innerHTML = puzzle.solve();
         }
         else {
+            console.warn('Invalid input');
             output.innerHTML = new Date().toISOString() + ' Invalid input';
         }
     }
     else {
+        console.warn('Invalid input');
         output.innerHTML = new Date().toISOString() + ' Invalid input';
     }
 });
 
-function setCookie(cname, cvalue, expireInDays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (expireInDays * 24*60*60*1000));
-    let expires = "expires=" + d.toUTCString();
-    var myCookieValue = cvalue.split('\n').join('\\'); // todo en/decodeURIComponent
-    document.cookie = cname + "=" + myCookieValue + ";" + expires + ";path=/";
+function setCookie(cname, cvalue) {
+    if (typeof (Storage) !== "undefined") {
+        localStorage.setItem(cname, cvalue);
+    } else {
+        const d = new Date();
+        let expireInDays = 365;
+        d.setTime(d.getTime() + (expireInDays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
+        var myCookieValue = cvalue.split('\n').join('\\'); // todo en/decodeURIComponent
+        document.cookie = cname + "=" + myCookieValue + ";" + expires + ";path=/";
+    }
 }
 
 function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = document.cookie;
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1);
+    if (typeof (Storage) !== "undefined") {
+        let res = localStorage.getItem(cname);
+        return res ? res : "";
+    } else {
+        // console.warn('No storageApi, using cookies')
+        let name = cname + "=";
+        let decodedCookie = document.cookie;
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length).split('\\').join('\n');
+            }
         }
-        if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length).split('\\').join('\n');
-        }
+        return "";
     }
-    return "";
 }
