@@ -29,7 +29,7 @@ class Piece {
 
         for (let i=0; i<layout.length; i++) {
             for (let j=0; j<layout[i].length; j++) {
-                if (layout[i][j] === 1) {
+                if (layout[i][j] !== 0) {
                     window.globalTotalFill++;
                     this.totalThisFill++;
                 }
@@ -84,7 +84,7 @@ class Piece {
             let setSoFar = 0;
             for (let i=0; i<this.layouts[rot].length; i++) {
                 for (let j = 0; j < this.layouts[rot][i].length; j++) {
-                    if (this.layouts[rot][i][j] === 1) {
+                    if (this.layouts[rot][i][j] >= 1) {
                         this.rowsSet[rot][setSoFar] = i;
                         this.columnsSet[rot][setSoFar] = j;
                         setSoFar++;
@@ -135,16 +135,16 @@ class Piece {
     }
 
     getLayout() {
-        return layouts[this.currRotation];
+        return this.layouts[this.currRotation];
     }
 
     copySymmetric(original) {
         let rows = original.length;
         let result = new Array(rows).fill(0);
 
-        for (let i=0; i<rows; i++) {
+        for (let i = 0; i < rows; i++) {
             result[i] = new Array(original[rows-i-1].length).fill(0);
-            for (let j=0; j<result[i].length; j++) {
+            for (let j = 0; j < result[i].length; j++) {
                 result[i][j] = original[rows - i - 1][j];
             }
         }
@@ -155,9 +155,15 @@ class Piece {
     realRotate(original, rows, columns, index) {
         let result = new Array(rows).fill(0).map(_ => new Array(columns).fill(0)); //[maxColumns][originalLayout.length];
 
-        for (let i=0; i<columns; i++) {
+        for (let i = 0; i < columns; i++) {
             for (let j = 0; j < rows; j++) {
-                result[rows - j - 1][i] = (original[i][j] === 1 ? 1 : 0);
+                result[rows - j - 1][i] = 0;
+                if (original[i][j] === 1) {
+                    result[rows - j - 1][i] = 1;
+                }
+                else if (original[i][j] === 2) {
+                    result[rows - j - 1][i] = 2;
+                }
             }
         }
 

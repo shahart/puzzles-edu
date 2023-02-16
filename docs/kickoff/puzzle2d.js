@@ -29,9 +29,9 @@ class Puzzle2d {
             alert('RangeError: Invalid array length');
         }
         this.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
+        this.gridCopy = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
         this.currPiece;
         this.totalFillInGrid = 0;
-        this.availInGrid = 0;
         this.allPieces = [
             // Poly
             [[1],[1],[1],[1,1]],        //4-2 (2)   L sym = indicates it is symmetric // TODO write flip
@@ -106,8 +106,14 @@ class Puzzle2d {
                 // } else if (this.totalSolutions === 0) {
                 } else if (this.grid[i][j] === 0) {
                     line += "-  ";
+                } else if (this.grid[i][j] === -10) { // 2nd type of grid cell
+                     line += "o  ";
                 } else {
-                    line += this.names.charAt(this.grid[i][j] - 1) + "  ";
+                    let ch = this.names.charAt(this.grid[i][j] - 1);
+                    if (this.gridCopy[i][j] === -10) {
+                        ch = ch.toLowerCase();
+                    }
+                    line += ch + "  ";
                 }
             }
             console.log(line);
@@ -128,9 +134,9 @@ class Puzzle2d {
         let columnjj = this.column - j;
         let rowi;
 
-        for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            rowi = this.row+this.currPiece.getRowSet(setSoFar);
-            columnj = columnjj+this.currPiece.getColumnSet(setSoFar); // column+currPiece.getColumnSet(setSoFar)-j;
+        for (let i = 0; i < this.currPiece.totalThisFill; i++) {
+            rowi = this.row + this.currPiece.getRowSet(setSoFar);
+            columnj = columnjj + this.currPiece.getColumnSet(setSoFar); // column + currPiece.getColumnSet(setSoFar) - j;
             if (this.grid[rowi] === undefined) {
                 return false;
             }
@@ -138,14 +144,18 @@ class Puzzle2d {
             if (gridRowiColumnJ === undefined) {
                 return false;
             }
-            if (gridRowiColumnJ !== 0) {
+            if (gridRowiColumnJ !== 0 && gridRowiColumnJ !== -10) {
                 // not included as in comments at Puzzle2D.java
                 return false;
             }
-            else {
+            let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)];
+            if ((gridRowiColumnJ === 0 && pieceVal === 1) || (gridRowiColumnJ === -10 && pieceVal === 2)) {
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
                 setSoFar++;
+            }
+            else {
+                return;
             }
             // not included as in comments at Puzzle2D
         }
@@ -261,7 +271,7 @@ class Puzzle2d {
         // console.debug(new Date().getTime() - this.start + " [msec] goForward");
         for (; this.row<this.ROWS; this.row++) {
             for (; this.column<this.COLUMNS; this.column++) {
-                if (this.grid[this.row][this.column] === 0) {
+                if (this.grid[this.row][this.column] === 0 || this.grid[this.row][this.column] === -10) {
                     return;
                 }
             }
@@ -277,18 +287,9 @@ class Puzzle2d {
         this.row = this.currPiece.getRow();
         this.column = this.currPiece.getColumn();
         // for debug- currPiece.setPosition(-1, -1);
-
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            this.grid[rowsSet[i]][columnsSet[i]] = 0;
+            this.grid[rowsSet[i]][columnsSet[i]] = this.gridCopy[rowsSet[i]][columnsSet[i]];
         }
-        /*
-                for (let i=0, rowi=row; i<currPieceLayout.length; i++, rowi++) {
-                    let columnj = column-this.currPiece.firstSquarePos;
-                    for (let j=0; j<currPieceLayout[i].length; j++, columnj++)
-                        if (currPieceLayout[i][j] === 1)
-                            grid[rowi][columnj] = 0;
-                }
-        */
         this.availInGrid += this.currPiece.totalThisFill;
     }
 

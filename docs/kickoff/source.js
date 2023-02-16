@@ -56,7 +56,7 @@ if (loadPuzzle("preset1") === '') {
     console.log("Init presets");
 
     savePuzzle("preset1",
-        "Poly,12,5");
+        "Poly,12,5\n");
 
     savePuzzle("preset2",
         "#10,6\n" +
@@ -75,7 +75,7 @@ if (loadPuzzle("preset1") === '') {
 
     savePuzzle("preset3",
         "#6,10\n" +
-        "#end of grid. Pieces:Poly");
+        "#end of grid. Pieces:Poly\n");
 
     savePuzzle("preset4",
         "#8,8\n" +
@@ -148,6 +148,86 @@ if (loadPuzzle("preset1") === '') {
         "\n" +
         "#pieceI5 R2 S1\n" +
         "xxxxx\n" +
+        "\n" +
+        "#piece-End\n");
+
+    savePuzzle("preset5",
+        "#8,8\n" +
+        "oxoxoxox\n" +
+        "xoxoxoxo\n" +
+        "oxoxoxox\n" +
+        "xoxoxoxo\n" +
+        "oxoxoxox\n" +
+        "xoxoxoxo\n" +
+        "oxoxoxox\n" +
+        "xoxoxoxo\n" +
+        "\n" +
+        "#end of grid. Pieces12 # checkers\n" +
+        "#PieceA4\n" +
+        "ox\n" +
+        "x\n" +
+        "o\n" +
+        "\n" +
+        "#pieceU5\n" +
+        "xo\n" +
+        " x\n" +
+        " o\n" +
+        " x\n" +
+        "\n" +
+        "#pieceF5\n" +
+        " o\n" +
+        "ox\n" +
+        "xo\n" +
+        " x\n" +
+        "\n" +
+        "#pieceX5\n" +
+        " x\n" +
+        "xo\n" +
+        "o\n" +
+        "x\n" +
+        "\n" +
+        "#pieceY5\n" +
+        "oxox\n" +
+        "  x\n" +
+        "\n" +
+        "#pieceW5\n" +
+        "o\n" +
+        "xo\n" +
+        " x\n" +
+        " o\n" +
+        "\n" +
+        "#pieceP6\n" +
+        "o\n" +
+        "xo\n" +
+        "oxo\n" +
+        "\n" +
+        "#pieceZ5\n" +
+        "  x\n" +
+        "oxo\n" +
+        "x\n" +
+        "\n" +
+        "#pieceB5\n" +
+        "  x\n" +
+        "oxo\n" +
+        "x\n" +
+        "\n" +
+        "#pieceV5\n" +
+        "o\n" +
+        "xo\n" +
+        " x\n" +
+        " o\n" +
+        "\n" +
+        "#pieceT5\n" +
+        "ox\n" +
+        " o\n" +
+        " x\n" +
+        " o\n" +
+        "\n" +
+        "#pieceI5\n" +
+        " x\n" +
+        "xox\n" +
+        "oxo\n" +
+        " o\n" +
         "\n" +
         "#piece-End\n");
 }

@@ -1,0 +1,88 @@
+#8,8
+oxoxoxox
+xoxoxoxo
+oxoxoxox
+xoxoxoxo
+oxoxoxox
+xoxoxoxo
+oxoxoxox
+xoxoxoxo
+
+#end of grid. Pieces12 # checkers
+#PieceA4
+ox
+x
+o
+
+#pieceU5
+xo
+ x
+ o
+ x
+
+#pieceF5
+ o
+ox
+xo
+ x
+
+#pieceX5
+ x
+xo
+o
+x
+
+#pieceY5
+oxox
+  x
+
+#pieceW5
+o
+xo
+ x
+ o
+
+#pieceP6
+o
+xo
+oxo
+
+#pieceZ5
+  x
+oxo
+x
+
+#pieceB5
+  x
+oxo
+x
+
+#pieceV5
+o
+xo
+ x
+ o
+
+#pieceT5
+ox
+ o
+ x
+ o
+
+#pieceI5
+ x
+xox
+oxo
+ o
+
+#piece-End
+
+#solution
+ 1  w  F  f  F  f  X  x  X
+ 2  W  w  F  f  X  x  A  y
+ 3  t  W  z  Z  a  A  a  Y
+ 4  T  w  Z  p  P  p  Y  y
+ 5  t  Z  z  P  p  I  i  Y
+ 6  T  t  B  p  I  i  I  i
+ 7  b  B  b  V  v  I  i  U
+ 8  B  v  V  v  U  u  U  u

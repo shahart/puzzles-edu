@@ -12,6 +12,7 @@ class Builder {
         let declardRows= parseInt(header.substring(1).split(",")[0]);
         let declardColumns = parseInt(header.substring(1).split(",")[1]);
         puzzle.grid = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
+        puzzle.gridCopy = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         let rows = 0;
         let columns = 0;
         let gridFound = false;
@@ -28,11 +29,20 @@ class Builder {
             }
             for (col = 0; col < line.length; ++col) {
                 if (line[col] === 'X' || line[col] === 'x') {
+                    // Filled by cell 0 by def
                     cellFound = true;
                     gridFound = true;
-                    ++ foundCells;
+                    ++foundCells;
+                } else if (line[col] === 'o' || line[col] === 'O') {
+                    puzzle.grid[row][col] = -10;
+                    puzzle.gridCopy[row][col] = -10;
+                    cellFound = true;
+                    gridFound = true;
+                    ++foundCells;
                 } else {
+                    // Empty
                     puzzle.grid[row][col] = -1;
+                    puzzle.gridCopy[row][col] = -1;
                     if (line[col] !== '_' && line[col] !== '-') {
                         console.warn("Invalid char " + line[col]);
                     }
@@ -96,7 +106,16 @@ class Builder {
                     for (let j = 0; j < pieceLines.length; ++j) {
                         layout[j] = [pieceLines[j].length];
                         for (let k = 0; k < pieceLines[j].length; ++k) {
-                            layout[j][k] = pieceLines[j][k] !== ' ' ? 1 : 0;
+                            layout[j][k] = 0;
+                            if (pieceLines[j][k] === 'X' || pieceLines[j][k] === 'x') {
+                                layout[j][k] = 1;
+                            }
+                            else if (pieceLines[j][k] === 'O' || pieceLines[j][k] === 'o') {
+                                layout[j][k] = 2;
+                            }
+                            else if (pieceLines[j][k] !== ' ') {
+                                console.warn('invalid char: ' + pieceLines[j][k]);
+                            }
                         }
                     }
                     if (!puzzle.names[pieceIdx]) {
@@ -144,6 +163,10 @@ class Builder {
                     pieceLines.push(line);
                 }
             }
+        }
+        if (puzzle.PIECES !== puzzle.names.length) {
+            alert("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
+            throw new Error("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
         }
     }
 }
