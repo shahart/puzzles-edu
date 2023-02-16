@@ -1,46 +1,49 @@
 import { Puzzle2d } from "../puzzle2d.js";
 import { Piece } from "../piece.js";
 
-// todo in tests mode, no serviceWorker, no notification, etc.
+// todo in tests mode, no serviceWorker, etc.
 
 describe('Mocha Puzzle2D tests', function () {
 
-    it('6x6-10 pieces', function () {
-        let puzzle2d = new Puzzle2d(10, 6, 6);
+    it('10x6-12 pieces', function () {
+        let puzzle2d = new Puzzle2d(12, 10, 6);
         let res = puzzle2d.solve();
         console.log("6x6-10 pieces>>" + res);
         chai.assert.include(res, ' 1  ');
     });
 
     it('3x3-3 pieces-no solution', function () {
-        let puzzle2d = new Puzzle2d(3, 3, 3);
+        let input =
+            '#3,3\n' +
+            'XXX\n' +
+            'xxX\n' +
+            'xxx\n' +
+            '\n' +
+            '#end of grid. Pieces3\n' +
+            '#PieceA5\n' +
+            '  X\n' +
+            'xxX\n' +
+            'X\n' +
+            '\n' +
+            '#pieceB3\n' +
+            'xx\n' +
+            'x\n' +
+            '\n' +
+            '#pieceC1\n' +
+            'x\n' +
+            '\n' +
+            '#piece-End\n';
+        let puzzle2d = new Puzzle2d(3, 3, 3, input);
         let res = puzzle2d.solve();
-        /*
-        [[0,0,1],[1,1,1],[1]]
-          x
-        xxx
-        x
-        [[1,1],[1]]
-        xx
-        x
-        [[1]]
-        x
-        */
         console.log("3x3-3 pieces-no solution>>" + res);
-        chai.assert.include(res, '');
+        chai.assert.equal(res, '');
     });
 
     it('invalid config, grid 60 pieces 55', () => {
-        try {
-            let puzzle2d = new Puzzle2d(11, 6, 10);
-            let res = puzzle2d.solve();
-            console.log("invalid config, grid 60 pieces 55>>" + res);
-            chai.assert.fail();
-        } catch (err) {
-            console.warn('invalid config, grid 60 pieces 55>>' + err);
-            // RangeError
-            chai.assert.include(err.message, 'nvalid array length'); // Chrome i..., Firefox I
-        }
+        let puzzle2d = new Puzzle2d(11, 6, 10);
+        let res = puzzle2d.solve();
+        console.log("invalid config, grid 60 pieces 55>>" + res);
+        chai.assert.equal(res, '');
     });
 
     it('invalid config, grid 50 pieces 60', () => {

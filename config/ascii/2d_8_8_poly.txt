@@ -1,0 +1,72 @@
+#8,8
+_xxxxxx_
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+_xxxxxx_
+
+#end of grid. Pieces12 # you can write also `Pieces:Poly`
+#PieceL5
+x
+x
+x
+xx
+
+#pieceU5 S1
+xx
+x
+xx
+
+#unique=F
+#pieceF5 R1 S1
+ xx
+xx
+ x
+
+#pieceX5 R1 S1
+ x
+xxx
+ x
+
+#pieceY5
+xxxx
+  x
+
+#pieceN5
+ x
+xx
+x
+x
+
+#pieceW5 S1
+  x
+ xx
+xx
+
+#pieceP5
+x
+xx
+xx
+
+#pieceZ5 R2
+  x
+xxx
+x
+
+#pieceV5 S1
+  x
+  x
+xxx
+
+#pieceT5 S1
+  x
+xxx
+  x
+
+#pieceI5 R2 S1
+xxxxx
+
+#piece-End

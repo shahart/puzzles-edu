@@ -1,0 +1,19 @@
+#3,3
+XXX
+xxX
+xxx
+
+#end of grid. Pieces3
+#PieceA1 R1
+ X
+
+#pieceB3
+ x
+xx
+
+#pieceC5
+xxx
+x
+x
+
+#piece-End

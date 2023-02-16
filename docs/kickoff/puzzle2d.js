@@ -11,7 +11,7 @@ class Puzzle2d {
         window.globalTotalFill = 0;
         this.allLines = '';
         this.start = new Date().getTime();
-        this.PIECES = pieces; // 3; // 12 Poly // 10 6x6
+        this.PIECES = pieces;
         this.ROWS = rows;
         this.COLUMNS = columns;
         this.totalSolutions = 0;
@@ -47,98 +47,39 @@ class Puzzle2d {
             [[0,0,1],[1,1,1],[0,0,1]],  //4-1 (8)   T
             [[1,1,1,1,1]]               //2-1 (1)   I
         ];
-
-        if (pieces === 3) {
-            this.allPieces = [
-                /* no solution - test
-                [[0,0,1],[1,1,1],[1]],
-                [[1,1],[1]],
-                [[1]]
-                 */
-                 [[0,1]],
-                 [[1,1],[1]],
-                 [[1,1,1],[1],[1]]
-            ];
-        }
-        else if (pieces === 10) {
-        this.allPieces = [
-            // 6x6
-            [[1, 1], [1], [1, 1]],
-            [[0, 1, 1], [1, 1]],
-            [[1, 1, 1], [0, 1]],
-            [[0, 1, 1], [1, 1]],
-            [[1, 1], [1]],
-            [[1, 1]],
-            [[0, 0, 1], [1, 1, 1]],
-            [[1, 1], [1, 1]],
-            [[1, 1]],
-            [[1, 1, 1, 1]],
-
-            // my first Ascii
-            /*
-                       // [[0,1]],
-                       // [[1,1],[1]],
-                       // [[1,1,1],[1],[1]]
-            */
-        ];
-        }
-
-        // 6x6, 10 pieces
-        this.names = "ABCDEFGHIJ";
-        this.rotations = [ 4,4,4/*4*/,4,4,2,4,1,2,2 ];
-        this.symmetric = [ 1,2,1/*2*/,2,1,1,2,1,1,1 ];
-
-        // Poly
-        if (pieces === 12) {
-            console.log("Polyominos");
-            this.names = "LUFXYNWPZVTI"; // Poly
-            this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
-            this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
-        }
-        else if (pieces === 3) {
-            console.log("3x3");
-            this.names = "XYZ";
-            this.rotations = [4, 4, 1];
-            this.symmetric = [2, 1, 1];
-        }
-
-        if (this.ROWS === this.COLUMNS && this.ROWS === 8) {
-            this.rotations[2] = 1;
-        }
-
-        if (this.allPieces.length > this.PIECES) {
-            console.warn("using first pieces from the whole set");
-        }
-
-        // prepare grid (the board)
-
+        this.names = "LUFXYNWPZVTI"; // Poly
+        this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
+        this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
+        this.totalFillInGrid = this.ROWS * this.COLUMNS;
         if (input) {
             new Builder(this, input);
-            this.COLUMNS = this.grid.length;
-            this.ROWS = this.grid[0].length;
+            if (this.PIECES === 12 && this.names === "LUFXYNWPZVTI") {
+                console.log("Polyominos");
+            }
         }
-        for (let i=0; i<this.PIECES/*allPieces.length*/; i++) {
-            let piece = i;
-            this.piecesIndices.push(piece);
-            this.pieces[i]= new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
+        else {
+            if (this.allPieces.length > this.PIECES) {
+                console.warn("using first pieces from the whole set");
+            }
+            for (let i = 0; i < this.PIECES/*allPieces.length*/; i++) {
+                let piece = i;
+                this.piecesIndices.push(piece);
+                this.pieces[i] = new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
+            }
+            for (let i = 0; i < this.grid.length; i++) {
+                for (let j = 0; j < this.grid[i].length; j++) {
+                    if (this.grid[i][j] === -1) {
+                        this.totalFillInGrid--;
+                    }
+                }
+            }
+            console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.totalFillInGrid);
         }
         while (this.grid[0][this.column] === -1) {
             this.column++;
         }
-
-        this.totalFillInGrid = this.ROWS * this.COLUMNS;
-        for (let i=0; i<this.grid.length; i++) {
-            for (let j = 0; j < this.grid[i].length; j++) {
-                if (this.grid[i][j] === -1) {
-                    this.totalFillInGrid--;
-                }
-            }
-        }
-
         this.availInGrid = this.totalFillInGrid;
-        console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.availInGrid);
         // this.showGrid();
-
         // todo ChatGPT said to sort by piece size, for now do simple shuffle as in Java - irrelevant at Poly
         this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
@@ -156,6 +97,10 @@ class Puzzle2d {
             }
             line += "  ";
             for (let j=0;  j<this.COLUMNS; j++) {
+                if (this.grid[i] === undefined || this.grid[i][j] === undefined) {
+                    alert("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
+                    throw new Error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
+                }
                 if (this.grid[i][j] === -1) {
                     line += "*  ";
                 // } else if (this.totalSolutions === 0) {
@@ -173,11 +118,6 @@ class Puzzle2d {
         if (this.totalSolutions > 0 && this.totalSolutions < this.EXIT_SIGN) {
             this.solutionFound = true;
         }
-    }
-
-    buildFromFile(input) {
-        // next todo
-        console.debug('buildFromFile, lines ' + input.split('\n').length);
     }
 
     canPut(rowsSet, columnsSet) {
@@ -214,11 +154,9 @@ class Puzzle2d {
     }
 
     put() {
-
         if (this.totalSolutions === this.EXIT_SIGN) {
             return;
         }
-
         let leftPieces = this.piecesIndices.length;
         // console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
         if (leftPieces === 0) { //  && availInGrid == 0) {
@@ -243,13 +181,10 @@ class Puzzle2d {
                 // throw new Error(notif); // todo? if !isMobile() /* at custom .html */ continue to find all solutions
             }
         }
-
         // this.showGrid();
-
         if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
             return;
         }
-
         // firefox's dom.max_script_run_time = 20 sec
         let timeoutThreshold = 1500;
         if (new Date().getTime() - this.start > timeoutThreshold && timeoutThreshold > 0) {
@@ -260,7 +195,6 @@ class Puzzle2d {
             this.totalSolutions = this.EXIT_SIGN; // fake exit - throw new Error(new Date().toISOString() + " Timeout, check the browser's console");
             this.allLines = msg;
         }
-
         let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
         let columnsSet = new Array(5).fill(0);
 
@@ -300,7 +234,6 @@ class Puzzle2d {
                 }
             }
         }
-
     }
 
     showPieces() {
@@ -340,11 +273,9 @@ class Puzzle2d {
         this.currPiece = this.pieces[piece];
         // console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
         // currPieceLayout = this.currPiece.getLayout();
-
         // getPosition
         this.row = this.currPiece.getRow();
         this.column = this.currPiece.getColumn();
-
         // for debug- currPiece.setPosition(-1, -1);
 
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
@@ -366,7 +297,7 @@ class Puzzle2d {
         this.triedPieces = 0;
 
         if (this.totalFillInGrid !== window.globalTotalFill) {
-            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill;
+            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns is in the correct order";
             console.error(msg);
             alert(msg);
         } else {

@@ -42,10 +42,10 @@ public class Part2D extends IPart {
         return cell;
     }
 
-    // notCheckDup- in case the curret part is the unique
+    // notCheckDup- in case the current part is the unique
     @Override
     public List<Integer> completeRotations(boolean notCheckDup) {
-        List<Integer> toDel = new ArrayList<Integer>();
+        List<Integer> toDel = new ArrayList<>();
         rotationIndex = 0;
         for (int sym = 0; sym<reflective;sym++) {
             for (int rot=0; rot< rotationCycle(new CellPart2D(new CellId(0)), CellPart2D.edge.XY.ordinal()); rot++) {
