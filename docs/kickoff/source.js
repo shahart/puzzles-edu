@@ -2,14 +2,13 @@ import { Puzzle2d } from "./puzzle2d.js";
 
 let solveButton = document.getElementById('solveButton');
 
-// a "library" of puzzles, see savePuzzle
 let restoreButton1 = document.getElementById('restoreButton1');
 let restoreButton2 = document.getElementById('restoreButton2');
 let restoreButton3 = document.getElementById('restoreButton3');
-let restoreButton4 = document.getElementById('restoreButton4');
-let restoreButton5 = document.getElementById('restoreButton5');
-let restoreButton6 = document.getElementById('restoreButton6');
-let restoreButton7 = document.getElementById('restoreButton7');
+
+let saveButton1 = document.getElementById('saveButton1');
+let saveButton2 = document.getElementById('saveButton2');
+let saveButton3 = document.getElementById('saveButton3');
 
 function restoreButton(id) {
     let input = loadPuzzle("preset" + id);
@@ -32,205 +31,267 @@ restoreButton3.addEventListener('click', () => {
     restoreButton(3);
 });
 
-restoreButton4.addEventListener('click', () => {
-    restoreButton(4);
+saveButton1.addEventListener('click', () => {
+    let input = document.getElementById('input').value;
+    if (input !== "") {
+        savePuzzle("preset" + 1, input);
+    }
 });
 
-restoreButton5.addEventListener('click', () => {
-    restoreButton(5);
+saveButton2.addEventListener('click', () => {
+    let input = document.getElementById('input').value;
+    if (input !== "") {
+        savePuzzle("preset" + 2, input);
+    }
 });
 
-restoreButton6.addEventListener('click', () => {
-    restoreButton(6);
-});
-
-restoreButton7.addEventListener('click', () => {
-    restoreButton(7);
+saveButton3.addEventListener('click', () => {
+    let input = document.getElementById('input').value;
+    if (input !== "") {
+        savePuzzle("preset" + 3, input);
+    }
 });
 
 if (!(typeof (StorageEvent) !== undefined)) {
     console.warn('No storageApi, using cookies');
 }
 
-if (loadPuzzle("preset1") === '') {
-    console.log("Init presets");
+let dropdownButton = document.getElementById('PuzzleSelect');
+dropdownButton.addEventListener('click', () => {
 
-    savePuzzle("preset1",
-        "Poly,12,5\n");
+    if (dropdownButton.value === '6x6, 6 pieces') {
+        document.getElementById('input').value =
+            "#6,6\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "\n" +
+            "#end of grid. Pieces10\n" +
+            "#PieceA5\n" +
+            "x x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceB4\n" +
+            " x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceC4\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceD4\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceE3\n" +
+            " x\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceF2 R2\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceG2 R2\n" +
+            "xx\n" +
+            "\n" +
+            "#unique=H\n" +
+            "#pieceH4\n" +
+            "  x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceI4 R1\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceJ4 R2\n" +
+            "xxxx\n" +
+            "\n" +
+            "#piece-End";
+    }
 
-    savePuzzle("preset2",
-        "#10,6\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "xxxxxx\n" +
-        "\n" +
-        "#end of grid. Pieces:Poly\n");
+    if (dropdownButton.value === 'Poly 12x5') {
+        document.getElementById('input').value =
+            "#12,5\n" +
+            "#end of grid. Pieces:Poly";
+    }
 
-    savePuzzle("preset3",
-        "#6,10\n" +
-        "#end of grid. Pieces:Poly\n");
+    if (dropdownButton.value === 'Poly 10x6') {
+        document.getElementById('input').value =
+            "#10,6\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "\n" +
+            "#end of grid. Pieces:Poly";
+    }
 
-    savePuzzle("preset4",
-        "#8,8\n" +
-        "_xxxxxx_\n" +
-        "xxxxxxxx\n" +
-        "xxxxxxxx\n" +
-        "xxxxxxxx\n" +
-        "xxxxxxxx\n" +
-        "xxxxxxxx\n" +
-        "xxxxxxxx\n" +
-        "_xxxxxx_\n" +
-        "\n" +
-        "#end of grid. Pieces12 # you can write also: Pieces:Poly\n" +
-        "#PieceL5\n" +
-        "x\n" +
-        "x\n" +
-        "x\n" +
-        "xx\n" +
-        "\n" +
-        "#pieceU5 S1\n" +
-        "xx\n" +
-        "x\n" +
-        "xx\n" +
-        "\n" +
-        "#unique=F\n" +
-        "#pieceF5 R1 S1\n" +
-        " xx\n" +
-        "xx\n" +
-        " x\n" +
-        "\n" +
-        "#pieceX5 R1 S1\n" +
-        " x\n" +
-        "xxx\n" +
-        " x\n" +
-        "\n" +
-        "#pieceY5\n" +
-        "xxxx\n" +
-        "  x\n" +
-        "\n" +
-        "#pieceN5\n" +
-        " x\n" +
-        "xx\n" +
-        "x\n" +
-        "x\n" +
-        "\n" +
-        "#pieceW5 S1\n" +
-        "  x\n" +
-        " xx\n" +
-        "xx\n" +
-        "\n" +
-        "#pieceP5\n" +
-        "x\n" +
-        "xx\n" +
-        "xx\n" +
-        "\n" +
-        "#pieceZ5 R2\n" +
-        "  x\n" +
-        "xxx\n" +
-        "x\n" +
-        "\n" +
-        "#pieceV5 S1\n" +
-        "  x\n" +
-        "  x\n" +
-        "xxx\n" +
-        "\n" +
-        "#pieceT5 S1\n" +
-        "  x\n" +
-        "xxx\n" +
-        "  x\n" +
-        "\n" +
-        "#pieceI5 R2 S1\n" +
-        "xxxxx\n" +
-        "\n" +
-        "#piece-End\n");
+    if (dropdownButton.value === 'Poly 8x8') {
+        document.getElementById('input').value =
+            "#8,8\n" +
+            "_xxxxxx_\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "_xxxxxx_\n" +
+            "\n" +
+            "#end of grid. Pieces12 # you can write also: Pieces:Poly\n" +
+            "#PieceL5\n" +
+            "x\n" +
+            "x\n" +
+            "x\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceU5 S1\n" +
+            "xx\n" +
+            "x\n" +
+            "xx\n" +
+            "\n" +
+            "#unique=F\n" +
+            "#pieceF5 R1 S1\n" +
+            " xx\n" +
+            "xx\n" +
+            " x\n" +
+            "\n" +
+            "#pieceX5 R1 S1\n" +
+            " x\n" +
+            "xxx\n" +
+            " x\n" +
+            "\n" +
+            "#pieceY5\n" +
+            "xxxx\n" +
+            "  x\n" +
+            "\n" +
+            "#pieceN5\n" +
+            " x\n" +
+            "xx\n" +
+            "x\n" +
+            "x\n" +
+            "\n" +
+            "#pieceW5 S1\n" +
+            "  x\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceP5\n" +
+            "x\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceZ5 R2\n" +
+            "  x\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceV5 S1\n" +
+            "  x\n" +
+            "  x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceT5 S1\n" +
+            "  x\n" +
+            "xxx\n" +
+            "  x\n" +
+            "\n" +
+            "#pieceI5 R2 S1\n" +
+            "xxxxx\n" +
+            "\n" +
+            "#piece-End";
+    }
 
-    savePuzzle("preset5",
-        "#8,8\n" +
-        "oxoxoxox\n" +
-        "xoxoxoxo\n" +
-        "oxoxoxox\n" +
-        "xoxoxoxo\n" +
-        "oxoxoxox\n" +
-        "xoxoxoxo\n" +
-        "oxoxoxox\n" +
-        "xoxoxoxo\n" +
-        "\n" +
-        "#end of grid. Pieces12 # checkers\n" +
-        "#PieceA4\n" +
-        "ox\n" +
-        "x\n" +
-        "o\n" +
-        "\n" +
-        "#pieceU5\n" +
-        "xo\n" +
-        " x\n" +
-        " o\n" +
-        " x\n" +
-        "\n" +
-        "#pieceF5\n" +
-        " o\n" +
-        "ox\n" +
-        "xo\n" +
-        " x\n" +
-        "\n" +
-        "#pieceX5\n" +
-        " x\n" +
-        "xo\n" +
-        "o\n" +
-        "x\n" +
-        "\n" +
-        "#pieceY5\n" +
-        "oxox\n" +
-        "  x\n" +
-        "\n" +
-        "#pieceW5\n" +
-        "o\n" +
-        "xo\n" +
-        " x\n" +
-        " o\n" +
-        "\n" +
-        "#pieceP6\n" +
-        "o\n" +
-        "xo\n" +
-        "oxo\n" +
-        "\n" +
-        "#pieceZ5\n" +
-        "  x\n" +
-        "oxo\n" +
-        "x\n" +
-        "\n" +
-        "#pieceB5\n" +
-        "  x\n" +
-        "oxo\n" +
-        "x\n" +
-        "\n" +
-        "#pieceV5\n" +
-        "o\n" +
-        "xo\n" +
-        " x\n" +
-        " o\n" +
-        "\n" +
-        "#pieceT5\n" +
-        "ox\n" +
-        " o\n" +
-        " x\n" +
-        " o\n" +
-        "\n" +
-        "#pieceI5\n" +
-        " x\n" +
-        "xox\n" +
-        "oxo\n" +
-        " o\n" +
-        "\n" +
-        "#piece-End\n");
-}
+    if (dropdownButton.value === 'Checkers') {
+        document.getElementById('input').value =
+            "#8,8\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "\n" +
+            "#end of grid. Pieces12 # checkers\n" +
+            "#PieceA4\n" +
+            "ox\n" +
+            "x\n" +
+            "o\n" +
+            "\n" +
+            "#pieceU5\n" +
+            "xo\n" +
+            " x\n" +
+            " o\n" +
+            " x\n" +
+            "\n" +
+            "#pieceF5\n" +
+            " o\n" +
+            "ox\n" +
+            "xo\n" +
+            " x\n" +
+            "\n" +
+            "#pieceX5\n" +
+            " x\n" +
+            "xo\n" +
+            "o\n" +
+            "x\n" +
+            "\n" +
+            "#pieceY5\n" +
+            "oxox\n" +
+            "  x\n" +
+            "\n" +
+            "#pieceW5\n" +
+            "o\n" +
+            "xo\n" +
+            " x\n" +
+            " o\n" +
+            "\n" +
+            "#pieceP6\n" +
+            "o\n" +
+            "xo\n" +
+            "oxo\n" +
+            "\n" +
+            "#pieceZ5\n" +
+            "  x\n" +
+            "oxo\n" +
+            "x\n" +
+            "\n" +
+            "#pieceB5\n" +
+            "  x\n" +
+            "oxo\n" +
+            "x\n" +
+            "\n" +
+            "#pieceV5\n" +
+            "o\n" +
+            "xo\n" +
+            " x\n" +
+            " o\n" +
+            "\n" +
+            "#pieceT5\n" +
+            "ox\n" +
+            " o\n" +
+            " x\n" +
+            " o\n" +
+            "\n" +
+            "#pieceI5\n" +
+            " x\n" +
+            "xox\n" +
+            "oxo\n" +
+            " o\n" +
+            "\n" +
+            "#piece-End";
+    }
+});
 
 solveButton.addEventListener('click', () => {
 
@@ -266,15 +327,6 @@ solveButton.addEventListener('click', () => {
             '\nTime taken [sec] ' + (dt.getTime() - start) / 1000;
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
-        if (input !== loadPuzzle("preset1")) {
-            savePuzzle("preset7", loadPuzzle("preset6"));
-            savePuzzle("preset6", loadPuzzle("preset5"));
-            savePuzzle("preset5", loadPuzzle("preset4"));
-            savePuzzle("preset4", loadPuzzle("preset3"));
-            savePuzzle("preset3", loadPuzzle("preset2"));
-            savePuzzle("preset2", loadPuzzle("preset1"));
-            savePuzzle("preset1", input);
-        }
 
         if (header.toLowerCase().indexOf('poly,') >= 0) {
             puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));

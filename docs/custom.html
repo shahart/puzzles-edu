@@ -63,88 +63,38 @@
     }
 </script>
 <h1>Naïve 2D Solver</h1>
-Solve your puzzle on your device,<p>
+Solve your puzzle on your device, 📝<p>
 with a simple back-tracking algorithm<p>
 for a planar orthogonal lattice.
 <p>
-<img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 10%;" alt="a puzzle">
+<img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 40%;" alt="a puzzle">
 <p>
-See the below presets for examples.
+<label for="PuzzleSelect"></label>
+<select id="PuzzleSelect">
+    <option value="Poly 12x5">Poly 12x5</option>
+    <option value="Poly 10x6">Poly 10x6</option>
+    <option value="Poly 8x8">Poly 8x8</option>
+    <option value="Checkers">Checkers</option>
+    <option value="6x6, 6 pieces">6x6, 6 pieces</option>
+    <option value="Presets" disabled selected>Presets</option>
+</select>
+<p>Load:
+    <button id="restoreButton1" type="button">1</button>
+    <button id="restoreButton2" type="button">2</button>
+    <button id="restoreButton3" type="button">3</button>
+<p>Save:
+    <button id="saveButton1" type="button">1</button>
+    <button id="saveButton2" type="button">2</button>
+    <button id="saveButton3" type="button">3</button>
 <h3>Puzzle</h3>
-<textarea id="input" rows="20" cols="30" aria-label="input">
-#6,6
-xxxxxx
-xxxxxx
-xxxxxx
-xxxxxx
-xxxxxx
-xxxxxx
-
-#end of grid. Pieces10
-#PieceA5
-x x
-xxx
-
-#pieceB4
- x
-xxx
-
-#pieceC4
- xx
-xx
-
-#pieceD4
- xx
-xx
-
-#pieceE3
- x
-xx
-
-#pieceF2 R2
-xx
-
-#pieceG2 R2
-xx
-
-#unique=H
-#pieceH4
-  x
-xxx
-
-#pieceI4 R1
-xx
-xx
-
-#pieceJ4 R2
-xxxx
-
-#piece-End
+<textarea id="input" rows="14" cols="30" aria-label="input">
+Poly,12,5
 </textarea>
 <p>
 <button id="solveButton" type="button">Solve</button>
 <h3>Solution...</h3>
-<textarea id="output" disabled="true" rows="20" cols="30" aria-label="Solution">
+<textarea id="output" disabled="disabled" rows="12" cols="30" aria-label="Solution">
 </textarea>
-<p>
-📝&nbsp;Preset puzzles:
-<p>
-('Solve' moves the preset to the right)
-<p>
-<button id="restoreButton1" type="button">Latest (1)</button>
-    &nbsp;==>&nbsp;
-<button id="restoreButton2" type="button">2</button>
-    &nbsp;==>&nbsp;
-<button id="restoreButton3" type="button">3</button>
-    &nbsp;==>&nbsp;
-<p>
-<button id="restoreButton4" type="button">4</button>
-&nbsp;==>&nbsp;
-<button id="restoreButton5" type="button">5</button>
-&nbsp;==>&nbsp;
-<button id="restoreButton6" type="button">6</button>
-&nbsp;==>&nbsp;
-<button id="restoreButton7" type="button">7</button>
 <p>
 <script src="kickoff/source.js" type='module'></script>
 <h4><a href="index.html">Back ... to more 🧩s</a></h4>
