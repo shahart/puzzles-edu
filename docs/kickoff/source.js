@@ -56,8 +56,11 @@ if (!(typeof (StorageEvent) !== undefined)) {
     console.warn('No storageApi, using cookies');
 }
 
+let lastRun = loadPuzzle("lastRun");
+document.getElementById('input').value = lastRun !== '' ? lastRun : 'Poly,15,4';
+
 let dropdownButton = document.getElementById('PuzzleSelect');
-dropdownButton.addEventListener('click', () => {
+dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === '6x6, 6 pieces') {
         document.getElementById('input').value =
@@ -146,7 +149,7 @@ dropdownButton.addEventListener('click', () => {
             "xxxxxxxx\n" +
             "_xxxxxx_\n" +
             "\n" +
-            "#end of grid. Pieces12 # you can write also: Pieces:Poly\n" +
+            "#end of grid. Pieces12 # You can write: Pieces:Poly\n" +
             "#PieceL5\n" +
             "x\n" +
             "x\n" +
@@ -293,7 +296,7 @@ dropdownButton.addEventListener('click', () => {
     }
 });
 
-solveButton.addEventListener('change', () => {
+solveButton.addEventListener('click', () => {
 
     // todo async, otherwise we got the output only in the end,
     // this allows timeout > 1.5 sec as user sees progress.
@@ -327,7 +330,7 @@ solveButton.addEventListener('change', () => {
             '\nTime taken [sec] ' + (dt.getTime() - start) / 1000;
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
-
+        savePuzzle("lastRun", input);
         if (header.toLowerCase().indexOf('poly,') >= 0) {
             puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
         }
