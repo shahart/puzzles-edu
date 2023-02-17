@@ -293,7 +293,7 @@ dropdownButton.addEventListener('click', () => {
     }
 });
 
-solveButton.addEventListener('click', () => {
+solveButton.addEventListener('change', () => {
 
     // todo async, otherwise we got the output only in the end,
     // this allows timeout > 1.5 sec as user sees progress.
