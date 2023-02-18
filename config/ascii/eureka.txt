@@ -1,0 +1,46 @@
+#8,8
+#end of grid. Pieces8
+#PieceA8
+xxx
+xxx
+ xx
+
+#pieceB8
+xxx
+x
+xx
+xx
+
+#pieceC8 S1
+  xx
+xxxx
+  xx
+
+#pieceD8
+x
+xxx
+xxxx
+
+#pieceE8
+x
+xxx
+xxx
+ x
+
+#pieceF8
+xx
+xx
+xxxx
+
+#pieceG8 S1
+  x
+xxx
+xxx
+  x
+
+#pieceH8 S1
+x x
+xxx
+xxx
+
+#piece-End

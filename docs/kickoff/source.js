@@ -1,4 +1,5 @@
 import { Puzzle2d } from "./puzzle2d.js";
+import { Speed } from "./speed.js";
 
 let solveButton = document.getElementById('solveButton');
 
@@ -138,6 +139,62 @@ dropdownButton.addEventListener('change', () => {
             "xxxxxx\n" +
             "\n" +
             "#end of grid. Pieces:Poly";
+    }
+
+    if (dropdownButton.value === 'Eureka') {
+        console.log('cls');
+        document.getElementById('input').value =
+            "#8,8\n" +
+            "#end of grid. Pieces8\n" +
+            "#PieceA8\n" +
+            "xxx\n" +
+            "xxx\n" +
+            " xx\n" +
+            " \n" +
+            "#pieceB8\n" +
+            "xxx\n" +
+            "x\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceC8 S1\n" +
+            "  xx\n" +
+            "xxxx\n" +
+            "  xx\n" +
+            "\n" +
+            "#pieceD8\n" +
+            "x\n" +
+            "xxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceE8\n" +
+            "x\n" +
+            "xxx\n" +
+            "xxx\n" +
+            " x\n" +
+            "\n" +
+            "#pieceF8\n" +
+            "xx\n" +
+            "xx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceG8 S1\n" +
+            "  x\n" +
+            "xxx\n" +
+            "xxx\n" +
+            "  x\n" +
+            "\n" +
+            "#pieceH8 S1\n" +
+            "x x\n" +
+            "xxx\n" +
+            "xxx\n" +
+            "\n" +
+            "#piece-End\n";
+    }
+
+    if (dropdownButton.value === 'Checkers 6x6') {
+        console.log('cls');
+        document.getElementById('input').value = ""; // todo
     }
 
     if (dropdownButton.value === 'Poly 8x8') {
@@ -314,25 +371,8 @@ solveButton.addEventListener('click', () => {
     let header = input.split('\n')[0];
     let puzzle;
 
-    // As I fixed the Poly bug, still have a way to measure the cpu speed.
-    // see "benchmarks" at puzzle2d.js
-    // Chrome: most users don't use other browser
-    //      Core i7, 8th Gen, 8665U (Q2 2019) - 3.2 sec - 53 sec with DevTools
-    //      Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
-    //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
-    // in fact, there's a way, with input = poly,3,20 (vs poly,20,3)
     if (header.toLowerCase().trim() === 'speed') {
-        let dt = new Date();
-        var amount = 1500000000;
-        console.log('For-loop till ' + amount);
-        let start = dt.getTime();
-        for (var i = amount; i > 0; i--) {
-            // do nothing
-        }
-        dt = new Date();
-        console.log('Ended at ' + dt.toISOString());
-        output.innerHTML = 'For-loop till ' + amount +
-            '\nTime taken [sec] ' + (dt.getTime() - start) / 1000;
+        new Speed().measure();
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         savePuzzle("lastRun", input);

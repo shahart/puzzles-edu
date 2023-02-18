@@ -1,0 +1,49 @@
+#6,6
+xoxoxo
+oxoxox
+xoxoxo
+oxoxox
+xoxoxo
+oxoxox
+
+#end of grid. Pieces8 # checkers
+#PieceA5
+xo
+o
+x
+o
+
+#pieceB5
+ xox
+xo
+
+#pieceC4
+ x
+xo
+ x
+
+#pieceD3
+o
+xo
+
+#pieceE5
+ o
+ x
+xo
+o
+
+#pieceF5
+o
+xo
+ xo
+
+#pieceG4
+xo
+ x
+ o
+
+#pieceH5
+ o
+oxox
+
+#piece-End
