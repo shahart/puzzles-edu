@@ -1,7 +1,16 @@
 import { Puzzle2d } from "./puzzle2d.js";
 import { Speed } from "./speed.js";
+import { GraphIt } from "./graphIt.js";
 
 let solveButton = document.getElementById('solveButton');
+let graphItButton = document.getElementById('graphItButton');
+
+graphItButton.addEventListener('click', () => {
+    let solution = document.getElementById('output').innerHTML;
+    if (solution !== '' && solution.indexOf('no solution') === -1) {
+        new GraphIt().graphIt(solution);
+    }
+});
 
 let restoreButton1 = document.getElementById('restoreButton1');
 let restoreButton2 = document.getElementById('restoreButton2');
@@ -14,6 +23,7 @@ let saveButton3 = document.getElementById('saveButton3');
 function restoreButton(id) {
     let input = loadPuzzle("preset" + id);
     console.log('cls');
+    graphItButton.disabled = true;
     document.getElementById('output').innerHTML = '';
     if (input !== "") {
         document.getElementById('input').value = input;
@@ -65,6 +75,8 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === '6x6, 6 pieces') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#6,6\n" +
             "xxxxxx\n" +
@@ -118,6 +130,8 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === 'Poly 12x5') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#12,5\n" +
             "#end of grid. Pieces:Poly";
@@ -125,6 +139,8 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === 'Poly 10x6') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#10,6\n" +
             "xxxxxx\n" +
@@ -143,6 +159,8 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === 'Eureka') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#8,8\n" +
             "#end of grid. Pieces8\n" +
@@ -150,7 +168,7 @@ dropdownButton.addEventListener('change', () => {
             "xxx\n" +
             "xxx\n" +
             " xx\n" +
-            " \n" +
+            "\n" +
             "#pieceB8\n" +
             "xxx\n" +
             "x\n" +
@@ -192,13 +210,24 @@ dropdownButton.addEventListener('change', () => {
             "#piece-End\n";
     }
 
+    if (dropdownButton.value === 'Empty') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value = "";
+    }
+
     if (dropdownButton.value === 'Checkers 6x6') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value = ""; // todo
     }
 
     if (dropdownButton.value === 'Poly 8x8') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#8,8\n" +
             "_xxxxxx_\n" +
@@ -276,6 +305,8 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === 'Checkers') {
         console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#8,8\n" +
             "oxoxoxox\n" +
@@ -384,7 +415,9 @@ solveButton.addEventListener('click', () => {
         }
         if (puzzle != null) {
             output.innerHTML = puzzle.solve();
-            // todo GraphIt.buildXml, see ShowSol
+            graphItButton.disabled =
+                output.innerHTML.indexOf("no solution") !== -1 ||
+                output.innerHTML.indexOf("Invalid input") !== -1
         }
         else {
             console.warn('Invalid input');

@@ -299,15 +299,19 @@ class Puzzle2d {
 
         if (this.totalFillInGrid !== window.globalTotalFill) {
             let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns is in the correct order";
+            this.allLines = 'Invalid input';
             console.error(msg);
             alert(msg);
         } else {
             this.put();
         }
 
-        console.log(new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces);
+        let msg = new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces;
+        console.log(msg);
         // triedPieces is an estimate, because of the back-track from the recursive put, note also the shuffle impacts the results.
-        return this.allLines;
+        return this.allLines === '' ?
+             "Found no solution" /* + ", a retry might be more lucky" */
+            : this.allLines;
     }
 }
 

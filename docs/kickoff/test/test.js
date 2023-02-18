@@ -36,21 +36,21 @@ describe('Mocha Puzzle2D tests', function () {
         let puzzle2d = new Puzzle2d(3, 3, 3, input);
         let res = puzzle2d.solve();
         console.log("3x3-3 pieces-no solution>>" + res);
-        chai.assert.equal(res, '');
+        chai.assert.equal(res, 'Found no solution');
     });
 
     it('invalid config, grid 60 pieces 55', () => {
         let puzzle2d = new Puzzle2d(11, 6, 10);
         let res = puzzle2d.solve();
         console.log("invalid config, grid 60 pieces 55>>" + res);
-        chai.assert.equal(res, '');
+        chai.assert.equal(res, 'Invalid input');
     });
 
     it('invalid config, grid 50 pieces 60', () => {
         let puzzle2d = new Puzzle2d(12, 5, 10);
         let res = puzzle2d.solve();
         console.log("invalid config, grid 50 pieces 60>>" + res);
-        chai.assert.equal(res, '');
+        chai.assert.equal(res, 'Invalid input');
     });
 
     xit('12x5-Poly-9000-timeout', function () {
