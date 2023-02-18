@@ -45,7 +45,7 @@ class GraphIt {
             '1 1 1' // white
         ];
         let pieces = {};
-
+        let checkersMode = false;
         let idx = 1;
         let lines = solution.split('\n');
         for (let row = 0; row < lines.length; ++row) {
@@ -54,6 +54,9 @@ class GraphIt {
             for (let col = 4; col < line.length; ++col) {
                 if (line[col] !== '*') {
                     let z = line[col].toUpperCase();
+                    if (z !== line[col]) {
+                        checkersMode = true;
+                    }
                     if (!pieces[z]) {
                         pieces[z] = idx;
                         if (idx-1 > colors.length) {
@@ -62,6 +65,9 @@ class GraphIt {
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
                         res += "<Shape DEF=\"PIECE_" + idx + "\"><Appearance><Material diffuseColor=\"" + colors[idx] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
+                        if (checkersMode) {
+                            res += "<Shape DEF=\"PIECE_" + idx + "s\"><Appearance><Material diffuseColor=\"" + colors[idx] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
+                        }
                         ++ idx;
                     }
                 }
@@ -80,7 +86,7 @@ class GraphIt {
                     let currLine =
                         "<Transform DEF=\"POINT" + point + "_id_" + (row+1) +"0" + ((col-1)/3) +
                         "\" translation=\"0 " + (row*10+10) + " " + ((col-1)/3*10+10) + "\">" +
-                        "<Shape USE=\"PIECE_" + idx + "\"/></Transform>\n";
+                        "<Shape USE=\"PIECE_" + (z !== line[col] ? idx : (idx+"s")) + "\"/></Transform>\n";
                     ++ point;
                     res += currLine;
                     ++ idx;
