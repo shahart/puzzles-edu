@@ -47,9 +47,9 @@
                     return;
                 }
                 if ($("#console-log").length === 0) {
-                    $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.85); color:white; font-family: monospace;"></ul>'));
+                    $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.65); color:white; font-family: monospace;"></ul>'));
                 }
-                $("#console-log").append($('<li style="margin-left:none;">' + message + '</li>'));
+                $("#console-log").prepend($('<li style="margin-left:none;">&nbsp;&nbsp;&nbsp;' + message + '</li>'));
             }
         }
     });
