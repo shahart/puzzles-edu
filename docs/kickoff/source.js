@@ -5,9 +5,13 @@ import { GraphIt } from "./graphIt.js";
 let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
 
+function handleOrientation(event) {
+    console.log('alpha ' + event.alpha + ' beta ' + event.beta + ' gamma ' + event.gamma);
+}
+
 graphItButton.addEventListener('click', () => {
     let solution = document.getElementById('output').innerHTML;
-    if (solution !== '' && solution.indexOf('no solution') === -1) {
+    if (solution !== '' && solution.startsWith(" 1  ")) {
         new GraphIt().graphIt(solution);
     }
 });
@@ -217,6 +221,101 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value = "";
     }
 
+
+    if (dropdownButton.value === 'Tetris 10x4') {
+        console.log('cls');
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#4,10\n" +
+            "#end of grid. Pieces10 # Tetris\n" +
+            "#PieceA4 S1\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceB4 S1\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceC4 S1\n" +
+            " x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceD4 S1\n" +
+            " x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceE4 R1 S1\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceF4 R1 S1\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceG4 R4\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceH4 R4\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceI4 R4\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceJ4 R4\n" +
+            "xx\n" +
+            " xx\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'Tetris 5x8') {
+        console.log('cls');
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#5,8\n" +
+            "#end of grid. Pieces10 # Tetris\n" +
+            "#PieceA4 S1\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceB4 S1\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceC4 S1\n" +
+            " x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceD4 S1\n" +
+            " x\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceE4 R1 S1\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceF4 R1 S1\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceG4 R4\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceH4 R4\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceI4 R4\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceJ4 R4\n" +
+            "xx\n" +
+            " xx\n" +
+            "\n" +
+            "#piece-End";
+    }
+
     if (dropdownButton.value === 'Checkers 6x6') {
         console.log('cls');
         graphItButton.disabled = true;
@@ -303,7 +402,7 @@ dropdownButton.addEventListener('change', () => {
             "#piece-End";
     }
 
-    if (dropdownButton.value === 'Checkers') {
+    if (dropdownButton.value === 'Checkers') { // Broken Chess board, by Dudeney
         console.log('cls');
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
@@ -404,6 +503,7 @@ solveButton.addEventListener('click', () => {
 
     if (header.toLowerCase().trim() === 'speed') {
         new Speed().measure();
+        window.addEventListener('deviceorientation', handleOrientation);
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         savePuzzle("lastRun", input);
@@ -417,7 +517,8 @@ solveButton.addEventListener('click', () => {
             output.innerHTML = puzzle.solve();
             graphItButton.disabled =
                 output.innerHTML.indexOf("no solution") !== -1 ||
-                output.innerHTML.indexOf("Invalid input") !== -1
+                output.innerHTML.indexOf("Invalid input") !== -1 ||
+               !output.innerHTML.startsWith(" 1  ");
         }
         else {
             console.warn('Invalid input');

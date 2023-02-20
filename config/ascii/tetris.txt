@@ -1,0 +1,41 @@
+#10,4
+#end of grid. Pieces10
+#PieceA4 S1
+xxxx
+
+#pieceB4 S1
+xxxx
+
+#pieceC4 S1
+ x
+xxx
+
+#pieceD4 S1
+ x
+xxx
+
+#pieceE4 R1 S1
+xx
+xx
+
+#pieceF4 R1 S1
+xx
+xx
+
+#pieceG4 R4
+xxx
+x
+
+#pieceH4 R4
+xxx
+x
+
+#pieceI4 R4
+ xx
+xx
+
+#pieceJ4 R4
+xx
+ xx
+
+#piece-End
