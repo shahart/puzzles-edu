@@ -24,7 +24,7 @@ class Builder {
                 console.error('Row ' + (row+1) + ' is undefined');
                 alert('Row ' + (row+1) + ' is undefined');
             }
-            else if (line.startsWith("#end of grid. Pieces")) {
+            else if (line.toLowerCase().startsWith("#end of grid. pieces")) {
                 break;
             }
             for (col = 0; col < line.length; ++col) {
@@ -77,7 +77,7 @@ class Builder {
         let doneWithGrid = false;
         for (; i<lines.length; ++i) {
             let line = lines[i];
-            if (line.startsWith("#end of grid. Pieces:Poly")) {
+            if (line.toLowerCase().startsWith("#end of grid. pieces:poly")) {
                 puzzle.PIECES = 12;
                 puzzle.names = "LUFXYNWPZVTI";
                 for (let i = 0; i < puzzle.PIECES/*allPieces.length*/; i++) {
@@ -87,9 +87,14 @@ class Builder {
                 }
                 return;
             }
-            else if (line.startsWith("#end of grid. Pieces")) {
+            else if (line.toLowerCase().startsWith("#end of grid. pieces")) {
                 doneWithGrid = true;
-                puzzle.PIECES = parseInt(line.substring("#end of grid. Pieces".length));
+                puzzle.PIECES = parseInt(line.toLowerCase().substring("#end of grid. pieces".length));
+                let foundPieces = input.toLowerCase().split("#piece").length - 2;
+                if (isNaN(puzzle.PIECES) || foundPieces !== puzzle.PIECES) {
+                    console.debug("Invalid number of found pieces, declared " + puzzle.PIECES + " found " + foundPieces);
+                    puzzle.PIECES = foundPieces;
+                }
                 console.log("Found pieces " + puzzle.PIECES);
                 if (! puzzle.PIECES) {
                     alert("NaN-Found no PiecesX");
@@ -148,6 +153,12 @@ class Builder {
                 }
                 if (line.toLowerCase().startsWith("#piece-end")) {
                     break;
+                }
+                if (puzzle.names.indexOf(line["#Piece".length]) >= 0) {
+                    let msg = "Piece " + line["#Piece".length] + " already defined";
+                    console.error(msg);
+                    alert(msg);
+                    throw new Error(msg);
                 }
                 puzzle.names += line["#Piece".length];
                 // console.log("Parsing piece " + line["#Piece".length]);

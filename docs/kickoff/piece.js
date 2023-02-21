@@ -5,11 +5,12 @@ class Piece {
     column = -1;
 
     constructor(index, layout, availRotations, symmetric, name) {
-        console.debug(name);
+        console.debug(name); // + " R" + availRotations + " S" + symmetric);
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
+        // todo let symmetric = this.calcSymmetric(layout); // 2 means a flip(reflection) is a new shape
         this.layouts = new Array(availRotations*symmetric); // .fill(0).map(_ => new Array().fill(0)); // availRotations*symmetric);
         for (let i=0; i<this.layouts.length; i++) {
             this.layouts[i]= [];
@@ -204,6 +205,29 @@ class Piece {
             }
             // console.debug(line);
         }
+    }
+
+    calcSymmetric(layout) {
+        let maxLength = 1;
+        for (let i = 0; i < layout.length; ++i) {
+            if (layout[i].length > maxLength) {
+                maxLength = layout[i].length;
+            }
+        }
+        // symmetric horizontally
+        let sameH = true;
+        for (let i = 0; i < layout.length; ++i) {
+            for (let j = 0; j < maxLength / 2; ++j) {
+                let fromRight = maxLength - j >= layout[i].length ? 0 : layout[i][maxLength - j];
+                if (layout[i][j] !== fromRight) {
+                    sameH = false;
+                }
+            }
+        }
+        // vertically
+        let sameV = true;
+        // todo for, for, if sameV = false
+        return (sameH && sameH) ? 1 : 2;
     }
 
 }

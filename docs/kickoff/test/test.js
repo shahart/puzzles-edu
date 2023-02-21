@@ -1,8 +1,6 @@
 import { Puzzle2d } from "../puzzle2d.js";
 import { Piece } from "../piece.js";
 
-// todo in tests mode, no serviceWorker, etc.
-
 describe('Mocha Puzzle2D tests', function () {
 
     it('10x6-12 pieces', function () {

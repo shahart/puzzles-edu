@@ -6,7 +6,10 @@ let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
 
 function handleOrientation(event) {
-    console.log('alpha ' + event.alpha + ' beta ' + event.beta + ' gamma ' + event.gamma);
+    console.log(
+        ' α ' + Math.trunc(event.alpha) +
+        ' β ' + Math.trunc(event.beta) +
+        ' γ ' + Math.trunc(event.gamma));
 }
 
 graphItButton.addEventListener('click', () => {
