@@ -65,6 +65,7 @@ class Puzzle2d {
                 let piece = i;
                 this.piecesIndices.push(piece);
                 this.pieces[i] = new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
+                this.pieces[i].shuffle();
             }
             for (let i = 0; i < this.grid.length; i++) {
                 for (let j = 0; j < this.grid[i].length; j++) {

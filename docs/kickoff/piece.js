@@ -5,31 +5,33 @@ class Piece {
     column = -1;
 
     constructor(index, layout, availRotations, symmetric, name) {
-        console.debug(name); // + " R" + availRotations + " S" + symmetric);
+        if (name !== '_') {
+            console.debug(name + " R" + availRotations + " S" + symmetric);
+        }
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
         // todo let symmetric = this.calcSymmetric(layout); // 2 means a flip(reflection) is a new shape
-        this.layouts = new Array(availRotations*symmetric); // .fill(0).map(_ => new Array().fill(0)); // availRotations*symmetric);
-        for (let i=0; i<this.layouts.length; i++) {
-            this.layouts[i]= [];
+        this.layouts = new Array(availRotations * symmetric); // .fill(0).map(_ => new Array().fill(0)); // availRotations*symmetric);
+        for (let i = 0; i < this.layouts.length; i++) {
+            this.layouts[i] = [];
         }
-        this.firstSquarePos = new Array(availRotations*symmetric).fill(0);
+        this.firstSquarePos = new Array(availRotations * symmetric).fill(0);
         this.layouts[0] = layout;
 
-        this.rowsSet = new Array(availRotations*symmetric).fill(0);
-        this.columnsSet = new Array(availRotations*symmetric).fill(0); //[];
+        this.rowsSet = new Array(availRotations * symmetric).fill(0);
+        this.columnsSet = new Array(availRotations * symmetric).fill(0); //[];
 
         this.firstSquarePos[0] = 0;
-        while (this.firstSquarePos[0]<this.layouts[0][0].length && this.layouts[0][0][this.firstSquarePos[0]] === 0) {
+        while (this.firstSquarePos[0] < this.layouts[0][0].length && this.layouts[0][0][this.firstSquarePos[0]] === 0) {
             this.firstSquarePos[0]++;
         }
 
         this.maxColumns = -1;
 
-        for (let i=0; i<layout.length; i++) {
-            for (let j=0; j<layout[i].length; j++) {
+        for (let i = 0; i < layout.length; i++) {
+            for (let j = 0; j < layout[i].length; j++) {
                 if (layout[i][j] !== 0) {
                     window.globalTotalFill++;
                     this.totalThisFill++;
@@ -47,13 +49,13 @@ class Piece {
 
         this.printPart(0, this.layouts[0]);
         if (availRotations > 1) {
-            this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length,1);
+            this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length, 1);
             this.printPart(1, this.layouts[1]);
             if (availRotations > 2) {
-                this.layouts[2] = this.realRotate(this.layouts[1], layout.length, this.maxColumns,2);
+                this.layouts[2] = this.realRotate(this.layouts[1], layout.length, this.maxColumns, 2);
                 this.printPart(2, this.layouts[2]);
                 if (availRotations > 3) {
-                    this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length,3);
+                    this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length, 3);
                     this.printPart(3, this.layouts[3]);
                     if (availRotations > 4) {
                         alert("rotations is up to 4");
@@ -74,16 +76,12 @@ class Piece {
                 }
             }
         }
-        else if (this.symmetric > 2) {
-            alert("symmetric is up to 2");
-            throw new Error("symmetric is up to 2");
-        }
 
-        for (let rot=0; rot<availRotations*symmetric; rot++) {
-            this.rowsSet[rot]= [this.totalThisFill];
-            this.columnsSet[rot]= [this.totalThisFill];
+        for (let rot = 0; rot < availRotations * symmetric; rot++) {
+            this.rowsSet[rot] = [this.totalThisFill];
+            this.columnsSet[rot] = [this.totalThisFill];
             let setSoFar = 0;
-            for (let i=0; i<this.layouts[rot].length; i++) {
+            for (let i = 0; i < this.layouts[rot].length; i++) {
                 for (let j = 0; j < this.layouts[rot][i].length; j++) {
                     if (this.layouts[rot][i][j] >= 1) {
                         this.rowsSet[rot][setSoFar] = i;
@@ -93,7 +91,9 @@ class Piece {
                 }
             }
         }
+    }
 
+    shuffle() {
         let indices = [this.layouts.length];
         for (let i = 0; i < this.layouts.length; ++i) {
             indices[i] = i;
@@ -205,6 +205,37 @@ class Piece {
             }
             // console.debug(line);
         }
+    }
+
+    eq(orig,dup) {
+        if (dup > this.getAvailRotations()-1) {
+            console.info("Irrelevant to call eq, as user set the avail rotations to " + this.getAvailRotations());
+            return false;
+        }
+        if (this.layouts[orig].length !== this.layouts[dup].length) {
+            return false;
+        }
+        for (let i = 0; i < this.layouts[orig].length; i++) {
+            if (this.layouts[orig][i].length !== this.layouts[dup][i].length) {
+                return false;
+            }
+            for (let j = 0; j < this.layouts[orig][i].length; j++) {
+                if (this.layouts[orig][i][j] !== this.layouts[dup][i][j]) {
+                    return false
+                }
+            }
+        }
+        return true;
+    }
+
+    calcRotations() {
+        if (this.eq(0,1)) {
+            return 1;
+        }
+        if (this.eq(0,2)) {
+            return 2;
+        }
+        return 4;
     }
 
     calcSymmetric(layout) {

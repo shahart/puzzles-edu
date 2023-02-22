@@ -17,17 +17,17 @@ describe('Mocha Puzzle2D tests', function () {
             'xxX\n' +
             'xxx\n' +
             '\n' +
-            '#end of grid. Pieces3\n' +
-            '#PieceA5\n' +
+            '#end of grid\n' +
+            '#PieceA\n' +
             '  X\n' +
             'xxX\n' +
             'X\n' +
             '\n' +
-            '#pieceB3\n' +
+            '#pieceB\n' +
             'xx\n' +
             'x\n' +
             '\n' +
-            '#pieceC1\n' +
+            '#pieceC\n' +
             'x\n' +
             '\n' +
             '#piece-End\n';

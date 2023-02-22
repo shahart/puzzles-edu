@@ -24,7 +24,7 @@ class Builder {
                 console.error('Row ' + (row+1) + ' is undefined');
                 alert('Row ' + (row+1) + ' is undefined');
             }
-            else if (line.toLowerCase().startsWith("#end of grid. pieces")) {
+            else if (line.toLowerCase().startsWith("#end of grid")) {
                 break;
             }
             for (col = 0; col < line.length; ++col) {
@@ -71,7 +71,6 @@ class Builder {
         // Puzzle2D, line "// Parts2D_Examples"
         puzzle.names = '';
         let pieceIdx = 0;
-        let rotations = 4;
         let symmetric = 2;
         let pieceLines = [];
         let doneWithGrid = false;
@@ -84,17 +83,13 @@ class Builder {
                     let piece = i;
                     puzzle.piecesIndices.push(piece);
                     puzzle.pieces[i] = new Piece(piece, puzzle.allPieces[i], puzzle.rotations[i], puzzle.symmetric[i], puzzle.names.charAt(i));
+                    puzzle.pieces[i].shuffle();
                 }
                 return;
             }
-            else if (line.toLowerCase().startsWith("#end of grid. pieces")) {
+            else if (line.toLowerCase().startsWith("#end of grid")) {
                 doneWithGrid = true;
-                puzzle.PIECES = parseInt(line.toLowerCase().substring("#end of grid. pieces".length));
-                let foundPieces = input.toLowerCase().split("#piece").length - 2;
-                if (isNaN(puzzle.PIECES) || foundPieces !== puzzle.PIECES) {
-                    console.debug("Invalid number of found pieces, declared " + puzzle.PIECES + " found " + foundPieces);
-                    puzzle.PIECES = foundPieces;
-                }
+                puzzle.PIECES = input.toLowerCase().split("#piece").length - 2;
                 console.log("Found pieces " + puzzle.PIECES);
                 if (! puzzle.PIECES) {
                     alert("NaN-Found no PiecesX");
@@ -127,21 +122,20 @@ class Builder {
                         alert("name undefined, line " + line);
                         throw new Error('name undefined-Invalid input, line ' + line);
                     }
+                    let globalTotalFill = window.globalTotalFill;
+                    let fakePiece = new Piece(1000, layout, 4, 2, "_");
+                    window.globalTotalFill = globalTotalFill;
+                    // symmetric = fakePiece.calcSymmetric();
+                    let rotations = fakePiece.calcRotations();
                     puzzle.pieces[pieceIdx] = new Piece(pieceIdx, layout, rotations, symmetric, puzzle.names[pieceIdx]);
+                    puzzle.pieces[pieceIdx].shuffle();
                     ++pieceIdx;
                     pieceLines = [];
-                    rotations = 4;
                     symmetric = 2;
                 }
                 let s = line.split(" ");
                 if (s.length > 1) {
-                    if (s[1].startsWith("R")) {
-                        rotations = parseInt(s[1].substring("R".length));
-                        if (rotations < 1 || rotations > 4) {
-                            console.error("Wrong rotations 1..4");
-                        }
-                    }
-                    else if (s[1].startsWith("S")) {
+                    if (s[1].startsWith("S")) {
                         symmetric = parseInt(s[1].substring("S".length));
                     }
                     if (s.length > 2 && s[2].startsWith("S")) {
@@ -166,9 +160,8 @@ class Builder {
             else if (line.length > 0 && doneWithGrid) {
                 if (line.toLowerCase().startsWith("#unique=")) {
                     // let uniqueId = line["#unique=".length];
-                    console.log(line + ">>make sure you have R1 S1");
-                    // rotations = 1; // todo handle, don't require to add R1 S1
-                    // symmetric = 1;
+                    console.log(line + ">>make sure you have S1");
+                    // symmetric = 1; // todo handle, don't require to add S1
                 }
                 else {
                     pieceLines.push(line);

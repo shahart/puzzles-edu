@@ -93,43 +93,43 @@ dropdownButton.addEventListener('change', () => {
             "xxxxxx\n" +
             "xxxxxx\n" +
             "\n" +
-            "#end of grid. Pieces10\n" +
-            "#PieceA5\n" +
+            "#end of grid\n" +
+            "#PieceA\n" +
             "x x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceB4\n" +
+            "#pieceB\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceC4\n" +
+            "#pieceC\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceD4\n" +
+            "#pieceD\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceE3\n" +
+            "#pieceE\n" +
             " x\n" +
             "xx\n" +
             "\n" +
-            "#pieceF2 R2\n" +
+            "#pieceF R2\n" +
             "xx\n" +
             "\n" +
-            "#pieceG2 R2\n" +
+            "#pieceG R2\n" +
             "xx\n" +
             "\n" +
             "#unique=H\n" +
-            "#pieceH4\n" +
+            "#pieceH\n" +
             "  x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceI4 R1\n" +
+            "#pieceI R1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ4 R2\n" +
+            "#pieceJ R2\n" +
             "xxxx\n" +
             "\n" +
             "#piece-End";
@@ -170,46 +170,46 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#8,8\n" +
-            "#end of grid. Pieces8\n" +
-            "#PieceA8\n" +
+            "#end of grid\n" +
+            "#PieceA\n" +
             "xxx\n" +
             "xxx\n" +
             " xx\n" +
             "\n" +
-            "#pieceB8\n" +
+            "#pieceB\n" +
             "xxx\n" +
             "x\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceC8 S1\n" +
+            "#pieceC S1\n" +
             "  xx\n" +
             "xxxx\n" +
             "  xx\n" +
             "\n" +
-            "#pieceD8\n" +
+            "#pieceD\n" +
             "x\n" +
             "xxx\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceE8\n" +
+            "#pieceE\n" +
             "x\n" +
             "xxx\n" +
             "xxx\n" +
             " x\n" +
             "\n" +
-            "#pieceF8\n" +
+            "#pieceF\n" +
             "xx\n" +
             "xx\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceG8 S1\n" +
+            "#pieceG S1\n" +
             "  x\n" +
             "xxx\n" +
             "xxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceH8 S1\n" +
+            "#pieceH S1\n" +
             "x x\n" +
             "xxx\n" +
             "xxx\n" +
@@ -230,42 +230,42 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#4,10\n" +
-            "#end of grid. Pieces10 # Tetris\n" +
-            "#PieceA4 S1\n" +
+            "#end of grid # Tetris\n" +
+            "#PieceA S1\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceB4 S1\n" +
+            "#pieceB S1\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceC4 S1\n" +
+            "#pieceC S1\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceD4 S1\n" +
+            "#pieceD S1\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE4 R1 S1\n" +
+            "#pieceE R1 S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF4 R1 S1\n" +
+            "#pieceF R1 S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceG4 R4\n" +
+            "#pieceG R4\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceH4 R4\n" +
+            "#pieceH R4\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceI4 R4\n" +
+            "#pieceI R4\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ4 R4\n" +
+            "#pieceJ R4\n" +
             "xx\n" +
             " xx\n" +
             "\n" +
@@ -277,42 +277,42 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#5,8\n" +
-            "#end of grid. Pieces10 # Tetris\n" +
-            "#PieceA4 S1\n" +
+            "#end of grid # Tetris\n" +
+            "#PieceA S1\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceB4 S1\n" +
+            "#pieceB S1\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceC4 S1\n" +
+            "#pieceC S1\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceD4 S1\n" +
+            "#pieceD S1\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE4 R1 S1\n" +
+            "#pieceE R1 S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF4 R1 S1\n" +
+            "#pieceF R1 S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceG4 R4\n" +
+            "#pieceG R4\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceH4 R4\n" +
+            "#pieceH R4\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceI4 R4\n" +
+            "#pieceI R4\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ4 R4\n" +
+            "#pieceJ R4\n" +
             "xx\n" +
             " xx\n" +
             "\n" +
@@ -341,65 +341,65 @@ dropdownButton.addEventListener('change', () => {
             "xxxxxxxx\n" +
             "_xxxxxx_\n" +
             "\n" +
-            "#end of grid. Pieces12 # You can write: Pieces:Poly\n" +
-            "#PieceL5\n" +
+            "#end of grid # You can write: Pieces:Poly\n" +
+            "#PieceL\n" +
             "x\n" +
             "x\n" +
             "x\n" +
             "xx\n" +
             "\n" +
-            "#pieceU5 S1\n" +
+            "#pieceU S1\n" +
             "xx\n" +
             "x\n" +
             "xx\n" +
             "\n" +
             "#unique=F\n" +
-            "#pieceF5 R1 S1\n" +
+            "#pieceF R1 S1\n" +
             " xx\n" +
             "xx\n" +
             " x\n" +
             "\n" +
-            "#pieceX5 R1 S1\n" +
+            "#pieceX R1 S1\n" +
             " x\n" +
             "xxx\n" +
             " x\n" +
             "\n" +
-            "#pieceY5\n" +
+            "#pieceY\n" +
             "xxxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceN5\n" +
+            "#pieceN\n" +
             " x\n" +
             "xx\n" +
             "x\n" +
             "x\n" +
             "\n" +
-            "#pieceW5 S1\n" +
+            "#pieceW S1\n" +
             "  x\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceP5\n" +
+            "#pieceP\n" +
             "x\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceZ5 R2\n" +
+            "#pieceZ R2\n" +
             "  x\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceV5 S1\n" +
+            "#pieceV S1\n" +
             "  x\n" +
             "  x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceT5 S1\n" +
+            "#pieceT S1\n" +
             "  x\n" +
             "xxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceI5 R2 S1\n" +
+            "#pieceI R2 S1\n" +
             "xxxxx\n" +
             "\n" +
             "#piece-End";
@@ -420,68 +420,68 @@ dropdownButton.addEventListener('change', () => {
             "oxoxoxox\n" +
             "xoxoxoxo\n" +
             "\n" +
-            "#end of grid. Pieces12 # checkers\n" +
-            "#PieceA4\n" +
+            "#end of grid # checkers\n" +
+            "#PieceA\n" +
             "ox\n" +
             "x\n" +
             "o\n" +
             "\n" +
-            "#pieceU5\n" +
+            "#pieceU\n" +
             "xo\n" +
             " x\n" +
             " o\n" +
             " x\n" +
             "\n" +
-            "#pieceF5\n" +
+            "#pieceF\n" +
             " o\n" +
             "ox\n" +
             "xo\n" +
             " x\n" +
             "\n" +
-            "#pieceX5\n" +
+            "#pieceX\n" +
             " x\n" +
             "xo\n" +
             "o\n" +
             "x\n" +
             "\n" +
-            "#pieceY5\n" +
+            "#pieceY\n" +
             "oxox\n" +
             "  x\n" +
             "\n" +
-            "#pieceW5\n" +
+            "#pieceW\n" +
             "o\n" +
             "xo\n" +
             " x\n" +
             " o\n" +
             "\n" +
-            "#pieceP6\n" +
+            "#pieceP\n" +
             "o\n" +
             "xo\n" +
             "oxo\n" +
             "\n" +
-            "#pieceZ5\n" +
+            "#pieceZ\n" +
             "  x\n" +
             "oxo\n" +
             "x\n" +
             "\n" +
-            "#pieceB5\n" +
+            "#pieceB\n" +
             "  x\n" +
             "oxo\n" +
             "x\n" +
             "\n" +
-            "#pieceV5\n" +
+            "#pieceV\n" +
             "o\n" +
             "xo\n" +
             " x\n" +
             " o\n" +
             "\n" +
-            "#pieceT5\n" +
+            "#pieceT\n" +
             "ox\n" +
             " o\n" +
             " x\n" +
             " o\n" +
             "\n" +
-            "#pieceI5\n" +
+            "#pieceI\n" +
             " x\n" +
             "xox\n" +
             "oxo\n" +
