@@ -6,10 +6,11 @@ let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
 
 function handleOrientation(event) {
-    console.log(
-        ' α ' + Math.trunc(event.alpha) +
-        ' β ' + Math.trunc(event.beta) +
-        ' γ ' + Math.trunc(event.gamma));
+    const a = event.alpha > 180 ? event.alpha - 360 : event.alpha;
+    const b = event.beta - 90;
+    const g = event.gamma > 180 ? 360 - event.gamma : -event.gamma;
+    let rot = "rotateX(" + b + "deg) rotateY(" + g + "deg) rotateZ(" + a + "deg)";
+    document.getElementById("cube").style.transform = rot;
 }
 
 graphItButton.addEventListener('click', () => {
@@ -491,6 +492,8 @@ dropdownButton.addEventListener('change', () => {
     }
 });
 
+window.addEventListener('deviceorientation', handleOrientation);
+
 solveButton.addEventListener('click', () => {
 
     // todo async, otherwise we got the output only in the end,
@@ -506,7 +509,6 @@ solveButton.addEventListener('click', () => {
 
     if (header.toLowerCase().trim() === 'speed') {
         new Speed().measure();
-        window.addEventListener('deviceorientation', handleOrientation);
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         savePuzzle("lastRun", input);

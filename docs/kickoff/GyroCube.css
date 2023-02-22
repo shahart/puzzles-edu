@@ -1,0 +1,59 @@
+.post--2021--water-line--gyro-cube .gyro-cube-container {
+    height: 200px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 50px;
+    perspective: 800px;
+    perspective-origin: center center;
+}
+
+.post--2021--water-line--gyro-cube .gyro-cube {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    transform-style: preserve-3d;
+}
+
+.post--2021--water-line--gyro-cube .gyro-cube-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    /*font-weight: bold;*/
+    font-size: 50px;
+}
+
+.post--2021--water-line--gyro-cube .gyro-cube-front {
+    background-color: #00bfa5;
+    transform: translateZ(50px);
+}
+.post--2021--water-line--gyro-cube .gyro-cube-back {
+    background-color: #00bfa5;
+    transform: translateZ(-50px);
+}
+
+.post--2021--water-line--gyro-cube .gyro-cube-left {
+    background-color: #00bfa5;
+    transform: translateX(50px) rotateY(90deg);
+}
+.post--2021--water-line--gyro-cube .gyro-cube-right {
+    background-color: #00bfa5;
+    transform: translateX(-50px) rotateY(90deg);
+}
+
+.post--2021--water-line--gyro-cube .gyro-cube-top {
+    background-color: #00bfa5;
+    transform: translateY(-50px) rotateX(90deg);
+}
+.post--2021--water-line--gyro-cube .gyro-cube-bottom {
+    background-color: #00bfa5;
+    transform: translateY(50px) rotateX(90deg);
+}
+
+/* tnx to https://trekhleb.dev/blog/2021/gyro-web/ */
