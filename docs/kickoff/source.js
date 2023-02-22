@@ -354,7 +354,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "\n" +
             "#unique=F\n" +
-            "#pieceF S1\n" +
+            "#pieceF\n" +
             " xx\n" +
             "xx\n" +
             " x\n" +

@@ -74,6 +74,7 @@ class Builder {
         let symmetric = 2;
         let pieceLines = [];
         let doneWithGrid = false;
+        let unique = '';
         for (; i<lines.length; ++i) {
             let line = lines[i];
             if (line.toLowerCase().startsWith("#end of grid. pieces:poly")) {
@@ -127,6 +128,11 @@ class Builder {
                     window.globalTotalFill = globalTotalFill;
                     // symmetric = fakePiece.calcSymmetric();
                     let rotations = fakePiece.calcRotations();
+                    if (unique === puzzle.names[pieceIdx]) {
+                        rotations = 1;
+                        symmetric = 1;
+                        console.debug("unique=" + unique);
+                    }
                     puzzle.pieces[pieceIdx] = new Piece(pieceIdx, layout, rotations, symmetric, puzzle.names[pieceIdx]);
                     puzzle.pieces[pieceIdx].shuffle();
                     ++pieceIdx;
@@ -159,9 +165,11 @@ class Builder {
             }
             else if (line.length > 0 && doneWithGrid) {
                 if (line.toLowerCase().startsWith("#unique=")) {
-                    // let uniqueId = line["#unique=".length];
-                    console.log(line + ">>make sure you have S1");
-                    // symmetric = 1; // todo handle, don't require to add S1
+                    if (unique !== '' && unique !== line["#unique=".length]) {
+                        console.warn("Only single unique is possible");
+                    } else {
+                        unique = line["#unique=".length];
+                    }
                 }
                 else {
                     pieceLines.push(line);
