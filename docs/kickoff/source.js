@@ -114,10 +114,10 @@ dropdownButton.addEventListener('change', () => {
             " x\n" +
             "xx\n" +
             "\n" +
-            "#pieceF R2\n" +
+            "#pieceF\n" +
             "xx\n" +
             "\n" +
-            "#pieceG R2\n" +
+            "#pieceG\n" +
             "xx\n" +
             "\n" +
             "#unique=H\n" +
@@ -125,11 +125,11 @@ dropdownButton.addEventListener('change', () => {
             "  x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceI R1\n" +
+            "#pieceI\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ R2\n" +
+            "#pieceJ\n" +
             "xxxx\n" +
             "\n" +
             "#piece-End";
@@ -245,27 +245,27 @@ dropdownButton.addEventListener('change', () => {
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE R1 S1\n" +
+            "#pieceE S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF R1 S1\n" +
+            "#pieceF S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceG R4\n" +
+            "#pieceG\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceH R4\n" +
+            "#pieceH\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceI R4\n" +
+            "#pieceI\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ R4\n" +
+            "#pieceJ\n" +
             "xx\n" +
             " xx\n" +
             "\n" +
@@ -292,27 +292,27 @@ dropdownButton.addEventListener('change', () => {
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE R1 S1\n" +
+            "#pieceE S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF R1 S1\n" +
+            "#pieceF S1\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceG R4\n" +
+            "#pieceG\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceH R4\n" +
+            "#pieceH\n" +
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceI R4\n" +
+            "#pieceI\n" +
             " xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceJ R4\n" +
+            "#pieceJ\n" +
             "xx\n" +
             " xx\n" +
             "\n" +
@@ -354,12 +354,12 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "\n" +
             "#unique=F\n" +
-            "#pieceF R1 S1\n" +
+            "#pieceF S1\n" +
             " xx\n" +
             "xx\n" +
             " x\n" +
             "\n" +
-            "#pieceX R1 S1\n" +
+            "#pieceX S1\n" +
             " x\n" +
             "xxx\n" +
             " x\n" +
@@ -384,7 +384,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceZ R2\n" +
+            "#pieceZ\n" +
             "  x\n" +
             "xxx\n" +
             "x\n" +
@@ -399,7 +399,7 @@ dropdownButton.addEventListener('change', () => {
             "xxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceI R2 S1\n" +
+            "#pieceI S1\n" +
             "xxxxx\n" +
             "\n" +
             "#piece-End";
