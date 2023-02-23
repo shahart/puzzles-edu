@@ -11,6 +11,10 @@ class Builder {
         }
         let declardRows= parseInt(header.substring(1).split(",")[0]);
         let declardColumns = parseInt(header.substring(1).split(",")[1]);
+        if (isNaN(declardColumns) || isNaN(declardRows)) {
+            console.error('Complete the template');
+            alert('Complete the template');
+        }
         puzzle.grid = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         puzzle.gridCopy = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         let rows = 0;
@@ -71,7 +75,6 @@ class Builder {
         // Puzzle2D, line "// Parts2D_Examples"
         puzzle.names = '';
         let pieceIdx = 0;
-        let symmetric = 2;
         let pieceLines = [];
         let doneWithGrid = false;
         let unique = '';
@@ -125,31 +128,19 @@ class Builder {
                     }
                     let globalTotalFill = window.globalTotalFill;
                     let fakePiece = new Piece(1000, layout, 4, 2, "_");
-                    window.globalTotalFill = globalTotalFill;
-                    // symmetric = fakePiece.calcSymmetric();
                     let rotations = fakePiece.calcRotations();
+                    let fakePiece2 = new Piece(1000, layout, rotations, 2, "_");
+                    let symmetric = fakePiece2.calcSymmetric();
                     if (unique === puzzle.names[pieceIdx]) {
                         rotations = 1;
                         symmetric = 1;
                         console.debug("unique=" + unique);
                     }
+                    window.globalTotalFill = globalTotalFill;
                     puzzle.pieces[pieceIdx] = new Piece(pieceIdx, layout, rotations, symmetric, puzzle.names[pieceIdx]);
                     puzzle.pieces[pieceIdx].shuffle();
                     ++pieceIdx;
                     pieceLines = [];
-                    symmetric = 2;
-                }
-                let s = line.split(" ");
-                if (s.length > 1) {
-                    if (s[1].startsWith("S")) {
-                        symmetric = parseInt(s[1].substring("S".length));
-                    }
-                    if (s.length > 2 && s[2].startsWith("S")) {
-                        symmetric = parseInt(s[2].substring("S".length));
-                    }
-                    if (symmetric !== 1 && symmetric !== 2) {
-                        console.error("Wrong symmetric 1..2");
-                    }
                 }
                 if (line.toLowerCase().startsWith("#piece-end")) {
                     break;

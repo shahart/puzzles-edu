@@ -1,6 +1,6 @@
 class GraphIt {
 
-    get_x3d(solution) {
+    get_x3d(solution, title) {
 
         /*
 
@@ -21,7 +21,7 @@ class GraphIt {
             "    <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>\n" +
             "    <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />\n" +
             "    <meta charset=\"utf-8\">\n" +
-            "    <title>x3d of your last run</title>\n" +
+            "    <title>x3d " + title + "</title>\n" +
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
@@ -105,10 +105,10 @@ class GraphIt {
         return res;
     }
 
-    graphIt(solution) {
+    graphIt(solution, title) {
         // console.log(solution)
-        var newWin = open('','graphIt','');
-        newWin.document.write(this.get_x3d(solution));
+        var newWin = open('','graphIt'+title,'');
+        newWin.document.write(this.get_x3d(solution, title));
         newWin.document.close();
     }
 

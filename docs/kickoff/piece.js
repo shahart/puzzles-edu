@@ -8,6 +8,7 @@ class Piece {
         if (name !== '_') {
             console.debug(name + " R" + availRotations + " S" + symmetric);
         }
+        this.availRotations = availRotations;
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
@@ -48,20 +49,22 @@ class Piece {
         }
 
         this.printPart(0, this.layouts[0]);
-        if (availRotations > 1) {
+        if (availRotations === 3 || availRotations >= 5 || availRotations <= 0) {
+            alert("rotations is 1/2/4");
+            throw new Error("rotations is 1/2/4");
+        }
+        if (availRotations >= 2) {
             this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length, 1);
             this.printPart(1, this.layouts[1]);
-            if (availRotations > 2) {
+            if (availRotations >= 4) {
                 this.layouts[2] = this.realRotate(this.layouts[1], layout.length, this.maxColumns, 2);
                 this.printPart(2, this.layouts[2]);
-                if (availRotations > 3) {
-                    this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length, 3);
-                    this.printPart(3, this.layouts[3]);
-                    if (availRotations > 4) {
-                        alert("rotations is up to 4");
-                        throw new Error("rotations is up to 4");
-                    }
-                }
+                this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length, 3);
+                this.printPart(3, this.layouts[3]);
+                this.layouts[0] = this.realRotate(this.layouts[3], layout.length, this.maxColumns, 0);
+            }
+            else {
+                this.layouts[0] = this.realRotate(this.layouts[1], layout.length, this.maxColumns, 0);
             }
         }
 
@@ -238,27 +241,25 @@ class Piece {
         return 4;
     }
 
-    calcSymmetric(layout) {
-        let maxLength = 1;
-        for (let i = 0; i < layout.length; ++i) {
-            if (layout[i].length > maxLength) {
-                maxLength = layout[i].length;
+    calcSymmetric() {
+        if (this.availRotations === 1) {
+            return 1;
+        }
+        else if (this.availRotations === 2) {
+            if ((this.eq(0, 2) || this.eq(0, 3)) &&
+                (this.eq(1, 2) || this.eq(1, 3))) {
+                return 1;
             }
         }
-        // symmetric horizontally
-        let sameH = true;
-        for (let i = 0; i < layout.length; ++i) {
-            for (let j = 0; j < maxLength / 2; ++j) {
-                let fromRight = maxLength - j >= layout[i].length ? 0 : layout[i][maxLength - j];
-                if (layout[i][j] !== fromRight) {
-                    sameH = false;
-                }
+        else if (this.availRotations === 4) {
+            if ((this.eq(0, 4) || this.eq(0, 5) || this.eq(0, 6) || this.eq(0, 7)) &&
+                (this.eq(1, 4) || this.eq(1, 5) || this.eq(1, 6) || this.eq(1, 7)) &&
+                (this.eq(2, 4) || this.eq(2, 5) || this.eq(2, 6) || this.eq(2, 7)) &&
+                (this.eq(3, 4) || this.eq(3, 5) || this.eq(3, 6) || this.eq(3, 7))) {
+                return 1;
             }
         }
-        // vertically
-        let sameV = true;
-        // todo for, for, if sameV = false
-        return (sameH && sameH) ? 1 : 2;
+        return 2;
     }
 
 }

@@ -4,6 +4,7 @@ import { GraphIt } from "./graphIt.js";
 
 let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
+let dropdownButton = document.getElementById('PuzzleSelect');
 
 function handleOrientation(event) {
     const a = event.alpha > 180 ? event.alpha - 360 : event.alpha;
@@ -16,7 +17,8 @@ function handleOrientation(event) {
 graphItButton.addEventListener('click', () => {
     let solution = document.getElementById('output').innerHTML;
     if (solution !== '' && solution.startsWith(" 1  ")) {
-        new GraphIt().graphIt(solution);
+        let title = dropdownButton.value; // todo identify a change in text if not custom, and switch option/title to custom
+        new GraphIt().graphIt(solution, title);
     }
 });
 
@@ -78,7 +80,6 @@ if (!(typeof (StorageEvent) !== undefined)) {
 let lastRun = loadPuzzle("lastRun");
 document.getElementById('input').value = lastRun !== '' ? lastRun : 'Poly,15,4';
 
-let dropdownButton = document.getElementById('PuzzleSelect');
 dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === '6x6, 6 pieces') {
@@ -183,7 +184,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceC S1\n" +
+            "#pieceC\n" +
             "  xx\n" +
             "xxxx\n" +
             "  xx\n" +
@@ -204,13 +205,13 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceG S1\n" +
+            "#pieceG\n" +
             "  x\n" +
             "xxx\n" +
             "xxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceH S1\n" +
+            "#pieceH\n" +
             "x x\n" +
             "xxx\n" +
             "xxx\n" +
@@ -218,11 +219,21 @@ dropdownButton.addEventListener('change', () => {
             "#piece-End\n";
     }
 
-    if (dropdownButton.value === 'Empty') {
+    if (dropdownButton.value === 'Custom') {
         console.log('cls');
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
-        document.getElementById('input').value = "";
+        document.getElementById('input').value =
+            "#rows,columns\n" +
+            "xxxx\n" +
+            "...\n" +
+            "#end of grid # comment\n" +
+            "#PieceA\n" +
+            "xxx\n" +
+            "xxx\n" +
+            " xx\n" +
+            "...\n" +
+            "#piece-End\n";
     }
 
 
@@ -232,25 +243,25 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             "#4,10\n" +
             "#end of grid # Tetris\n" +
-            "#PieceA S1\n" +
+            "#PieceA\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceB S1\n" +
+            "#pieceB\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceC S1\n" +
+            "#pieceC\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceD S1\n" +
+            "#pieceD\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE S1\n" +
+            "#pieceE\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF S1\n" +
+            "#pieceF\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
@@ -279,25 +290,25 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             "#5,8\n" +
             "#end of grid # Tetris\n" +
-            "#PieceA S1\n" +
+            "#PieceA\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceB S1\n" +
+            "#pieceB\n" +
             "xxxx\n" +
             "\n" +
-            "#pieceC S1\n" +
+            "#pieceC\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceD S1\n" +
+            "#pieceD\n" +
             " x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceE S1\n" +
+            "#pieceE\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceF S1\n" +
+            "#pieceF\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
@@ -349,7 +360,7 @@ dropdownButton.addEventListener('change', () => {
             "x\n" +
             "xx\n" +
             "\n" +
-            "#pieceU S1\n" +
+            "#pieceU\n" +
             "xx\n" +
             "x\n" +
             "xx\n" +
@@ -360,7 +371,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             " x\n" +
             "\n" +
-            "#pieceX S1\n" +
+            "#pieceX\n" +
             " x\n" +
             "xxx\n" +
             " x\n" +
@@ -375,7 +386,7 @@ dropdownButton.addEventListener('change', () => {
             "x\n" +
             "x\n" +
             "\n" +
-            "#pieceW S1\n" +
+            "#pieceW\n" +
             "  x\n" +
             " xx\n" +
             "xx\n" +
@@ -390,17 +401,17 @@ dropdownButton.addEventListener('change', () => {
             "xxx\n" +
             "x\n" +
             "\n" +
-            "#pieceV S1\n" +
+            "#pieceV\n" +
             "  x\n" +
             "  x\n" +
             "xxx\n" +
             "\n" +
-            "#pieceT S1\n" +
+            "#pieceT\n" +
             "  x\n" +
             "xxx\n" +
             "  x\n" +
             "\n" +
-            "#pieceI S1\n" +
+            "#pieceI\n" +
             "xxxxx\n" +
             "\n" +
             "#piece-End";
