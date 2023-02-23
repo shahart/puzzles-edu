@@ -7,10 +7,10 @@ let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
 
 function handleOrientation(event) {
-    const a = event.alpha > 180 ? event.alpha - 360 : event.alpha;
+    const a = event.alpha > 180 ? event.alpha - 360 : event.alpha; // todo fix alpha rotation
     const b = event.beta - 90;
     const g = event.gamma > 180 ? 360 - event.gamma : -event.gamma;
-    let rot = "rotateX(" + b + "deg) rotateY(" + g + "deg) rotateZ(" + a + "deg)";
+    let rot = "rotateX(" + b + "deg) rotateY(" + g  + "deg) rotateZ(" + a + "deg)";
     document.getElementById("cube").style.transform = rot;
 }
 
@@ -179,57 +179,66 @@ dropdownButton.addEventListener('change', () => {
             "#end of grid. Pieces:Poly";
     }
 
-    if (dropdownButton.value === 'Eureka') {
+    if (dropdownButton.value === 'Eureka') { // by John Kirkman
         console.log('cls');
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#8,8\n" +
-            "#end of grid\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "oxoxoxox\n" +
+            "xoxoxoxo\n" +
+            "\n" +
+            "#end of grid. Pieces # Eureka\n" +
             "#PieceA\n" +
-            "xxx\n" +
-            "xxx\n" +
-            " xx\n" +
+            "xox\n" +
+            "oxo\n" +
+            " ox\n" +
             "\n" +
             "#pieceB\n" +
-            "xxx\n" +
+            "oxo\n" +
             "x\n" +
-            "xx\n" +
-            "xx\n" +
+            "ox\n" +
+            "xo\n" +
             "\n" +
             "#pieceC\n" +
-            "  xx\n" +
-            "xxxx\n" +
-            "  xx\n" +
+            "  xo\n" +
+            "oxox\n" +
+            "  xo\n" +
             "\n" +
             "#pieceD\n" +
             "x\n" +
-            "xxx\n" +
-            "xxxx\n" +
+            "oxo\n" +
+            "xoxo\n" +
             "\n" +
             "#pieceE\n" +
-            "x\n" +
-            "xxx\n" +
-            "xxx\n" +
-            " x\n" +
+            "  o\n" +
+            "xox\n" +
+            "oxo\n" +
+            " o\n" +
             "\n" +
             "#pieceF\n" +
-            "xx\n" +
-            "xx\n" +
-            "xxxx\n" +
+            "ox\n" +
+            "xo\n" +
+            "oxox\n" +
             "\n" +
             "#pieceG\n" +
-            "  x\n" +
-            "xxx\n" +
-            "xxx\n" +
-            "  x\n" +
+            "o\n" +
+            "xox\n" +
+            "oxo\n" +
+            "x\n" +
             "\n" +
             "#pieceH\n" +
             "x x\n" +
-            "xxx\n" +
-            "xxx\n" +
+            "oxo\n" +
+            "xox\n" +
             "\n" +
-            "#piece-End\n";
+            "#piece-End";
     }
 
     if (dropdownButton.value === 'Custom') {
@@ -536,7 +545,18 @@ solveButton.addEventListener('click', () => {
     let puzzle;
 
     if (header.toLowerCase().trim() === 'speed') {
-        new Speed().measure();
+        let res = new Speed().measure();
+        // alert(res);
+        window.addEventListener("compassneedscalibration", function(event) {
+            alert('Compass needs calibrating! Wave your device in a figure "8" motion');
+            event.preventDefault();
+        }, true);
+        window.removeEventListener('deviceorientation', handleOrientation);
+        window.addEventListener('deviceorientation', (event) => {
+            console.log('cls');
+            console.log('NORTH(360-α) ' + (360-Math.trunc(event.alpha)) + ' ⬆️ β ' + Math.trunc(event.beta) + ' γ ' + Math.trunc(event.gamma));
+        });
+
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         savePuzzle("lastRun", input);
