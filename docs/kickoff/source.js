@@ -22,6 +22,19 @@ graphItButton.addEventListener('click', () => {
     }
 });
 
+document.getElementById('cube').addEventListener('click', () => {
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // iOS 13+, click on the cube to save some user action
+        DeviceOrientationEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+            })
+        .catch(console.error);
+    }
+});
+
 let restoreButton1 = document.getElementById('restoreButton1');
 let restoreButton2 = document.getElementById('restoreButton2');
 let restoreButton3 = document.getElementById('restoreButton3');
@@ -78,7 +91,7 @@ if (!(typeof (StorageEvent) !== undefined)) {
 }
 
 let lastRun = loadPuzzle("lastRun");
-document.getElementById('input').value = lastRun !== '' ? lastRun : 'Poly,15,4';
+document.getElementById('input').value = lastRun !== '' ? lastRun : "#15,4\n#end of grid. Pieces:Poly";
 
 dropdownButton.addEventListener('change', () => {
 
@@ -236,9 +249,9 @@ dropdownButton.addEventListener('change', () => {
             "#piece-End\n";
     }
 
-
-    if (dropdownButton.value === 'Tetris 10x4') {
+    if (dropdownButton.value === 'Tetris 4x10') {
         console.log('cls');
+        graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#4,10\n" +
@@ -286,6 +299,7 @@ dropdownButton.addEventListener('change', () => {
 
     if (dropdownButton.value === 'Tetris 5x8') {
         console.log('cls');
+        graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#5,8\n" +
@@ -503,7 +517,10 @@ dropdownButton.addEventListener('change', () => {
     }
 });
 
-window.addEventListener('deviceorientation', handleOrientation);
+// Non iOS, no user action is needed
+if (typeof DeviceMotionEvent.requestPermission !== 'function') {
+    window.addEventListener('deviceorientation', handleOrientation);
+}
 
 solveButton.addEventListener('click', () => {
 
@@ -523,27 +540,16 @@ solveButton.addEventListener('click', () => {
     }
     else if (input !== "" && input.indexOf(',') !== -1) {
         savePuzzle("lastRun", input);
-        if (header.toLowerCase().indexOf('poly,') >= 0) {
-            puzzle = new Puzzle2d(12, parseInt(header.split(',')[1]), parseInt(header.split(',')[2]));
-        }
-        else if (header.trim().startsWith('#')) {
-            puzzle = new Puzzle2d(0, 0, 0, input);
-        }
-        if (puzzle != null) {
-            output.innerHTML = puzzle.solve();
-            graphItButton.disabled =
-                output.innerHTML.indexOf("no solution") !== -1 ||
-                output.innerHTML.indexOf("Invalid input") !== -1 ||
-               !output.innerHTML.startsWith(" 1  ");
-        }
-        else {
-            console.warn('Invalid input');
-            output.innerHTML = new Date().toISOString() + ' Invalid input';
-        }
+        puzzle = new Puzzle2d(0, 0, 0, input);
+        output.innerHTML = puzzle.solve();
+        graphItButton.disabled =
+            output.innerHTML.indexOf("no solution") !== -1 ||
+            output.innerHTML.indexOf("Invalid input") !== -1 ||
+            !output.innerHTML.startsWith(" 1  ");
     }
     else {
-        console.warn('Invalid input');
-        output.innerHTML = new Date().toISOString() + ' Invalid input';
+        console.warn('Invalid input. Follow an example');
+        output.innerHTML = ' Invalid input. Follow an example';
     }
 });
 

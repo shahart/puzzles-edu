@@ -7,7 +7,9 @@ class Builder {
         let foundCells = 0;
         let header = lines[0];
         if (!header.startsWith("#")) {
-            console.error("Found no grid header");
+            console.error("Found no grid header: #rows, columns");
+            alert("Found no grid header: #rows, columns");
+            throw new Error("Found no grid header: #rows, columns");
         }
         let declardRows= parseInt(header.substring(1).split(",")[0]);
         let declardColumns = parseInt(header.substring(1).split(",")[1]);
@@ -95,7 +97,9 @@ class Builder {
                 doneWithGrid = true;
                 puzzle.PIECES = input.toLowerCase().split("#piece").length - 2;
                 console.log("Found pieces " + puzzle.PIECES);
+                console.debug("(default is Rotations=4, Has no symmetry)")
                 if (! puzzle.PIECES) {
+                    console.error("NaN-Found no PiecesX");
                     alert("NaN-Found no PiecesX");
                     throw new Error('NaN-Found no PiecesX');
                 }
@@ -123,6 +127,7 @@ class Builder {
                         }
                     }
                     if (!puzzle.names[pieceIdx]) {
+                        console.error('name undefined-Invalid input, line ' + line);
                         alert("name undefined, line " + line);
                         throw new Error('name undefined-Invalid input, line ' + line);
                     }
@@ -168,6 +173,7 @@ class Builder {
             }
         }
         if (puzzle.PIECES !== puzzle.names.length) {
+            console.error("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
             alert("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
             throw new Error("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
         }

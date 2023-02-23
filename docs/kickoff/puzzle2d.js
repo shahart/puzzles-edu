@@ -99,6 +99,7 @@ class Puzzle2d {
             line += "  ";
             for (let j=0;  j<this.COLUMNS; j++) {
                 if (this.grid[i] === undefined || this.grid[i][j] === undefined) {
+                    console.error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                     alert("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                     throw new Error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                 }

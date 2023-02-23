@@ -6,14 +6,21 @@ class Piece {
 
     constructor(index, layout, availRotations, symmetric, name) {
         if (name !== '_') {
-            console.debug(name + " R" + availRotations + " S" + symmetric);
+            let msg = name;
+            if (availRotations < 4) {
+                msg += " Rotations=" + availRotations;
+            }
+            // 2 means a flip(reflection) is a new shape
+            if (symmetric === 1) {
+                msg += ", Has symmetry";
+            }
+            console.debug(msg);
         }
         this.availRotations = availRotations;
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
-        // todo let symmetric = this.calcSymmetric(layout); // 2 means a flip(reflection) is a new shape
         this.layouts = new Array(availRotations * symmetric); // .fill(0).map(_ => new Array().fill(0)); // availRotations*symmetric);
         for (let i = 0; i < this.layouts.length; i++) {
             this.layouts[i] = [];
@@ -44,14 +51,16 @@ class Piece {
         }
 
         if (this.totalThisFill === 0) {
+            console.error("empty piece");
             alert("empty piece");
             throw new Error('empty piece');
         }
 
         this.printPart(0, this.layouts[0]);
         if (availRotations === 3 || availRotations >= 5 || availRotations <= 0) {
-            alert("rotations is 1/2/4");
-            throw new Error("rotations is 1/2/4");
+            console.error("rotations must be 1/2/4");
+            alert("rotations must be 1/2/4");
+            throw new Error("rotations must be 1/2/4");
         }
         if (availRotations >= 2) {
             this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length, 1);
