@@ -95,7 +95,7 @@ document.getElementById('input').value = lastRun !== '' ? lastRun : "#15,4\n#end
 
 dropdownButton.addEventListener('change', () => {
 
-    if (dropdownButton.value === '6x6, 6 pieces') {
+    if (dropdownButton.value === '6x6, 10 pieces') {
         console.log('cls');
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
@@ -545,6 +545,7 @@ solveButton.addEventListener('click', () => {
     let puzzle;
 
     if (header.toLowerCase().trim() === 'speed') {
+        graphItButton.disabled = true;
         let res = new Speed().measure();
         // alert(res);
         window.addEventListener("compassneedscalibration", function(event) {

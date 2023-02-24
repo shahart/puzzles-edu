@@ -64,9 +64,9 @@ class GraphIt {
                             alert('For now supports up to ' + colors.length + ' pieces');
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
-                        res += "<Shape DEF=\"PIECE_" + idx + "\"><Appearance><Material diffuseColor=\"" + colors[idx] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
+                        res += "<Shape DEF=\"PIECE_" + idx + "\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
                         if (checkersMode) {
-                            res += "<Shape DEF=\"PIECE_" + idx + "s\"><Appearance><Material diffuseColor=\"" + colors[idx] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
+                            res += "<Shape DEF=\"PIECE_" + idx + "s\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
                         }
                         ++ idx;
                     }
@@ -78,15 +78,17 @@ class GraphIt {
 
         let point = 0;
         for (let row = 0; row < lines.length; ++row) {
-            let line = lines[row];
+            let line = lines[lines.length - 1 - row];
             for (let col = 4; col < line.length; ++col) {
                 if (line[col] !== '*') {
                     let z = line[col].toUpperCase();
                     idx = pieces[z];
+                    let c = col;
+                    let r = row;
                     let currLine =
-                        "<Transform DEF=\"POINT" + point + "_id_" + (row+1) +"0" + ((col-1)/3) +
-                        "\" translation=\"0 " + (row*10) + " " + ((col-1)/3*10-10) + "\">" +
-                        "<Shape USE=\"PIECE_" + (z === line[col] ? idx : (idx+"s")) + "\"/></Transform>\n";
+                        "<Transform DEF=\"POINT" + point + "_id_" + (r+1) +"0" + ((c-1)/3) +
+                        "\" translation=\"0 " + (r*10) + " " + ((line.length-c-1)/3*10-10) + "\">" +
+                        "<Shape USE=\"PIECE_" + (z === line[c] ? idx : (idx+"s")) + "\"/></Transform>\n";
                     ++ point;
                     res += currLine;
                     ++ idx;
