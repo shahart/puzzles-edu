@@ -111,7 +111,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#\n" +
+            "#\n" + // the trigger for this site
             "xxxxxx\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
@@ -179,8 +179,8 @@ dropdownButton.addEventListener('change', () => {
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
-            "xxx  xxx\n" +
-            "xxx  xxx\n" +
+            "xxx--xxx\n" +
+            "xxx--xxx\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +

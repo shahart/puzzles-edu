@@ -62,7 +62,7 @@
     function example3d() {
         alert("Comes in bits and pieces, put together forms a whole. It's athletics for the mind, the more you think the more you find. " +
             "Sometimes it can be a grind, but then, that is the goal (BrainZilla.com/Riddles). " +
-            "\n\nHere's a solution for the green cube, here: https://happycube.com/");
+            "\n\nHere's a solution for the green cube: see https://happycube.com");
         window.open("x3d/3d_happycube_0_MC_SZ_ST_0.html", "x3d Happy Cube (Green)");
     }
 
@@ -88,17 +88,23 @@ aka Put together puzzles
 <p>
 <label for="PuzzleSelect"></label>
 <select id="PuzzleSelect">
-    <option value="Poly 12x5">Poly 12x5</option>
-    <option value="Poly 10x6">Poly 10x6</option>
-    <option value="Poly 8x8">Poly 8x8</option>
-    <option value="Poly 8x8, Hole">Poly 8x8, Hole</option>
-    <option value="Katamino">Katamino, Classic</option>
-    <option value="Katamino, Cup">Katamino, a Cup 🍷</option>
-    <option value="Checkers">Checkers 🏁</option>
-<!--    <option value="Checkers 6x6">Checkers 6x6</option>-->
-    <option value="Tetris 4x10">Tetrominoes 4x10</option>
-    <option value="Tetris 5x8">Tetrominoes 5x8</option>
-    <option value="Eureka">Eureka</option> <!-- todo checkerboard version -->
+    <optgroup label="Polyominos">
+        <option value="Poly 8x8">Poly 8x8</option>
+        <option value="Poly 8x8, Hole">Poly 8x8, Hole</option>
+        <option value="Poly 12x5">Poly 12x5</option>
+        <option value="Poly 10x6">Poly 10x6</option>
+        <option value="Katamino">Katamino, Classic</option>
+        <option value="Katamino, Cup">Katamino, a Cup 🍷</option>
+    </optgroup>
+    <optgroup label="Tetrominoes">
+        <option value="Tetris 4x10">Tetris 4x10</option>
+        <option value="Tetris 5x8">Tetris 5x8</option>
+    </optgroup>
+    <optgroup label="Checkers">
+        <option value="Checkers">Checkers 🏁</option>
+        <option value="Eureka">Eureka</option> <!-- todo checkerboard version -->
+        <!--option value="Checkers 6x6">Checkers 6x6</option-->
+    </optgroup>
     <option value="6x6, 10 pieces">6x6, 10 pieces</option>
     <option value="Custom">Custom</option>
     <option value="Presets" disabled selected>Presets</option>
