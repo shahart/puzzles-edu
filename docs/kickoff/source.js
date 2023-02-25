@@ -7,10 +7,21 @@ let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
 
 function handleOrientation(event) {
-    const a = event.alpha > 180 ? event.alpha - 360 : event.alpha; // todo fix alpha rotation
-    const b = event.beta - 90;
-    const g = event.gamma > 180 ? 360 - event.gamma : -event.gamma;
-    let rot = "rotateX(" + b + "deg) rotateY(" + g  + "deg) rotateZ(" + a + "deg)";
+    let rot = "";
+    if (event !== null) {
+        let a = event.alpha > 180 ? event.alpha - 360 : event.alpha; // todo fix alpha rotation
+        let b = event.beta - 90;
+        let g = event.gamma > 180 ? 360 - event.gamma : -event.gamma;
+        if (a === null) {
+            a = 0;
+            b = 15;
+            g = -15;
+        }
+        rot = "rotateX(" + b + "deg) rotateY(" + g + "deg) rotateZ(" + a + "deg)";
+    }
+    else {
+        rot = "rotateX(0deg) rotateY(0deg) rotateZ(0deg)";
+    }
     document.getElementById("cube").style.transform = rot;
 }
 
@@ -159,6 +170,54 @@ dropdownButton.addEventListener('change', () => {
             "#end of grid. Pieces:Poly";
     }
 
+    if (dropdownButton.value === 'Poly 8x8, Hole') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#8,8\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxx  xxx\n" +
+            "xxx  xxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "xxxxxxxx\n" +
+            "\n" +
+            "#end of grid. Pieces:Poly";
+    }
+
+    if (dropdownButton.value === 'Katamino') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#11,5 # Katamino\n" +
+            "#end of grid. Pieces:Poly";
+    }
+
+    if (dropdownButton.value === 'Katamino, Cup') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#12,6 # Katamino, a Cup\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "xxxxxx\n" +
+            "-xxxx-\n" +
+            "--xx--\n" +
+            "--xx--\n" +
+            "-xxxx-\n" +
+            "xxxxxx\n" +
+            "#end of grid. Pieces:Poly";
+    }
+
     if (dropdownButton.value === 'Poly 10x6') {
         console.log('cls');
         graphItButton.disabled = true;
@@ -249,6 +308,7 @@ dropdownButton.addEventListener('change', () => {
             "#rows,columns\n" +
             "xxxx\n" +
             "...\n" +
+            "\n (empty line)" +
             "#end of grid # comment\n" +
             "#PieceA\n" +
             "xxx\n" +
@@ -529,6 +589,7 @@ dropdownButton.addEventListener('change', () => {
 // Non iOS, no user action is needed
 if (typeof DeviceMotionEvent.requestPermission !== 'function') {
     window.addEventListener('deviceorientation', handleOrientation);
+    handleOrientation(null);
 }
 
 solveButton.addEventListener('click', () => {

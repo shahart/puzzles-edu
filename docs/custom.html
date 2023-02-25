@@ -43,9 +43,9 @@
                     return;
                 }
                 if ($("#console-log").length === 0) {
-                    $("body").append($('<ul id="console-log" style="position:fixed; top:0; left:0; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.65); color:white; font-family: monospace;"></ul>'));
+                    $("body").append($('<ul id="console-log" onclick="cls()" style="position:fixed; top:0; left:1; width:100%; list-style-type:none; margin:0; padding:0; padding-top:25px; font-size:9px; background:rgba(0,0,0,0.65); color:white; font-family: monospace;"></ul>'));
                 }
-                $("#console-log").append($('<li style="margin-left:none;">&nbsp;&nbsp;&nbsp;' + message + '</li>'));
+                $("#console-log").prepend($('<li style="margin-left:none;">&nbsp;&nbsp;&nbsp;' + message + '</li>')); // append
             }
         }
     });
@@ -58,6 +58,16 @@
             || useragent.indexOf('iPad') !== -1
             || useragent.indexOf('SamsungBrowser') !== -1;
     }
+
+    function example3d() {
+        alert("Comes in bits and pieces, put together forms a whole. It's athletircs for the mind, the more you think the more you find. Sometimes it can be a grind, but then, that's the goal (brainZilla.com/riddles)");
+        window.open("x3d/3d_happycube_0_MC_SZ_ST_0.html", "x3d Happy Cube");
+    }
+
+    function cls() {
+        console.log('cls');
+    }
+
     </script>
     <script src="kickoff/source.js" type='module'></script>
 </head>
@@ -79,7 +89,10 @@ aka Put together puzzles
     <option value="Poly 12x5">Poly 12x5</option>
     <option value="Poly 10x6">Poly 10x6</option>
     <option value="Poly 8x8">Poly 8x8</option>
-    <option value="Checkers">Checkers</option>
+    <option value="Poly 8x8, Hole">Poly 8x8, Hole</option>
+    <option value="Katamino">Katamino, Classic</option>
+    <option value="Katamino, Cup">Katamino, a Cup 🍷</option>
+    <option value="Checkers">Checkers 🏁</option>
 <!--    <option value="Checkers 6x6">Checkers 6x6</option>-->
     <option value="Tetris 4x10">Tetrominoes 4x10</option>
     <option value="Tetris 5x8">Tetrominoes 5x8</option>
@@ -109,7 +122,7 @@ aka Put together puzzles
 <h4><a href="index.html">Back ... to more 🧩s</a></h4>
 <h5><a href="kickoff/test/test.html">(Tests)</a></h5>
 <h4>Next? 3D Solver...</h4>
-<div class="post--2021--water-line--gyro-cube">
+<div class="post--2021--water-line--gyro-cube" onclick="example3d()">
     <div class="gyro-cube-container">
         <div id="cube" class="gyro-cube" >
             <div class="gyro-cube-side gyro-cube-front">1</div>
@@ -121,5 +134,9 @@ aka Put together puzzles
         </div>
     </div>
 </div>
+<p>
+Mail 📧 me your puzzle,
+<p>
+I'll add it above.
 </body>
 </html>

@@ -17,6 +17,9 @@ class Builder {
             console.error('Complete the template');
             alert('Complete the template');
         }
+        if (header.endsWith("# Katamino") > 0) {
+            puzzle.isKatamino = true;
+        }
         puzzle.grid = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         puzzle.gridCopy = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         let rows = 0;
@@ -50,7 +53,7 @@ class Builder {
                     puzzle.grid[row][col] = -1;
                     puzzle.gridCopy[row][col] = -1;
                     if (line[col] !== '_' && line[col] !== '-') {
-                        console.warn("Invalid char " + line[col]);
+                        console.warn("Invalid char '" + line[col] + "'");
                     }
                 }
             }
@@ -60,7 +63,9 @@ class Builder {
                 break;
             }
         }
-        rows -= 1;
+        if (lines[rows] === '') {
+            rows -= 1;
+        }
         let i=1;
         if (!gridFound) {
             columns = declardColumns;

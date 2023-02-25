@@ -9,6 +9,7 @@ class Puzzle2d {
             console.warn('You might want to switch dimensions.');
         }
         window.globalTotalFill = 0;
+        this.isKatamino = false;
         this.allLines = '';
         this.start = new Date().getTime();
         this.PIECES = pieces;
@@ -86,7 +87,7 @@ class Puzzle2d {
     }
 
     showGrid() {
-        console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
+        // console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
         for (let i=0; i<this.ROWS; i++) {
             let line = "";
@@ -118,7 +119,9 @@ class Puzzle2d {
                     line += ch + "  ";
                 }
             }
-            console.log(line);
+            if (this.totalSolutions === 0) {
+                console.log(line);
+            }
             if (!this.solutionFound) {
                 this.allLines += line + "\n";
             }
@@ -171,9 +174,10 @@ class Puzzle2d {
         }
         let leftPieces = this.piecesIndices.length;
         // console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
-        if (leftPieces === 0) { //  && availInGrid == 0) {
+        if ((leftPieces === 0) ||
+            (this.isKatamino && leftPieces === (window.globalTotalFill - this.totalFillInGrid) / 5)) { //  && availInGrid == 0) {
             this.totalSolutions++;
-            console.log(new Date().getTime() - this.start + " [msec] Found a solution");
+            console.log(new Date().getTime() - this.start + " [msec] Found a solution, click 'Show'");
 
             if (this.totalSolutions === 1) {
                 this.showGrid();
@@ -299,7 +303,8 @@ class Puzzle2d {
         this.start = new Date().getTime();
         this.triedPieces = 0;
 
-        if (this.totalFillInGrid !== window.globalTotalFill) {
+        if ((!this.isKatamino && this.totalFillInGrid !== window.globalTotalFill) ||
+            ( this.isKatamino && this.totalFillInGrid > 60)) {
             let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns is in the correct order";
             this.allLines = 'Invalid input';
             console.error(msg);
