@@ -20,7 +20,7 @@ function handleOrientation(event) {
         rot = "rotateX(" + b + "deg) rotateY(" + g + "deg) rotateZ(" + a + "deg)";
     }
     else {
-        rot = "rotateX(0deg) rotateY(0deg) rotateZ(0deg)";
+        rot = "rotateX(15deg) rotateY(-15deg) rotateZ(0deg)";
     }
     document.getElementById("cube").style.transform = rot;
 }
@@ -588,8 +588,8 @@ dropdownButton.addEventListener('change', () => {
 
 // Non iOS, no user action is needed
 if (typeof DeviceMotionEvent.requestPermission !== 'function') {
+    // handleOrientation(null);
     window.addEventListener('deviceorientation', handleOrientation);
-    handleOrientation(null);
 }
 
 solveButton.addEventListener('click', () => {
