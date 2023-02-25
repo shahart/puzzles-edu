@@ -111,7 +111,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#6,6\n" +
+            "#\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
@@ -175,7 +175,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#8,8\n" +
+            "#\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
@@ -193,7 +193,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#11,5 # Katamino\n" +
+            "#11,5 # Katamino, 1st number can be 3 to 12\n" +
             "#end of grid. Pieces:Poly";
     }
 
@@ -202,7 +202,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#12,6 # Katamino, a Cup\n" +
+            "#Katamino, a Cup\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
@@ -223,7 +223,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#10,6\n" +
+            "#\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
             "xxxxxx\n" +
@@ -243,7 +243,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#8,8\n" +
+            "#\n" +
             "oxoxoxox\n" +
             "xoxoxoxo\n" +
             "oxoxoxox\n" +
@@ -305,17 +305,18 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#rows,columns\n" +
+            "#comment\n" +
+            "xxxx\n" +
             "xxxx\n" +
             "...\n" +
-            "\n (empty line)" +
-            "#end of grid # comment\n" +
+            "#end of grid #2nd comment\n" +
             "#PieceA\n" +
             "xxx\n" +
             "xxx\n" +
             " xx\n" +
             "...\n" +
-            "#piece-End\n";
+            "#piece-End #3rd comment\n" +
+            "(comments are optional)";
     }
 
     if (dropdownButton.value === 'Tetris 4x10') {
@@ -426,7 +427,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#8,8\n" +
+            "#\n" +
             "_xxxxxx_\n" +
             "xxxxxxxx\n" +
             "xxxxxxxx\n" +
@@ -505,7 +506,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#8,8\n" +
+            "#\n" +
             "oxoxoxox\n" +
             "xoxoxoxo\n" +
             "oxoxoxox\n" +
@@ -620,7 +621,7 @@ solveButton.addEventListener('click', () => {
         });
 
     }
-    else if (input !== "" && input.indexOf(',') !== -1) {
+    else if (input !== "") {
         savePuzzle("lastRun", input);
         puzzle = new Puzzle2d(0, 0, 0, input);
         output.innerHTML = puzzle.solve();

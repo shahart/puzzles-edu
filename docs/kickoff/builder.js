@@ -11,13 +11,16 @@ class Builder {
             alert("Found no grid header: #rows, columns");
             throw new Error("Found no grid header: #rows, columns");
         }
-        let declardRows= parseInt(header.substring(1).split(",")[0]);
+        let declardRows = parseInt(header.substring(1).split(",")[0]);
         let declardColumns = parseInt(header.substring(1).split(",")[1]);
         if (isNaN(declardColumns) || isNaN(declardRows)) {
-            console.error('Complete the template');
-            alert('Complete the template');
+            this.calcRows(lines);
+            // console.error('Complete the template');
+            // alert('Complete the template');
+            declardColumns = this.declaredColumns;
+            declardRows = this.declaredRows;
         }
-        if (header.endsWith("# Katamino") > 0) {
+        if (header.indexOf("# Katamino") > 0) {
             puzzle.isKatamino = true;
         }
         puzzle.grid = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
@@ -183,6 +186,25 @@ class Builder {
             throw new Error("wrong number of pieces, found " + puzzle.names.length + " declared " + puzzle.PIECES);
         }
     }
+
+    calcRows(lines) {
+        this.declaredRows = 0;
+        this.declaredColumns = 0;
+        let row = 0;
+        for (; row < lines.length; ++row) {
+            let line = lines[row+1];
+            if (line !== undefined && line.toLowerCase().startsWith("#end of grid")) {
+                break;
+            }
+            this.declaredColumns = Math.max(this.declaredColumns, line.length);
+            this.declaredRows = row + 1;
+        }
+        if (lines[row] === '') {
+            this.declaredRows -= 1;
+        }
+        console.debug("Found " + this.declaredRows + " rows, " + this.declaredColumns + " cols");
+    }
+
 }
 
 export { Builder };

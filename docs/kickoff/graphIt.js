@@ -86,8 +86,8 @@ class GraphIt {
                     let c = col;
                     let r = row;
                     let currLine =
-                        "<Transform DEF=\"POINT" + point + "_id_" + (r+1) +"0" + ((c-1)/3) +
-                        "\" translation=\"0 " + (r*10) + " " + ((line.length-c-1)/3*10-10) + "\">" +
+                        "<Transform DEF=\"POINT" + point + "_id_" + (r) +"0" + ((c-1)/3) +
+                        "\" translation=\"0 " + (r*10-10) + " " + ((line.length-c-3)/3*10) + "\">" +
                         "<Shape USE=\"PIECE_" + (z === line[c] ? idx : (idx+"s")) + "\"/></Transform>\n";
                     ++ point;
                     res += currLine;
