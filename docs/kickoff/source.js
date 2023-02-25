@@ -8,20 +8,20 @@ let dropdownButton = document.getElementById('PuzzleSelect');
 
 function handleOrientation(event) {
     let rot = "";
-    if (event !== null) {
+    // if (event !== null) {
         let a = event.alpha > 180 ? event.alpha - 360 : event.alpha; // todo fix alpha rotation
         let b = event.beta - 90;
         let g = event.gamma > 180 ? 360 - event.gamma : -event.gamma;
         if (a === null) {
             a = 0;
-            b = 15;
-            g = -15;
+            // b = 15;
+            // g = -15;
         }
         rot = "rotateX(" + b + "deg) rotateY(" + g + "deg) rotateZ(" + a + "deg)";
-    }
-    else {
-        rot = "rotateX(15deg) rotateY(-15deg) rotateZ(0deg)";
-    }
+    // }
+    // else {
+    //     rot = "rotateX(15deg) rotateY(-15deg) rotateZ(0deg)";
+    // }
     document.getElementById("cube").style.transform = rot;
 }
 
