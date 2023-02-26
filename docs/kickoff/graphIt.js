@@ -64,9 +64,9 @@ class GraphIt {
                             alert('For now supports up to ' + colors.length + ' pieces');
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
-                        res += "<Shape DEF=\"PIECE_" + idx + "\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
+                        res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
                         if (checkersMode) {
-                            res += "<Shape DEF=\"PIECE_" + idx + "s\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
+                            res += "<Shape DEF=\"PIECE_" + idx + "_s\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
                         }
                         ++ idx;
                     }
@@ -76,6 +76,8 @@ class GraphIt {
         }
         console.debug('found ' + (idx-1) + ' pieces');
 
+        let transforms = "";
+        let switchSizes = false; // 0 0 0 can't be a piece with s, from some reason
         let point = 0;
         for (let row = 0; row < lines.length; ++row) {
             let line = lines[lines.length - 1 - row];
@@ -88,17 +90,26 @@ class GraphIt {
                     let currLine =
                         "<Transform DEF=\"POINT" + point + "_id_" + (r) +"0" + ((c-1)/3) +
                         "\" translation=\"0 " + (r*10-10) + " " + ((line.length-c-3)/3*10) + "\">" +
-                        "<Shape USE=\"PIECE_" + (z === line[c] ? idx : (idx+"s")) + "\"/></Transform>\n";
+                        "<Shape USE=\"PIECE_" + (z === line[c] ? (idx+"_r") : (idx+"_s")) + "\"/></Transform>\n";
                     ++ point;
-                    res += currLine;
+                    transforms += currLine;
                     ++ idx;
+                    if ((r*10-10) === 0 && ((line.length-c-3)/3*10) === 0 && z !== line[c]) {
+                        switchSizes = true;
+                    }
                 }
                 col += 2;
             }
         }
 
+        if (switchSizes) {
+            transforms = transforms.replaceAll("_r\"/></Transform>", "_t\"/></Transform>");
+            transforms = transforms.replaceAll("_s\"/></Transform>", "_r\"/></Transform>");
+            transforms = transforms.replaceAll("_t\"/></Transform>", "_s\"/></Transform>");
+        }
+
         // postfix
-        res +=
+        res += transforms +
             "</Transform>\n" +
             "</Scene></X3D>\n" +
             "</body>\n" +

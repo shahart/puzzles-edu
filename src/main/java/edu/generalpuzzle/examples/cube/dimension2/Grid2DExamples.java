@@ -46,7 +46,7 @@ public class Grid2DExamples extends Grid2D {
 
     }
 
-    public void buildFromFile() {
+    public void buildFromFile() { // TODO align to the JS version, auto-detects, etc.
         grid.clear();
         currCell = null;
         leftCells = -1;

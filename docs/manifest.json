@@ -1,6 +1,6 @@
 {
   "name": "Puzzle Solver",
-  "short_name": "Puzzle",
+  "short_name": "Pzl Solver",
   "description": "Solve 2D (Planar Orthogonal Lattice) Puzzles",
   "scope": "/puzzles-edu/",
   "id": "/puzzles-edu/",
