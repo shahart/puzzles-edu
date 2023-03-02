@@ -25,27 +25,38 @@ class GraphIt {
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
+
+            "<center>" +
+            solution.replaceAll("\n", "<p>") + //
+            "</center>" +
+
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE X3D SYSTEM \"x3dViewer/Xj3D/DTD/x3d-3.0.dtd\">\n" +
             "<X3D profile=\"Interchange\">\n" +
             "<Scene>\n" +
             "<Transform rotation=\"0 1 0 -1\"  scale=\"0.05 0.05 0.05\">\n";
 
         let colors = [
-            '0 1 1', // cyan
-            '1 0 0', // red
-            '1 0.686 0.686', // pink
-            '1 0.784 0', // orange
-            '1 1 0', // yello
-            '0 1 0', // green
-            '1 0 1', // magenta
-            '0 0 1', // blue
-            '0.753 0.753 0.753', // light_gray
-            '0.502 0.502 0.502', // gray
-            '0.251 0.251 0.251', // dark_gray
-            '1 1 1' // white
+            '0 1 1', // 0 cyan
+            '1 0 0', // 1 red
+            '1 0.686 0.686', // 2 pink
+            '1 0.784 0', // 3 orange
+            '1 1 0', // 4 yellow
+            '0 1 0', // 5 green
+            '1 0 1', // 6 magenta
+            '0 0 1', // 7 blue
+            '0.753 0.753 0.753', // 8 light_gray
+            '0.502 0.502 0.502', // 9 gray
+            '0.251 0.251 0.251', // 10 dark_gray
+            '1 1 1' // 11 white
         ];
         let pieces = {};
         let checkersMode = false;
+        for (let col = 0; col < solution.length; ++col) {
+            if ('a' <= solution[col] && solution[col] <= 'z') {
+                checkersMode = true;
+                break;
+            }
+        }
         let idx = 1;
         let lines = solution.split('\n');
         for (let row = 0; row < lines.length; ++row) {
@@ -54,9 +65,6 @@ class GraphIt {
             for (let col = 4; col < line.length; ++col) {
                 if (line[col] !== '*') {
                     let z = line[col].toUpperCase();
-                    if (z !== line[col]) {
-                        checkersMode = true;
-                    }
                     if (!pieces[z]) {
                         pieces[z] = idx;
                         if (idx-1 > colors.length) {
@@ -64,7 +72,8 @@ class GraphIt {
                             alert('For now supports up to ' + colors.length + ' pieces');
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
-                        res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>\n";
+                        res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>";
+                        res += " <!-- " + (idx-1) + " -->\n"
                         if (checkersMode) {
                             res += "<Shape DEF=\"PIECE_" + idx + "_s\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
                         }

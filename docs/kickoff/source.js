@@ -188,6 +188,71 @@ dropdownButton.addEventListener('change', () => {
             "#end of grid. Pieces:Poly";
     }
 
+    if (dropdownButton.value === 'AquaBelle0') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            // https://smartGamesAndPuzzles.com/aquaBelle.html
+            "# AquaBelle Starter\n" +
+            "xox\n" +
+            "oxx\n" +
+            "xxx\n" +
+            "\n" +
+            "#end of grid. o-bad, g-good\n" +
+            "#PieceA\n" +
+            "ox\n" +
+            "\n" +
+            "#pieceB\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceC\n" +
+            "oo\n" +
+            "\n" +
+            "#pieceD\n" +
+            "xx\n" +
+            " o\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'AquaBelle1') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "# AquaBelle Junior\n" +
+            "oxgg\n" +
+            "oxxg\n" +
+            "gxxg\n" +
+            "gxxo\n" +
+            "\n" +
+            "#end of grid. o-bad, g-good\n" +
+            "#PieceA\n" +
+            "ox\n" +
+            " o\n" +
+            "\n" +
+            "#pieceB\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceC\n" +
+            "o\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceD\n" +
+            "xx\n" +
+            "o\n" +
+            "\n" +
+            "#pieceE\n" +
+            "xo\n" +
+            "\n" +
+            "#pieceF\n" +
+            " x\n" +
+            "xo\n" +
+            "\n" +
+            "#piece-End";
+    }
+
     if (dropdownButton.value === 'Katamino') {
         console.log('cls');
         graphItButton.disabled = true;
