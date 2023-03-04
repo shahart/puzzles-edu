@@ -10,6 +10,7 @@ class Puzzle2d {
         }
         window.globalTotalFill = 0;
         this.isKatamino = false;
+        this.isAquaBelle = false;
         this.allLines = '';
         this.start = new Date().getTime();
         this.PIECES = pieces;
@@ -66,7 +67,7 @@ class Puzzle2d {
                 let piece = i;
                 this.piecesIndices.push(piece);
                 this.pieces[i] = new Piece(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
-                this.pieces[i].shuffle();
+                this.pieces[i].shuffle(); //
             }
             for (let i = 0; i < this.grid.length; i++) {
                 for (let j = 0; j < this.grid[i].length; j++) {
@@ -111,9 +112,11 @@ class Puzzle2d {
                     line += "-  ";
                 } else if (this.grid[i][j] === -10) { // 2nd type of grid cell
                      line += "o  ";
+                } else if (this.grid[i][j] === -15) { // good fish (AquaBelle)
+                    line += "g  ";
                 } else {
                     let ch = this.names.charAt(this.grid[i][j] - 1);
-                    if (this.gridCopy[i][j] === -10) {
+                    if (this.gridCopy[i][j] <= -10) {
                         ch = ch.toLowerCase();
                     }
                     line += ch + "  ";
@@ -133,6 +136,7 @@ class Puzzle2d {
 
     canPut(rowsSet, columnsSet) {
         // console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
+        // this.showGrid();
         let setSoFar = 0;
         let columnj = this.column;
         let j = this.currPiece.getFirstSquarePos();
@@ -149,12 +153,16 @@ class Puzzle2d {
             if (gridRowiColumnJ === undefined) {
                 return false;
             }
-            if (gridRowiColumnJ !== 0 && gridRowiColumnJ !== -10) {
+            if (gridRowiColumnJ !== 0 &&
+                gridRowiColumnJ !== -15 &&
+                gridRowiColumnJ !== -10) {
                 // not included as in comments at Puzzle2D.java
                 return false;
             }
             let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)];
-            if ((gridRowiColumnJ === 0 && pieceVal === 1) || (gridRowiColumnJ === -10 && pieceVal === 2)) {
+            if (((gridRowiColumnJ === 0 || gridRowiColumnJ === -15) && pieceVal === 1) || // regular cover, or on good fish
+                ((gridRowiColumnJ === -10 || gridRowiColumnJ === 0) && pieceVal === 2))  // bubble on nothing/ bad-fish
+            {
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
                 setSoFar++;
@@ -202,7 +210,7 @@ class Puzzle2d {
             return;
         }
         // firefox's dom.max_script_run_time = 20 sec
-        let timeoutThreshold = 1500;
+        let timeoutThreshold = 1500; // * 100
         if (new Date().getTime() - this.start > timeoutThreshold && timeoutThreshold > 0) {
             this.showGrid();
             let msg = new Date().toISOString() + ' Timeout, pieces per sec ' + Math.trunc(this.triedPieces / timeoutThreshold) + 'K';
@@ -214,6 +222,7 @@ class Puzzle2d {
         let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
         let columnsSet = new Array(5).fill(0);
 
+        // this.showGrid();
         for (let i=0; i< leftPieces; i++) {
             let piece = this.piecesIndices[i];
             this.currPiece = this.pieces[piece];
@@ -235,10 +244,10 @@ class Puzzle2d {
                     //      no desktop.
                     //      Cell - 180, 176, 169  -> ~175k
 
-                    if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) {
+                    if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) { //
                         this.showGrid();
                         this.showPieces();
-                    }
+                    } //
                     // this.showPieces();
 
                     // this.showGrid();
@@ -266,6 +275,10 @@ class Puzzle2d {
         let currIndex = this.currPiece.index+1;
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
             this.grid[rowsSet[i]][columnsSet[i]] = currIndex;
+            // todo find a way to draw a good fish
+            // if (this.isAquaBelle && this.currPiece.getLayout()[rowsSet[i]][columnsSet[i]] === 2) {
+            //     this.grid[rowsSet[i]][columnsSet[i]] *= 100;
+            // }
         }
         // this.showGrid();
         // find next avail free position
@@ -277,7 +290,9 @@ class Puzzle2d {
         // console.debug(new Date().getTime() - this.start + " [msec] goForward");
         for (; this.row<this.ROWS; this.row++) {
             for (; this.column<this.COLUMNS; this.column++) {
-                if (this.grid[this.row][this.column] === 0 || this.grid[this.row][this.column] === -10) {
+                if (this.grid[this.row][this.column] === 0 ||
+                    this.grid[this.row][this.column] === -15 ||
+                    this.grid[this.row][this.column] === -10) {
                     return;
                 }
             }

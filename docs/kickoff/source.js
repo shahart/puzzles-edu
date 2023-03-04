@@ -193,7 +193,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            // https://smartGamesAndPuzzles.com/aquaBelle.html
+            // no good fish 1..12
             "# AquaBelle Starter\n" +
             "xox\n" +
             "oxx\n" +
@@ -213,7 +213,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             " o\n" +
             "\n" +
-            "#piece-End";
+            "#piece-End # https://smartgamesandpuzzles.com/aquabelle.html";
     }
 
     if (dropdownButton.value === 'AquaBelle1') {
@@ -221,12 +221,45 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
+            // 13..24
             "# AquaBelle Junior\n" +
             "oxgg\n" +
             "oxxg\n" +
             "gxxg\n" +
             "gxxo\n" +
-            "\n" +
+            "\n";
+    }
+
+    if (dropdownButton.value === 'AquaBelle2') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            // 25..36
+            "# AquaBelle Expert\n" +
+            "ooxx\n" +
+            "xggx\n" +
+            "xggg\n" +
+            "xgxx\n" +
+            "\n";
+    }
+
+    if (dropdownButton.value === 'AquaBelle3') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            // 37..48
+            "# AquaBelle Master\n" +
+            "ggox\n" +
+            "xgxg\n" +
+            "oxxx\n" +
+            "oxgg\n" +
+            "\n";
+    }
+
+    if (dropdownButton.value.startsWith('AquaBelle') && dropdownButton.value !== 'AquaBelle0') {
+        document.getElementById('input').value +=
             "#end of grid. o-bad, g-good\n" +
             "#PieceA\n" +
             "ox\n" +

@@ -20,9 +20,14 @@ class Builder {
             declardColumns = this.declaredColumns;
             declardRows = this.declaredRows;
         }
-        if (header.indexOf("# Katamino") > 0) {
+
+        if (header.indexOf("Katamino") > 0) {
             puzzle.isKatamino = true;
         }
+        else if (header.indexOf("AquaBelle") > 0) {
+            puzzle.isAquaBelle = true;
+        }
+
         puzzle.grid = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         puzzle.gridCopy = new Array(declardRows).fill(0).map(_ => new Array(declardColumns).fill(0));
         let rows = 0;
@@ -48,6 +53,12 @@ class Builder {
                 } else if (line[col] === 'o' || line[col] === 'O') {
                     puzzle.grid[row][col] = -10;
                     puzzle.gridCopy[row][col] = -10;
+                    cellFound = true;
+                    gridFound = true;
+                    ++foundCells;
+                } else if (line[col] === 'g' || line[col] === 'G') {
+                    puzzle.grid[row][col] = -15;
+                    puzzle.gridCopy[row][col] = -15;
                     cellFound = true;
                     gridFound = true;
                     ++foundCells;
@@ -97,7 +108,7 @@ class Builder {
                     let piece = i;
                     puzzle.piecesIndices.push(piece);
                     puzzle.pieces[i] = new Piece(piece, puzzle.allPieces[i], puzzle.rotations[i], puzzle.symmetric[i], puzzle.names.charAt(i));
-                    puzzle.pieces[i].shuffle();
+                    puzzle.pieces[i].shuffle(); //
                 }
                 return;
             }
@@ -143,7 +154,7 @@ class Builder {
                     let fakePiece = new Piece(1000, layout, 4, 2, "_");
                     let rotations = fakePiece.calcRotations();
                     let fakePiece2 = new Piece(1000, layout, rotations, 2, "_");
-                    let symmetric = fakePiece2.calcSymmetric();
+                    let symmetric = puzzle.isAquaBelle ? 1 : fakePiece2.calcSymmetric();
                     if (unique === puzzle.names[pieceIdx]) {
                         rotations = 1;
                         symmetric = 1;
@@ -151,7 +162,7 @@ class Builder {
                     }
                     window.globalTotalFill = globalTotalFill;
                     puzzle.pieces[pieceIdx] = new Piece(pieceIdx, layout, rotations, symmetric, puzzle.names[pieceIdx]);
-                    puzzle.pieces[pieceIdx].shuffle();
+                    puzzle.pieces[pieceIdx].shuffle(); //
                     ++pieceIdx;
                     pieceLines = [];
                 }
