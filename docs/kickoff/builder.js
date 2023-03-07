@@ -50,7 +50,7 @@ class Builder {
                     cellFound = true;
                     gridFound = true;
                     ++foundCells;
-                } else if (line[col] === 'o' || line[col] === 'O') {
+                } else if (line[col] === 'o' || line[col] === 'O' || line[col] === 'B' || line[col] === 'b') {
                     puzzle.grid[row][col] = -10;
                     puzzle.gridCopy[row][col] = -10;
                     cellFound = true;

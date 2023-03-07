@@ -6,6 +6,8 @@ let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
 
+let puzzle;
+
 function handleOrientation(event) {
     let rot = "";
     // if (event !== null) {
@@ -29,7 +31,7 @@ graphItButton.addEventListener('click', () => {
     let solution = document.getElementById('output').innerHTML;
     if (solution !== '' && solution.startsWith(" 1  ")) {
         let title = dropdownButton.value; // todo identify a change in text if not custom, and switch option/title to custom
-        new GraphIt().graphIt(solution, title);
+        new GraphIt().graphIt(puzzle.getGrid(), solution, title, puzzle.isAquaBelle);
     }
 });
 
@@ -195,11 +197,11 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             // no good fish 1..12
             "# AquaBelle Starter\n" +
-            "xox\n" +
-            "oxx\n" +
+            "xbx\n" +
+            "bxx\n" +
             "xxx\n" +
             "\n" +
-            "#end of grid. o-bad, g-good\n" +
+            "#end of grid. b-bad, g-good\n" +
             "#PieceA\n" +
             "ox\n" +
             "\n" +
@@ -223,10 +225,10 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             // 13..24
             "# AquaBelle Junior\n" +
-            "oxgg\n" +
-            "oxxg\n" +
+            "bxgg\n" +
+            "bxxg\n" +
             "gxxg\n" +
-            "gxxo\n" +
+            "gxxb\n" +
             "\n";
     }
 
@@ -237,7 +239,7 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             // 25..36
             "# AquaBelle Expert\n" +
-            "ooxx\n" +
+            "bbxx\n" +
             "xggx\n" +
             "xggg\n" +
             "xgxx\n" +
@@ -251,16 +253,16 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             // 37..48
             "# AquaBelle Master\n" +
-            "ggox\n" +
+            "ggbx\n" +
             "xgxg\n" +
-            "oxxx\n" +
-            "oxgg\n" +
+            "bxxx\n" +
+            "bxgg\n" +
             "\n";
     }
 
     if (dropdownButton.value.startsWith('AquaBelle') && dropdownButton.value !== 'AquaBelle0') {
         document.getElementById('input').value +=
-            "#end of grid. o-bad, g-good\n" +
+            "#end of grid. b-bad, g-good\n" +
             "#PieceA\n" +
             "ox\n" +
             " o\n" +
@@ -702,7 +704,6 @@ solveButton.addEventListener('click', () => {
     let input = document.getElementById('input').value;
 
     let header = input.split('\n')[0];
-    let puzzle;
 
     if (header.toLowerCase().trim() === 'speed') {
         graphItButton.disabled = true;

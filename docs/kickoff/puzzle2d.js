@@ -87,6 +87,10 @@ class Puzzle2d {
         this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
+    getGrid() {
+        return this.grid;
+    }
+
     showGrid() {
         // console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
@@ -275,10 +279,6 @@ class Puzzle2d {
         let currIndex = this.currPiece.index+1;
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
             this.grid[rowsSet[i]][columnsSet[i]] = currIndex;
-            // todo find a way to draw a good fish
-            // if (this.isAquaBelle && this.currPiece.getLayout()[rowsSet[i]][columnsSet[i]] === 2) {
-            //     this.grid[rowsSet[i]][columnsSet[i]] *= 100;
-            // }
         }
         // this.showGrid();
         // find next avail free position

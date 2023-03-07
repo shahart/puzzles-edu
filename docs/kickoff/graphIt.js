@@ -1,6 +1,6 @@
 class GraphIt {
 
-    get_x3d(solution, title) {
+    get_x3d(grid, solution, title, aquaBelleMode) {
 
         /*
 
@@ -27,7 +27,7 @@ class GraphIt {
             "<body>\n" +
 
             "<center>" +
-            solution.replaceAll("\n", "<p>") + //
+            // solution.replaceAll("\n", "<p>") + //
             "</center>" +
 
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE X3D SYSTEM \"x3dViewer/Xj3D/DTD/x3d-3.0.dtd\">\n" +
@@ -74,6 +74,11 @@ class GraphIt {
                         }
                         res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>";
                         res += " <!-- " + (idx-1) + " -->\n"
+                        if (aquaBelleMode) {
+                            res += "<Shape DEF=\"PIECE_" + idx + "_g\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Sphere radius='3'/></Shape>\n";
+                            res += "<Shape DEF=\"PIECE_" + idx + "_b\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Torus innerRadius='0.6' outerRadius='2'/></Shape>\n";
+                        }
+                        res += " <!-- " + (idx-1) + " -->\n"
                         if (checkersMode) {
                             res += "<Shape DEF=\"PIECE_" + idx + "_s\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"5 5 5\"/></Shape>\n";
                         }
@@ -99,7 +104,25 @@ class GraphIt {
                     let currLine =
                         "<Transform DEF=\"POINT" + point + "_id_" + (r) +"0" + ((c-1)/3) +
                         "\" translation=\"0 " + (r*10-10) + " " + ((line.length-c-3)/3*10) + "\">" +
-                        "<Shape USE=\"PIECE_" + (z === line[c] ? (idx+"_r") : (idx+"_s")) + "\"/></Transform>\n";
+                        "<Shape USE=\"PIECE_" + (idx + "_");
+
+                    let id = "";
+                    if (aquaBelleMode) {
+                        if (grid[lines.length - 1 - row][(c-4)/3] === -15 && z !== line[c]) {
+                            id += "g"; // bubble on good
+                        }
+                        else if (grid[lines.length - 1 - row][(c-4)/3] === -10 && z !== line[c]) {
+                            id += "b"; // bubble on bad
+                        }
+                        else if (z !== line[c]) {
+                            id += "r"; // just bubble
+                        }
+                    }
+                    if (id === '') {
+                        id += (z === line[c] ? ("r") : ("s"));
+                    }
+                    currLine += id;
+                    currLine += "\"/></Transform>\n";
                     ++ point;
                     transforms += currLine;
                     ++ idx;
@@ -127,10 +150,10 @@ class GraphIt {
         return res;
     }
 
-    graphIt(solution, title) {
+    graphIt(grid, solution, title, aquaBelleMode) {
         // console.log(solution)
         var newWin = open('','graphIt'+title,'');
-        newWin.document.write(this.get_x3d(solution, title));
+        newWin.document.write(this.get_x3d(grid, solution, title, aquaBelleMode));
         newWin.document.close();
     }
 
