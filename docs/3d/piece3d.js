@@ -3,7 +3,7 @@ class Piece3d {
 
     row = -1;
     column = -1;
-    z = -1;
+    floor = -1;
 
     constructor(index, layout, availRotations, symmetric, name) {
         if (name !== '_') {
@@ -30,6 +30,7 @@ class Piece3d {
 
         this.rowsSet = new Array(availRotations * symmetric).fill(0);
         this.columnsSet = new Array(availRotations * symmetric).fill(0); //[];
+        this.floorsSet = new Array(availRotations * symmetric).fill(0);
 
         this.firstSquarePos[0] = 0;
         while (this.firstSquarePos[0] < this.layouts[0][0].length && this.layouts[0][0][this.firstSquarePos[0]] === 0) {
@@ -92,13 +93,17 @@ class Piece3d {
         for (let rot = 0; rot < availRotations * symmetric; rot++) {
             this.rowsSet[rot] = [this.totalThisFill];
             this.columnsSet[rot] = [this.totalThisFill];
+            this.floorsSet[rot] = [this.totalThisFill];
             let setSoFar = 0;
-            for (let i = 0; i < this.layouts[rot].length; i++) {
-                for (let j = 0; j < this.layouts[rot][i].length; j++) {
-                    if (this.layouts[rot][i][j] >= 1) {
-                        this.rowsSet[rot][setSoFar] = i;
-                        this.columnsSet[rot][setSoFar] = j;
-                        setSoFar++;
+            for (let k = 0; k < 1; k++) {
+                for (let i = 0; i < this.layouts[rot].length; i++) {
+                    for (let j = 0; j < this.layouts[rot][i].length; j++) {
+                        if (this.layouts[rot][i][j][k] >= 1) {
+                            this.rowsSet[rot][setSoFar] = i;
+                            this.columnsSet[rot][setSoFar] = j;
+                            this.floorsSet[rot][setSoFar] = k;
+                            setSoFar++;
+                        }
                     }
                 }
             }
@@ -122,6 +127,7 @@ class Piece3d {
             this.swap(this.firstSquarePos, i, indices[i]);
             this.swap(this.rowsSet, i, indices[i]);
             this.swap(this.columnsSet, i, indices[i]);
+            this.swap(this.floorsSet, i, indices[i]);
         }
     }
 
@@ -141,6 +147,10 @@ class Piece3d {
 
     getColumnSet(i) {
         return this.columnsSet[this.currRotation][i];
+    }
+
+    getFloorSet(i) {
+        return this.floorsSet[this.currRotation][i];
     }
 
     getAvailRotations() {
@@ -195,9 +205,10 @@ class Piece3d {
         }
     }
 
-    setPosition(row, column) {
+    setPosition(row, column, floor) {
         this.row = row;
         this.column = column;
+        this.floor = floor;
     }
 
     getRow() {
@@ -208,14 +219,21 @@ class Piece3d {
         return this.column;
     }
 
+    getFloor() {
+        return this.floor;
+    }
+
     printPart(l, layout) {
         // console.debug("    layout=" + l);
-        for (let i=0; i<layout.length; ++i) {
-            let line = "    ";
-            for (let j=0; j<layout[i].length; ++j) {
-                line += layout[i][j];
+        for (let k=0; k<1; ++k) { // todo
+            for (let i = 0; i < layout.length; ++i) {
+                let line = "    ";
+                for (let j = 0; j < layout[i].length; ++j) {
+                    line += layout[i][j][k];
+                }
+                // console.debug(line);
             }
-            // console.debug(line);
+            // console.debug("\n" + k + "\n");
         }
     }
 

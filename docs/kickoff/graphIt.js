@@ -1,5 +1,3 @@
-import { GraphIt3d } from "../3d/graphIt3d.js";
-
 class GraphIt {
 
     get_x3d(grid, solution, title, aquaBelleMode) {
@@ -155,7 +153,7 @@ class GraphIt {
     graphIt(grid, solution, title, aquaBelleMode) {
         // console.log(solution)
         var newWin = open('','graphIt'+title,'');
-        newWin.document.write(solution.startsWith('3d') ? new GraphIt3d().get3d_x3d(solution.replace('3d\n', ''), title) : this.get_x3d(grid, solution, title, aquaBelleMode));
+        newWin.document.write(this.get_x3d(grid, solution, title, aquaBelleMode));
         newWin.document.close();
     }
 

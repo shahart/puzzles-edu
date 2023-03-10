@@ -65,7 +65,7 @@ saveButton3.addEventListener('click', () => {
 });
 
 let lastRun = loadPuzzle("lastRun3d");
-document.getElementById('input').value = lastRun !== '' ? lastRun : "Poly,3,4,5";
+document.getElementById('input').value = lastRun !== '' ? lastRun : "\"#3,4,5\n#end of grid. Pieces:Poly";
 
 dropdownButton.addEventListener('change', () => {
 
@@ -74,8 +74,168 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "Poly,3,4,5";
+            "#3,4,5\n" +
+            "#end of grid. Pieces:Poly";
     }
+
+    if (dropdownButton.value === 'Bedlam') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#4,4,4\n" +
+            "#end of grid. Pieces:...";
+    }
+
+    if (dropdownButton.value === 'Soma') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#3,3,3\n" +
+            "#end of grid\n" +
+            "#PieceL\n" +
+            "xx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceT\n" +
+            "xxx\n" +
+            " x\n" +
+            "\n" +
+            "#pieceM\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceS\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceE\n" +
+            "xx\n" +
+            "x\n" +
+            "2\n" + // 2nd floor
+            " x\n" +
+            "\n" +
+            "#pieceF\n" +
+            "xx\n" +
+            "x\n" +
+            "2\n" +
+            " \n" +
+            "x\n" +
+            "\n" +
+            "#pieceG\n" +
+            "xx\n" +
+            "x\n" +
+            "2" +
+            "x" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'HappyCubeG') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#5,5,5 # Green\n" +
+            "#end of grid\n" +
+            "#pieceA\n" +
+            "xx x\n" +
+            "    x\n" +
+            "x\n" +
+            "    x\n" +
+            "xx xx\n" +
+            "\n" +
+            "#pieceB\n" +
+            "  x\n" +
+            "\n" +
+            "x   x\n" +
+            "\n" +
+            " x xx\n" +
+            "\n" +
+            "#pieceC\n" +
+            "  x\n" +
+            "\n" +
+            "x   x\n" +
+            "\n" +
+            "xx xx\n" +
+            "\n" +
+            "#pieceD\n" +
+            "  x\n" +
+            "x   x\n" +
+            "\n" +
+            "x   x\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceE\n" +
+            " x x\n" +
+            "\n" +
+            "x   x\n" +
+            "\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceF\n" +
+            "xx xx\n" +
+            "x\n" +
+            "    x\n" +
+            "x\n" +
+            "  x\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'HappyCubeR') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#5,5,5 # Red\n" +
+            "#end of grid. Pieces:...";
+    }
+
+    if (dropdownButton.value === 'Graatsma') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#3,3,3\n" +
+            "#end of grid\n" +
+            "#PieceA\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#PieceB\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#PieceC\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#PieceD\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#PieceE\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceF\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceG\n" +
+            "x\n" +
+            "\n" +
+            "#pieceH\n" +
+            "x\n" +
+            "\n" +
+            "#pieceI\n" +
+            "x\n" +
+            "\n" +
+            "#piece-End";
+    }
+
 
 });
 
@@ -91,7 +251,7 @@ solveButton.addEventListener('click', () => {
 
     if (input !== "") {
         savePuzzle("lastRun3d", input);
-        puzzle = new Puzzle3d(12, 3, 4, 5);
+        puzzle = new Puzzle3d(0, 0, 0, 0, input);
         output.innerHTML = puzzle.solve();
         graphItButton.disabled =
             output.innerHTML.indexOf("no solution") !== -1 ||

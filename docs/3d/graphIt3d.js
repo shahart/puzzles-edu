@@ -29,7 +29,8 @@ class GraphIt3d {
             '0.753 0.753 0.753', // light_gray
             '0.502 0.502 0.502', // gray
             '0.251 0.251 0.251', // dark_gray
-            '1 1 1' // white
+            '1 1 1', // white
+            '0 0 0' // black
         ];
         let pieces = {};
         let idx = 1;
@@ -74,7 +75,7 @@ class GraphIt3d {
         let linesPerFloor = 0;
         let floor = 0;
         for (let row = 0; row < lines.length; ++row) {
-            let line = lines[lines.length - 1 - row];
+            let line = lines[row];
             if (line === '') {
                 ++ floor;
                 if (linesPerFloor === 0) {
@@ -98,7 +99,7 @@ class GraphIt3d {
                 col += 2;
             }
         }
-console.debug(res);
+
         // postfix
         res +=
             "</Transform>\n" +

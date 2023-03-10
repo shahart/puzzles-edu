@@ -1,10 +1,10 @@
 import { Piece3d } from "./piece3d.js";
-// import { Builder } from "./builder3d.js";
+import { Builder3d } from "./builder3d.js";
 
 window.globalTotalFill = 0;
 
 class Puzzle3d {
-    constructor(pieces, rows, columns, z) {
+    constructor(pieces, rows, columns, floors, input) {
         if (columns > rows) {
             console.warn('You might want to switch dimensions.');
         }
@@ -14,13 +14,14 @@ class Puzzle3d {
         this.PIECES = pieces;
         this.ROWS = rows;
         this.COLUMNS = columns;
-        this.Z = z;
+        this.FLOORS = floors;
         this.totalSolutions = 0;
         this.EXIT_SIGN = 100000;
         this.triedPieces = 0;
         this.solutionFound = false;
         this.row = 0;
         this.column = 0;
+        this.floor = 0;
         this.piecesIndices = new Array();
         this.solution = new Array(this.PIECES).fill(0);
         this.pieces = [this.PIECES];
@@ -29,8 +30,8 @@ class Puzzle3d {
             console.error('RangeError: Invalid array length');
             alert('RangeError: Invalid array length');
         }
-        this.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(z).fill(0)));
-        this.gridCopy = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
+        this.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
+        this.gridCopy = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
         this.currPiece;
         this.totalFillInGrid = 0;
         this.allPieces = [
@@ -51,14 +52,14 @@ class Puzzle3d {
         this.names = "LUFXYNWPZVTI"; // Poly
         this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
         this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
-        this.totalFillInGrid = this.ROWS * this.COLUMNS;
-        // if (input) {
-        //     new Builder3d(this, input);
-        //     if (this.PIECES === 12 && this.names === "LUFXYNWPZVTI") {
-        //         console.log("Polyominos");
-        //     }
-        // }
-        // else {
+        this.totalFillInGrid = this.ROWS * this.COLUMNS * this.FLOORS;
+        if (input) {
+            new Builder3d(this, input);
+            if (this.PIECES === 12 && this.names === "LUFXYNWPZVTI") {
+                console.log("Polyominos");
+            }
+        }
+        else {
             if (this.allPieces.length > this.PIECES) {
                 console.warn("using first pieces from the whole set");
             }
@@ -75,9 +76,9 @@ class Puzzle3d {
                     }
                 }
             }
-            console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, with total of cells " + this.totalFillInGrid);
-        // }
-        while (this.grid[0][this.column] === -1) {
+            console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, " + this.FLOORS + " floors, with total of cells " + this.totalFillInGrid);
+        }
+        while (this.grid[0][this.column][this.floor] === -1) {
             this.column++;
         }
         this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
@@ -86,41 +87,37 @@ class Puzzle3d {
     showGrid() {
         // console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
-        for (let i=0; i<this.ROWS; i++) {
-            let line = "";
-            if (i+1 < 10) {
-                line += " " + (i+1);
-            }
-            else {
-                line += (i+1);
-            }
-            line += "  ";
-            for (let j=0;  j<this.COLUMNS; j++) {
-                if (this.grid[i] === undefined || this.grid[i][j] === undefined) {
-                    console.error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
-                    alert("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
-                    throw new Error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
-                }
-                if (this.grid[i][j] === -1) {
-                    line += "*  ";
-                // } else if (this.totalSolutions === 0) {
-                } else if (this.grid[i][j] === 0) {
-                    line += "-  ";
-                } else if (this.grid[i][j] === -10) { // 2nd type of grid cell
-                     line += "o  ";
+        for (let k=0; k<this.FLOORS; k++) {
+            for (let i = 0; i < this.ROWS; i++) {
+                let line = "";
+                if (i + 1 < 10) {
+                    line += " " + (i + 1);
                 } else {
-                    let ch = this.names.charAt(this.grid[i][j] - 1);
-                    if (this.gridCopy[i][j] === -10) {
-                        ch = ch.toLowerCase();
-                    }
-                    line += ch + "  ";
+                    line += (i + 1);
                 }
-            }
-            if (this.totalSolutions === 0) {
-                console.log(line);
-            }
-            if (!this.solutionFound) {
-                this.allLines += line + "\n";
+                line += "  ";
+                for (let j = 0; j < this.COLUMNS; j++) {
+                    if (this.grid[i] === undefined || this.grid[i][j] === undefined || this.grid[i][j][k] === undefined) {
+                        console.error("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
+                        alert("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
+                        throw new Error("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
+                    }
+                    if (this.grid[i][j][k] === -1) {
+                        line += "*  ";
+                        // } else if (this.totalSolutions === 0) {
+                    } else if (this.grid[i][j][k] === 0) {
+                        line += "-  ";
+                    } else {
+                        let ch = this.names.charAt(this.grid[i][j][k] - 1);
+                        line += ch + "  ";
+                    }
+                }
+                if (this.totalSolutions === 0) {
+                    console.log(line);
+                }
+                if (!this.solutionFound) {
+                    this.allLines += line + "\n";
+                }
             }
         }
         if (this.totalSolutions > 0 && this.totalSolutions < this.EXIT_SIGN) {
@@ -128,17 +125,19 @@ class Puzzle3d {
         }
     }
 
-    canPut(rowsSet, columnsSet) {
+    canPut(rowsSet, columnsSet, floorsSet) {
         // console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
         let setSoFar = 0;
         let columnj = this.column;
         let j = this.currPiece.getFirstSquarePos();
         let columnjj = this.column - j;
+        let floorj; // todo
         let rowi;
 
         for (let i = 0; i < this.currPiece.totalThisFill; i++) {
             rowi = this.row + this.currPiece.getRowSet(setSoFar);
             columnj = columnjj + this.currPiece.getColumnSet(setSoFar); // column + currPiece.getColumnSet(setSoFar) - j;
+            floorj = 0 + this.currPiece.getFloorSet(setSoFar); // todo
             if (this.grid[rowi] === undefined) {
                 return false;
             }
@@ -146,13 +145,18 @@ class Puzzle3d {
             if (gridRowiColumnJ === undefined) {
                 return false;
             }
-            if (gridRowiColumnJ !== 0 && gridRowiColumnJ !== -10) {
+            let gridRowiColumnJk = this.grid[rowi][columnj][floorj];
+            if (gridRowiColumnJk === undefined) {
                 return false;
             }
-            let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)];
-            if ((gridRowiColumnJ === 0 && pieceVal === 1) || (gridRowiColumnJ === -10 && pieceVal === 2)) {
+            if (gridRowiColumnJk !== 0) {
+                return false;
+            }
+            let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)][this.currPiece.getFloorSet(setSoFar)];
+            if (gridRowiColumnJ === 0 && pieceVal === 1) {
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
+                floorsSet[setSoFar] = floorj;
                 setSoFar++;
             }
             else {
@@ -193,22 +197,23 @@ class Puzzle3d {
         }
         let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
         let columnsSet = new Array(5).fill(0);
+        let floorsSet = new Array(5).fill(0);
 
         for (let i=0; i< leftPieces; i++) {
             let piece = this.piecesIndices[i];
             this.currPiece = this.pieces[piece];
             for (let r = this.pieces[piece].getAvailRotations(); r > 0; r--, this.currPiece.rotate()) {
                 // currPieceLayout = currPiece.getLayout();
-                if (this.canPut(rowsSet, columnsSet)) {
+                if (this.canPut(rowsSet, columnsSet, floorsSet)) {
                     this.piecesIndices.splice(i, 1);
                     this.solution[this.PIECES-leftPieces] = piece; // solution.add(piece);
-                    this.putCurrPiece(rowsSet, columnsSet);
+                    this.putCurrPiece(rowsSet, columnsSet, floorsSet);
                     if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) {
                         this.showGrid();
                         this.showPieces();
                     }
                     this.put(); // the recurse
-                    this.removeLast(piece, rowsSet, columnsSet);
+                    this.removeLast(piece, rowsSet, columnsSet, floorsSet);
                     this.piecesIndices.splice(i, 0, piece);
                 }
             }
@@ -223,12 +228,12 @@ class Puzzle3d {
         console.log(new Date().getTime() - this.start + " [msec] pieces " + line + " tried pieces " + this.triedPieces);
     }
 
-    putCurrPiece(rowsSet, columnsSet) {
+    putCurrPiece(rowsSet, columnsSet, floorsSet) {
         // console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
         this.currPiece.setPosition(this.row, this.column);
         let currIndex = this.currPiece.index+1;
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            this.grid[rowsSet[i]][columnsSet[i]] = currIndex;
+            this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = currIndex;
         }
         // this.showGrid();
         // find next avail free position
@@ -238,26 +243,30 @@ class Puzzle3d {
 
     goForward() {
         // console.debug(new Date().getTime() - this.start + " [msec] goForward");
-        for (; this.row<this.ROWS; this.row++) {
-            for (; this.column<this.COLUMNS; this.column++) {
-                if (this.grid[this.row][this.column] === 0 || this.grid[this.row][this.column] === -10) {
-                    return;
+        for (; this.floor<this.FLOORS; this.floor++) {
+            for (; this.row < this.ROWS; this.row++) {
+                for (; this.column < this.COLUMNS; this.column++) {
+                    if (this.grid[this.row][this.column][this.floor] === 0) {
+                        return;
+                    }
                 }
+                this.column = 0;
             }
-            this.column = 0;
+            this.row = 0;
         }
     }
 
-    removeLast(piece, rowsSet, columnsSet) {
+    removeLast(piece, rowsSet, columnsSet, floorsSet) {
         this.currPiece = this.pieces[piece];
         // console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
         // currPieceLayout = this.currPiece.getLayout();
         // getPosition
         this.row = this.currPiece.getRow();
         this.column = this.currPiece.getColumn();
+        this.floor = this.currPiece.getFloor();
         // for debug- currPiece.setPosition(-1, -1);
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            this.grid[rowsSet[i]][columnsSet[i]] = this.gridCopy[rowsSet[i]][columnsSet[i]];
+            this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = this.gridCopy[rowsSet[i]][columnsSet[i]][floorsSet[i]];
         }
         this.availInGrid += this.currPiece.totalThisFill;
     }
@@ -267,7 +276,7 @@ class Puzzle3d {
         this.triedPieces = 0;
 
         if (this.totalFillInGrid !== window.globalTotalFill) {
-            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns is in the correct order";
+            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns,floors is in the correct order";
             this.allLines = 'Invalid input';
             console.error(msg);
             alert(msg);
