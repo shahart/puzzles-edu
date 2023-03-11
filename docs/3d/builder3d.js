@@ -28,14 +28,15 @@ class Builder3d {
         let rows = 0;
         let columns = 0;
         let floors = 0;
+        let floor = 0;
+        let r = 0;
         let gridFound = false;
         for (let row = 0; row < lines.length; ++row) {
-            let cellFound = false;
             let line = lines[row+1];
             let col;
             if (line === undefined) { // todo? enhance
-                console.error('Row ' + (row+1) + ' is undefined');
-                alert('Row ' + (row+1) + ' is undefined');
+                console.error('Line ' + (row+1) + ' is undefined');
+                alert('Line ' + (row+1) + ' is undefined');
             }
             else if (line.toLowerCase().startsWith("#end of grid")) {
                 break;
@@ -43,26 +44,24 @@ class Builder3d {
             for (col = 0; col < line.length; ++col) {
                 if (line[col] === 'X' || line[col] === 'x') {
                     // Filled by cell 0 by def
-                    cellFound = true;
                     gridFound = true;
                     ++foundCells;
                 } else {
                     // Empty
-                    puzzle.grid[row][col] = -1;
-                    puzzle.gridCopy[row][col] = -1;
+                    puzzle.grid[r][col][floor] = -1;
+                    puzzle.gridCopy[r][col][floor] = -1;
                     if (line[col] !== '_' && line[col] !== '-') {
                         console.warn("Invalid char '" + line[col] + "'");
                     }
                 }
             }
             columns = Math.max(columns, col);
-            rows = row + 1;
-            if (!cellFound) {
-                break;
+            rows = Math.max(rows, r);
+            ++r;
+            if (line === '') {
+                ++floor;
+                r = 0;
             }
-        }
-        if (lines[rows] === '') {
-            rows -= 1;
         }
         let i=1;
         if (!gridFound) {
@@ -76,8 +75,9 @@ class Builder3d {
         }
         puzzle.COLUMNS = columns; // this.grid.length;
         puzzle.ROWS = rows; // this.grid[0].length;
+        floors = floor;
         puzzle.FLOORS = floors;
-        console.log("Found " + (rows) + " rows, " + columns + " cols, with total of cells " + foundCells);
+        console.log("Found " + (rows) + " rows, " + columns + " cols, " + floors + " floors, with total of cells " + foundCells);
         puzzle.totalFillInGrid = foundCells;
         // Puzzle2D, line "// Parts2D_Examples"
         puzzle.names = '';
@@ -115,16 +115,14 @@ class Builder3d {
             }
             else if (line.toLowerCase().startsWith("#piece")) {
                 if (pieceLines.length >= 1) {
-                    let layout = new Array(pieceLines.length).fill(0).map(_ => new Array(9).fill(0));
+                    let layout = new Array(9).fill(0).map(_ => new Array(9).fill(0).map(_ => new Array(9).fill(0)));
+                    floor = 0;
                     for (let j = 0; j < pieceLines.length; ++j) {
                         layout[j] = [pieceLines[j].length];
                         for (let k = 0; k < pieceLines[j].length; ++k) {
-                            layout[j][k] = 0;
+                            layout[j][k][floor] = 0;
                             if (pieceLines[j][k] === 'X' || pieceLines[j][k] === 'x') {
-                                layout[j][k] = 1;
-                            }
-                            else if (pieceLines[j][k] === 'O' || pieceLines[j][k] === 'o') {
-                                layout[j][k] = 2;
+                                layout[j][k][floor] = 1;
                             }
                             else if (pieceLines[j][k] !== ' ') {
                                 console.warn('invalid char: ' + pieceLines[j][k]);
@@ -137,9 +135,9 @@ class Builder3d {
                         throw new Error('name undefined-Invalid input, line ' + line);
                     }
                     let globalTotalFill = window.globalTotalFill;
-                    let fakePiece = new Piece3d(1000, layout, 4, 2, "_");
+                    // let fakePiece = new Piece3d(1000, layout, 4, 2, "_");
                     let rotations = 1; // todo fakePiece.calcRotations();
-                    let fakePiece2 = new Piece3d(1000, layout, rotations, 2, "_");
+                    // let fakePiece2 = new Piece3d(1000, layout, rotations, 2, "_");
                     let symmetric = 1; // todo fakePiece2.calcSymmetric();
                     if (unique === puzzle.names[pieceIdx]) {
                         rotations = 1;

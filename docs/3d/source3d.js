@@ -65,7 +65,7 @@ saveButton3.addEventListener('click', () => {
 });
 
 let lastRun = loadPuzzle("lastRun3d");
-document.getElementById('input').value = lastRun !== '' ? lastRun : "\"#3,4,5\n#end of grid. Pieces:Poly";
+document.getElementById('input').value = lastRun !== '' ? lastRun : "#3,4,5\n#end of grid. Pieces:Poly";
 
 dropdownButton.addEventListener('change', () => {
 
@@ -83,7 +83,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#4,4,4\n" +
+            "#4,4,4 # Bedlam\n" +
             "#end of grid. Pieces:...";
     }
 
@@ -92,7 +92,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#3,3,3\n" +
+            "#3,3,3 # Soma\n" +
             "#end of grid\n" +
             "#PieceL\n" +
             "xx\n" +
@@ -120,13 +120,12 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "x\n" +
             "2\n" +
-            " \n" +
             "x\n" +
             "\n" +
             "#pieceG\n" +
             "xx\n" +
             "x\n" +
-            "2" +
+            "2\n" +
             "x" +
             "\n" +
             "#piece-End";
@@ -138,47 +137,77 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#5,5,5 # Green\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
             "#end of grid\n" +
             "#pieceA\n" +
             "xx x\n" +
-            "    x\n" +
-            "x\n" +
-            "    x\n" +
+            " xxxx\n" +
+            "xxxx\n" +
+            " xxxx\n" +
             "xx xx\n" +
             "\n" +
             "#pieceB\n" +
             "  x\n" +
-            "\n" +
-            "x   x\n" +
-            "\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
             " x xx\n" +
             "\n" +
             "#pieceC\n" +
             "  x\n" +
-            "\n" +
-            "x   x\n" +
-            "\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
             "xx xx\n" +
             "\n" +
             "#pieceD\n" +
             "  x\n" +
-            "x   x\n" +
-            "\n" +
-            "x   x\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            "xxxxx\n" +
             " x x\n" +
             "\n" +
             "#pieceE\n" +
             " x x\n" +
-            "\n" +
-            "x   x\n" +
-            "\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
             " x x\n" +
             "\n" +
             "#pieceF\n" +
             "xx xx\n" +
-            "x\n" +
-            "    x\n" +
-            "x\n" +
+            "xxxx\n" +
+            " xxxx\n" +
+            "xxxx\n" +
             "  x\n" +
             "\n" +
             "#piece-End";
@@ -198,7 +227,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#3,3,3\n" +
+            "#3,3,3 # Slothouber–Graatsma\n" +
             "#end of grid\n" +
             "#PieceA\n" +
             "xx\n" +
@@ -236,7 +265,6 @@ dropdownButton.addEventListener('change', () => {
             "#piece-End";
     }
 
-
 });
 
 solveButton.addEventListener('click', () => {
@@ -246,13 +274,12 @@ solveButton.addEventListener('click', () => {
 
     let input = document.getElementById('input').value;
 
-    let header = input.split('\n')[0];
-    let puzzle;
+    let puzzle3d;
 
     if (input !== "") {
         savePuzzle("lastRun3d", input);
-        puzzle = new Puzzle3d(0, 0, 0, 0, input);
-        output.innerHTML = puzzle.solve();
+        puzzle3d = new Puzzle3d(0, 0, 0, 0, input);
+        output.innerHTML = puzzle3d.solve();
         graphItButton.disabled =
             output.innerHTML.indexOf("no solution") !== -1 ||
             output.innerHTML.indexOf("Invalid input") !== -1 ||

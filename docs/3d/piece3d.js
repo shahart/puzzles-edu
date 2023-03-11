@@ -41,9 +41,11 @@ class Piece3d {
 
         for (let i = 0; i < layout.length; i++) {
             for (let j = 0; j < layout[i].length; j++) {
-                if (layout[i][j] !== 0) {
-                    window.globalTotalFill++;
-                    this.totalThisFill++;
+                for (let k = 0; k < layout[i][j].length; k++) {
+                    if (layout[i][j][k] !== 0) {
+                        window.globalTotalFill++;
+                        this.totalThisFill++;
+                    }
                 }
             }
             if (layout[i].length > this.maxColumns) {
@@ -175,17 +177,15 @@ class Piece3d {
         return result;
     }
 
-    realRotate(original, rows, columns, index) {
-        let result = new Array(rows).fill(0).map(_ => new Array(columns).fill(0)); //[maxColumns][originalLayout.length];
-
-        for (let i = 0; i < columns; i++) {
-            for (let j = 0; j < rows; j++) {
-                result[rows - j - 1][i] = 0;
-                if (original[i][j] === 1) {
-                    result[rows - j - 1][i] = 1;
-                }
-                else if (original[i][j] === 2) {
-                    result[rows - j - 1][i] = 2;
+    realRotate(original, rows, columns, floors, index) {
+        let result = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
+        for (let k = 0; k < floors; k++) {
+            for (let i = 0; i < columns; i++) {
+                for (let j = 0; j < rows; j++) {
+                    result[rows - j - 1][i][k] = 0;
+                    if (original[i][j] === 1) {
+                        result[rows - j - 1][i][k] = 1;
+                    }
                 }
             }
         }
