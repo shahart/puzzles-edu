@@ -11,7 +11,6 @@
     <title>3D Solver</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.3/cash.min.js" integrity="sha256-KU3WNi23kKKR5HDFtqqOJpEBoX/pa8vPDw4xOuobnVk=" crossorigin="anonymous"></script>-->
-    <!--<script src="https://raw.github.com/gorbiz/mobile-console.log/master/console.js" type="text/javascript"></script>--> <!-- Cross-Origin Read Blocking (CORB) -->
     <script>
     $(document).ready(function() {
         // Make a custom log for mobile devices
@@ -71,13 +70,14 @@
 <label for="PuzzleSelect"></label>
 <select id="PuzzleSelect">
     <option value="Soma">Soma</option>
-<!--    <option value="Bedlam">Bedlam</option>-->
+    <option value="Bedlam">Bedlam</option>
     <option value="Graatsma">Graatsma</option>
+    <option value="Conway">Conway</option>
     <optgroup label="Happy Cube">
         <option value="HappyCubeG">Green</option>
-<!--        <option value="HappyCubeR">HappyCubeR</option>-->
+        <option value="HappyCubeR">Red</option>
+        <option value="HappyCubeO">Orange</option>
     </optgroup>
-<!--    <option value="Conway">Conway</option>-->
 <!--    <option value="Live Cube">Live Cube</option>-->
 <!--    ...-->
     <option value="Custom">Custom</option>
@@ -98,14 +98,17 @@
 <button id="solveButton" type="button">Solve</button>
 <h3>Solution...</h3>
 <textarea id="output" disabled rows="12" cols="30" aria-label="Solution">
- 1  M  M  M  A
- 2  M  E  G  A
+ 1  M  M  M
+ 2  M  E  G
+ 3  S  G  G
 
- 4  E  E  F  X
- 5  T  E  F  B
+ 4  E  E  F
+ 5  T  E  F
+ 6  S  S  G
 
- 7  T  F  F  B
- 8  T  L  L  A
+ 7  T  F  F
+ 8  T  L  L
+ 9  T  S  L
 </textarea>
 <p>
 <button id="graphItButton" type="button" >Show</button> <!-- disabled -->

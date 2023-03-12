@@ -84,15 +84,6 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
             "#4,4,4 # Bedlam\n" +
-            "#end of grid. Pieces:...";
-    }
-
-    if (dropdownButton.value === 'Soma') {
-        console.log('cls');
-        graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
-        document.getElementById('input').value =
-            "#3,3,3 # Soma\n" +
             "#end of grid\n" +
             "#PieceL\n" +
             "xx\n" +
@@ -126,7 +117,133 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "x\n" +
             "2\n" +
-            "x" +
+            "x\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'Conway') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#5,5,5 # Conway\n" +
+            "#end of grid\n" +
+            "#PieceA\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceB\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceC\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceD\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceE\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceF\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceG\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceH\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceI\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceJ\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceK\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceL\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#PieceM\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            "\n" +
+            "#pieceN\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceO\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceP\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceQO\n" +
+            "xxx\n" +
+            "\n" +
+            "#pieceR\n" +
+            "xx\n" +
+            "xx\n" +
+            "2\n" +
+            "xx\n" +
+            "xx\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'Soma') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#3,3,3 # Soma\n" +
+            "#end of grid\n" +
+            "#PieceL\n" +
+            "xxx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceP\n" +
+            "xx\n" +
+            "x\n" +
+            "2\n" +
+            "x\n" +
+            "\n" +
+            "#pieceV\n" +
+            "xx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceZ\n" +
+            " xx\n" +
+            "xx\n" +
+            "\n" +
+            "#pieceT\n" +
+            "xxx\n" +
+            " x\n" +
+            "\n" +
+            "#pieceA\n" +
+            "xx\n" +
+            " x\n" +
+            "2\n" +
+            "x\n" +
+            "\n" +
+            "#pieceB\n" +
+            "xx\n" +
+            " x\n" +
+            "2\n" +
+            " x\n" +
             "\n" +
             "#piece-End";
     }
@@ -136,7 +253,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#5,5,5 # Green\n" +
+            "#5,5,5 # Green (Easy)\n" +
             "xxxxx\n" +
             "xxxxx\n" +
             "xxxxx\n" +
@@ -167,7 +284,7 @@ dropdownButton.addEventListener('change', () => {
             "xxxxx\n" +
             "xxxxx\n" +
             "\n" +
-            "#end of grid\n" +
+            "#end of grid # https://happycube.com\n" +
             "#pieceA\n" +
             "xx x\n" +
             " xxxx\n" +
@@ -218,8 +335,164 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#5,5,5 # Red\n" +
-            "#end of grid. Pieces:...";
+            "#5,5,5 # Red (Medium)\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
+            "#end of grid\n" +
+            "#pieceA\n" +
+            "  x\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceB\n" +
+            "  x\n" +
+            "xxxx\n" +
+            " xxxx\n" +
+            "xxxxx\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceC\n" +
+            " x xx\n" +
+            "xxxx\n" +
+            "xxxx\n" +
+            " xxxx\n" +
+            "xx xx\n" +
+            "\n" +
+            "#pieceD\n" +
+            "  x\n" +
+            "xxxx\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            "x x x\n" +
+            "\n" +
+            "#pieceE\n" +
+            "  xx\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            "xx xx\n" +
+            "\n" +
+            "#pieceF\n" +
+            " x x\n" +
+            "xxxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            " x xx\n" +
+            "\n" +
+            "#piece-End";
+    }
+
+    if (dropdownButton.value === 'HappyCubeO') {
+        console.log('cls');
+        graphItButton.disabled = true;
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('input').value =
+            "#5,5,5 # Orange (Hard)\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx" +
+            "\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "x---x\n" +
+            "xxxxx\n" +
+            "\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "xxxxx\n" +
+            "\n" +
+            "#end of grid\n" +
+            "#pieceA\n" +
+            "  x\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            "xx x\n" +
+            "\n" +
+            "#pieceB\n" +
+            " x x\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceC\n" +
+            "xx x\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            " x xx\n" +
+            "\n" +
+            "#pieceD\n" +
+            "xx x\n" +
+            "xxxx\n" +
+            " xxxx\n" +
+            "xxxx\n" +
+            "x x\n" +
+            "\n" +
+            "#pieceE\n" +
+            "x x\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " x x\n" +
+            "\n" +
+            "#pieceF\n" +
+            " x x\n" +
+            " xxx\n" +
+            "xxxxx\n" +
+            " xxx\n" +
+            "xx xx\n" +
+            "\n" +
+            "#piece-End";
     }
 
     if (dropdownButton.value === 'Graatsma') {
