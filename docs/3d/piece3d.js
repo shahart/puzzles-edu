@@ -14,6 +14,17 @@ class Piece3d {
             if (symmetric === 1) {
                 msg += ", Has symmetry";
             }
+            let atoms = 0;
+            for (let i = 0; i < layout.length; ++i) {
+                for (let j = 0; j < layout[0].length; ++j) {
+                    for (let k = 0; k < layout[0][0].length; ++k) {
+                        if (layout[i][j][k] === 1) {
+                            ++ atoms;
+                        }
+                    }
+                }
+            }
+            msg += ", Atoms=" + atoms;
             console.debug(msg);
         }
         this.availRotations = availRotations;

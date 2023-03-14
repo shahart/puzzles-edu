@@ -129,55 +129,7 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             "#5,5,5 # Conway\n" +
             "#end of grid\n" +
-            "#PieceA\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceB\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceC\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceD\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceE\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceF\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceG\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceH\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceI\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceJ\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceK\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceL\n" +
-            "xxxx\n" +
-            "xxxx\n" +
-            "\n" +
-            "#PieceM\n" +
+            "#PieceA x13\n" +
             "xxxx\n" +
             "xxxx\n" +
             "\n" +
@@ -185,13 +137,7 @@ dropdownButton.addEventListener('change', () => {
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#pieceO\n" +
-            "xxx\n" +
-            "\n" +
-            "#pieceP\n" +
-            "xxx\n" +
-            "\n" +
-            "#pieceQO\n" +
+            "#pieceO x3\n" +
             "xxx\n" +
             "\n" +
             "#pieceR\n" +
@@ -502,37 +448,11 @@ dropdownButton.addEventListener('change', () => {
         document.getElementById('input').value =
             "#3,3,3 # Slothouber–Graatsma\n" +
             "#end of grid\n" +
-            "#PieceA\n" +
+            "#PieceA x6\n" +
             "xx\n" +
             "xx\n" +
             "\n" +
-            "#PieceB\n" +
-            "xx\n" +
-            "xx\n" +
-            "\n" +
-            "#PieceC\n" +
-            "xx\n" +
-            "xx\n" +
-            "\n" +
-            "#PieceD\n" +
-            "xx\n" +
-            "xx\n" +
-            "\n" +
-            "#PieceE\n" +
-            "xx\n" +
-            "xx\n" +
-            "\n" +
-            "#pieceF\n" +
-            "xx\n" +
-            "xx\n" +
-            "\n" +
-            "#pieceG\n" +
-            "x\n" +
-            "\n" +
-            "#pieceH\n" +
-            "x\n" +
-            "\n" +
-            "#pieceI\n" +
+            "#pieceG x3\n" +
             "x\n" +
             "\n" +
             "#piece-End";

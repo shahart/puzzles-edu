@@ -75,7 +75,7 @@ class Builder3d {
         }
         puzzle.COLUMNS = columns; // this.grid.length;
         puzzle.ROWS = rows; // this.grid[0].length;
-        floors = floor;
+        floors = declardFloors;
         puzzle.FLOORS = floors;
         console.log("Found " + (rows) + " rows, " + columns + " cols, " + floors + " floors, with total of cells " + foundCells);
         puzzle.totalFillInGrid = foundCells;
@@ -84,6 +84,7 @@ class Builder3d {
         let pieceIdx = 0;
         let pieceLines = [];
         let doneWithGrid = false;
+        let currMultiplier = 1;
         let unique = '';
         for (; i<lines.length; ++i) {
             let line = lines[i];
@@ -100,7 +101,7 @@ class Builder3d {
             }
             else if (line.toLowerCase().startsWith("#end of grid")) {
                 doneWithGrid = true;
-                puzzle.PIECES = input.toLowerCase().split("#piece").length - 2;
+                puzzle.PIECES = input.toLowerCase().split("#piece").length - 2 + this.countXn(lines);
                 console.log("Found pieces " + puzzle.PIECES);
                 console.debug("(default is Rotations=4, Has no symmetry)")
                 if (! puzzle.PIECES) {
@@ -117,16 +118,37 @@ class Builder3d {
                 if (pieceLines.length >= 1) {
                     let layout = new Array(9).fill(0).map(_ => new Array(9).fill(0).map(_ => new Array(9).fill(0)));
                     floor = 0;
-                    for (let j = 0; j < pieceLines.length; ++j) {
-                        layout[j] = [pieceLines[j].length];
-                        for (let k = 0; k < pieceLines[j].length; ++k) {
+
+                    // new
+                    // for (let j = 0; j < pieceLines.length; ++j) {
+                    //     layout[j] = [pieceLines[j].length];
+                    //     for (let k = 0; k < pieceLines[j].length; ++k) {
+                    //         layout[j][k][floor] = 0;
+                    //         if (pieceLines[j][k] === 'X' || pieceLines[j][k] === 'x') {
+                    //             layout[j][k][floor] = 1;
+                    //         }
+                    //         else if (pieceLines[j][k] !== ' ') {
+                    //             console.warn('invalid char: ' + pieceLines[j][k]);
+                    //         }
+                    //     }
+                    // }
+
+                    // old
+                    let j = 0;
+                    for (let j2 = 0; j < pieceLines.length; ++j) {
+                        // layout[j] = [pieceLines[j2].length];
+                        for (let k = 0; k < pieceLines[j2].length; ++k) {
                             layout[j][k][floor] = 0;
-                            if (pieceLines[j][k] === 'X' || pieceLines[j][k] === 'x') {
+                            if (pieceLines[j2][k] === 'X' || pieceLines[j2][k] === 'x') {
                                 layout[j][k][floor] = 1;
                             }
-                            else if (pieceLines[j][k] !== ' ') {
-                                console.warn('invalid char: ' + pieceLines[j][k]);
+                            else if (pieceLines[j2][k] !== ' ') {
+                                console.warn('invalid char: ' + pieceLines[j2][k]);
                             }
+                        }
+                        if (pieceLines[j2] === '') {
+                            ++ floor;
+                            j = 0;
                         }
                     }
                     if (!puzzle.names[pieceIdx]) {
@@ -145,9 +167,12 @@ class Builder3d {
                         console.debug("unique=" + unique);
                     }
                     window.globalTotalFill = globalTotalFill;
-                    puzzle.pieces[pieceIdx] = new Piece3d(pieceIdx, layout, rotations, symmetric, puzzle.names[pieceIdx]);
-                    puzzle.pieces[pieceIdx].shuffle(); //
-                    ++pieceIdx;
+                    for (let z = 0; z < currMultiplier; ++z) {
+                        puzzle.pieces[pieceIdx] = new Piece3d(pieceIdx + z, layout, rotations, symmetric, puzzle.names[pieceIdx]);
+                        puzzle.pieces[pieceIdx].shuffle(); //
+                        ++pieceIdx;
+                    }
+                    currMultiplier = 1;
                     pieceLines = [];
                 }
                 if (line.toLowerCase().startsWith("#piece-end")) {
@@ -160,6 +185,13 @@ class Builder3d {
                     throw new Error(msg);
                 }
                 puzzle.names += line["#Piece".length];
+                currMultiplier = 1;
+                if (line.indexOf(" x") > 1) {
+                    currMultiplier = parseInt(line.substring(line.indexOf(" x")+2));
+                }
+                for (let z = 1; z < currMultiplier; ++z) {
+                    puzzle.names += String.fromCharCode(line["#Piece".length].charCodeAt(0) + z);
+                }
                 // console.log("Parsing piece " + line["#Piece".length]);
             }
             else if (line.length > 0 && doneWithGrid) {
@@ -198,6 +230,16 @@ class Builder3d {
             this.declaredRows -= 1;
         }
         console.debug("Found " + this.declaredRows + " rows, " + this.declaredColumns + " cols");
+    }
+
+    countXn(lines) {
+        let res = 0;
+        for (let i = 0; i < lines.length; ++i) {
+            if (lines[i].toLowerCase().startsWith("#piece") && lines[i].indexOf(" x") > 1) {
+                res += parseInt(lines[i].substring(lines[i].indexOf(" x")+2)) - 1;
+            }
+        }
+        return res;
     }
 
 }
