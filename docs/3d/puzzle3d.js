@@ -281,7 +281,11 @@ class Puzzle3d {
             console.error(msg);
             alert(msg);
         } else {
-            this.put();
+            try {
+                this.put();
+            } catch (err) {
+                console.error(err.stack);
+            }
         }
 
         let msg = new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces;
