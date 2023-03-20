@@ -85,7 +85,6 @@ class Builder3d {
         let pieceLines = [];
         let doneWithGrid = false;
         let currMultiplier = 1;
-        let unique = '';
         for (; i<lines.length; ++i) {
             let line = lines[i];
             if (line.toLowerCase().startsWith("#end of grid. pieces:poly")) {
@@ -94,7 +93,24 @@ class Builder3d {
                 for (let i = 0; i < puzzle.PIECES/*allPieces.length*/; i++) {
                     let piece = i;
                     puzzle.piecesIndices.push(piece);
-                    puzzle.pieces[i] = new Piece3d(piece, puzzle.allPieces[i], puzzle.rotations[i], puzzle.symmetric[i], puzzle.names.charAt(i));
+
+                    // transform 2d into 3d (with one floor)
+                    let rows = puzzle.allPieces[i].length;
+                    let cols = 1;
+                    for (let j=0; j<puzzle.allPieces[i].length; ++j) {
+                        cols = Math.max(cols, puzzle.allPieces[i][j].length);
+                    }
+                    let pieceMax = Math.max(rows, cols);
+                    let layout = new Array(pieceMax).fill(0).map(_ => new Array(pieceMax).fill(0).map(_ => new Array(pieceMax).fill(0)));
+                    for (let j=0; j<puzzle.allPieces[i].length; ++j) {
+                        for (let k=0; k<puzzle.allPieces[i][j].length; ++k) {
+                            if (puzzle.allPieces[i][j][k] === 1) {
+                                layout[0][j][k] = 1;
+                            }
+                        }
+                    }
+
+                    puzzle.pieces[i] = new Piece3d(piece, layout, puzzle.names.charAt(i));
                     puzzle.pieces[i].shuffle(); //
                 }
                 return;
@@ -116,59 +132,56 @@ class Builder3d {
             }
             else if (line.toLowerCase().startsWith("#piece")) {
                 if (pieceLines.length >= 1) {
-                    let layout = new Array(9).fill(0).map(_ => new Array(9).fill(0).map(_ => new Array(9).fill(0)));
-                    floor = 0;
 
-                    // new
-                    // for (let j = 0; j < pieceLines.length; ++j) {
-                    //     layout[j] = [pieceLines[j].length];
-                    //     for (let k = 0; k < pieceLines[j].length; ++k) {
-                    //         layout[j][k][floor] = 0;
-                    //         if (pieceLines[j][k] === 'X' || pieceLines[j][k] === 'x') {
-                    //             layout[j][k][floor] = 1;
-                    //         }
-                    //         else if (pieceLines[j][k] !== ' ') {
-                    //             console.warn('invalid char: ' + pieceLines[j][k]);
-                    //         }
-                    //     }
-                    // }
-
-                    // old
-                    let j = 0;
-                    for (let j2 = 0; j < pieceLines.length; ++j) {
-                        // layout[j] = [pieceLines[j2].length];
-                        for (let k = 0; k < pieceLines[j2].length; ++k) {
-                            layout[j][k][floor] = 0;
-                            if (pieceLines[j2][k] === 'X' || pieceLines[j2][k] === 'x') {
-                                layout[j][k][floor] = 1;
-                            }
-                            else if (pieceLines[j2][k] !== ' ') {
-                                console.warn('invalid char: ' + pieceLines[j2][k]);
-                            }
-                        }
-                        if (pieceLines[j2] === '') {
-                            ++ floor;
-                            j = 0;
+                    let pieceMaxColumns = 1;
+                    let pieceMaxRows = 1;
+                    let pieceFloors = 1;
+                    let pieceRows = 1;
+                    let prevPieceRowStart = 0;
+                    for (let pieceRow = 0; pieceRow < pieceLines.length; ++pieceRow) {
+                        let pieceLine = pieceLines[pieceRow];
+                        pieceMaxColumns = Math.max(pieceLine.length, pieceMaxColumns);
+                        if (pieceLine === '2' || pieceLine === '3' || pieceLine === '4') { // todo make it better
+                            ++pieceFloors;
+                            pieceRows = pieceRow - prevPieceRowStart;
+                            pieceMaxRows = Math.max(pieceRows, pieceMaxRows);
+                            prevPieceRowStart = pieceRow;
                         }
                     }
+                    pieceRows = pieceLines.length - prevPieceRowStart;
+                    pieceMaxRows = Math.max(pieceRows, pieceMaxRows);
+
+                    let pieceMax = Math.max(pieceMaxRows, pieceMaxColumns);
+                    pieceMax = Math.max(pieceMax, pieceFloors);
+
+                    let layout = new Array(pieceMax).fill(0).map(_ => new Array(pieceMax).fill(0).map(_ => new Array(pieceMax).fill(0)));
+
+                    floor = 0;
+                    prevPieceRowStart = 0;
+                    for (let j = 0; j < pieceLines.length; ++j) {
+                        let pieceLine = pieceLines[j];
+                        if (pieceLine === '2' || pieceLine === '3' || pieceLine === '4') { // todo make it better
+                            ++floor;
+                            prevPieceRowStart = j+1;
+                        }
+                        else {
+                            for (let k = 0; k < pieceLine.length; ++k) {
+                                if (pieceLine[k] === 'X' || pieceLine[k] === 'x') {
+                                    layout[floor][j-prevPieceRowStart][k] = 1;
+                                }
+                            }
+                        }
+                    }
+
                     if (!puzzle.names[pieceIdx]) {
                         console.error('name undefined-Invalid input, line ' + line);
                         alert("name undefined, line " + line);
                         throw new Error('name undefined-Invalid input, line ' + line);
                     }
                     let globalTotalFill = window.globalTotalFill;
-                    // let fakePiece = new Piece3d(1000, layout, 4, 2, "_");
-                    let rotations = 1; // todo fakePiece.calcRotations();
-                    // let fakePiece2 = new Piece3d(1000, layout, rotations, 2, "_");
-                    let symmetric = 1; // todo fakePiece2.calcSymmetric();
-                    if (unique === puzzle.names[pieceIdx]) {
-                        rotations = 1;
-                        symmetric = 1;
-                        console.debug("unique=" + unique);
-                    }
                     window.globalTotalFill = globalTotalFill;
                     for (let z = 0; z < currMultiplier; ++z) {
-                        puzzle.pieces[pieceIdx] = new Piece3d(pieceIdx + z, layout, rotations, symmetric, puzzle.names[pieceIdx]);
+                        puzzle.pieces[pieceIdx] = new Piece3d(pieceIdx + z, layout, puzzle.names[pieceIdx]);
                         puzzle.pieces[pieceIdx].shuffle(); //
                         ++pieceIdx;
                     }
@@ -195,16 +208,7 @@ class Builder3d {
                 // console.log("Parsing piece " + line["#Piece".length]);
             }
             else if (line.length > 0 && doneWithGrid) {
-                if (line.toLowerCase().startsWith("#unique=")) {
-                    if (unique !== '' && unique !== line["#unique=".length]) {
-                        console.warn("Only single unique is possible");
-                    } else {
-                        unique = line["#unique=".length];
-                    }
-                }
-                else {
-                    pieceLines.push(line);
-                }
+                pieceLines.push(line);
             }
         }
         if (puzzle.PIECES !== puzzle.names.length) {

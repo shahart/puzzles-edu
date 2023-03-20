@@ -83,7 +83,7 @@ dropdownButton.addEventListener('change', () => {
         graphItButton.disabled = true;
         document.getElementById('output').innerHTML = '';
         document.getElementById('input').value =
-            "#4,4,4 # Bedlam\n" +
+            "#3,3,3 # Bedlam\n" +
             "#end of grid\n" +
             "#PieceL\n" +
             "xx\n" +
@@ -323,7 +323,7 @@ dropdownButton.addEventListener('change', () => {
             "#pieceB\n" +
             "  x\n" +
             "xxxx\n" +
-            " xxxx\n" +
+            " xxx\n" +
             "xxxxx\n" +
             " x x\n" +
             "\n" +

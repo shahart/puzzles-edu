@@ -129,7 +129,7 @@ class Puzzle3d {
         // console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
         let setSoFar = 0;
         let columnj = this.column;
-        let j = this.currPiece.getFirstSquarePos();
+        let j = 0; // this.currPiece.getFirstSquarePos();
         let columnjj = this.column - j;
         let floorj; // todo
         let rowi;

@@ -5,49 +5,33 @@ class Piece3d {
     column = -1;
     floor = -1;
 
-    constructor(index, layout, availRotations, symmetric, name) {
-        if (name !== '_') {
-            let msg = name;
-            if (availRotations < 4) {
-                msg += " Rotations=" + availRotations;
-            }
-            if (symmetric === 1) {
-                msg += ", Has symmetry";
-            }
-            let atoms = 0;
-            for (let i = 0; i < layout.length; ++i) {
-                for (let j = 0; j < layout[0].length; ++j) {
-                    for (let k = 0; k < layout[0][0].length; ++k) {
-                        if (layout[i][j][k] === 1) {
-                            ++ atoms;
-                        }
+    constructor(index, layout, name) {
+        let msg = name;
+        let atoms = 0;
+        for (let i = 0; i < layout.length; ++i) {
+            for (let j = 0; j < layout[0].length; ++j) {
+                for (let k = 0; k < layout[0][0].length; ++k) {
+                    if (layout[i][j][k] === 1) {
+                        ++atoms;
                     }
                 }
             }
-            msg += ", Atoms=" + atoms;
-            console.debug(msg);
         }
-        this.availRotations = availRotations;
+        msg += ", Atoms=" + atoms;
+        console.debug(msg);
+        let availRotations = 64; // todo if needed because of timeouts, maybe drop dups will help
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
-        this.layouts = new Array(availRotations * symmetric); // .fill(0).map(_ => new Array().fill(0)); // availRotations*symmetric);
+        this.layouts = new Array(64);
         for (let i = 0; i < this.layouts.length; i++) {
             this.layouts[i] = [];
         }
-        this.firstSquarePos = new Array(availRotations * symmetric).fill(0);
         this.layouts[0] = layout;
-
-        this.rowsSet = new Array(availRotations * symmetric).fill(0);
-        this.columnsSet = new Array(availRotations * symmetric).fill(0); //[];
-        this.floorsSet = new Array(availRotations * symmetric).fill(0);
-
-        this.firstSquarePos[0] = 0;
-        while (this.firstSquarePos[0] < this.layouts[0][0].length && this.layouts[0][0][this.firstSquarePos[0]] === 0) {
-            this.firstSquarePos[0]++;
-        }
-
+        this.rowsSet = new Array(64).fill(0);
+        this.columnsSet = new Array(64).fill(0); //[];
+        this.floorsSet = new Array(64).fill(0);
         this.maxColumns = -1;
 
         for (let i = 0; i < layout.length; i++) {
@@ -70,40 +54,26 @@ class Piece3d {
             throw new Error('empty piece');
         }
 
-        this.printPart(0, this.layouts[0]);
-        if (availRotations === 3 || availRotations >= 5 || availRotations <= 0) {
-            console.error("rotations must be 1/2/4");
-            alert("rotations must be 1/2/4");
-            throw new Error("rotations must be 1/2/4");
+        // 2d, 0->1,2,3
+        for (let a = 1; a < 4; ++a) {
+            this.layouts[a] = this.realRotate2d(this.layouts[a - 1]);
         }
-        if (availRotations >= 2) {
-            this.layouts[1] = this.realRotate(this.layouts[0], this.maxColumns, layout.length, 1);
-            this.printPart(1, this.layouts[1]);
-            if (availRotations >= 4) {
-                this.layouts[2] = this.realRotate(this.layouts[1], layout.length, this.maxColumns, 2);
-                this.printPart(2, this.layouts[2]);
-                this.layouts[3] = this.realRotate(this.layouts[2], this.maxColumns, layout.length, 3);
-                this.printPart(3, this.layouts[3]);
-                this.layouts[0] = this.realRotate(this.layouts[3], layout.length, this.maxColumns, 0);
-            }
-            else {
-                this.layouts[0] = this.realRotate(this.layouts[1], layout.length, this.maxColumns, 0);
+
+        // 3d Y, 0,1,2,3 -> 4,5,6,7  8,9,10,11  12,13,14,15
+        for (let a = 0; a < 4; ++a) {
+            for (let b = 1; b < 4; ++b) {
+                this.layouts[a+b*4] = this.realRotate2dY(this.layouts[a+(b-1)*4]);
             }
         }
 
-        if (symmetric === 2) {
-            for (let i = 0; i < availRotations; i++) {
-                this.layouts[i + availRotations] = this.copySymmetric(this.layouts[i]);
-                this.printPart(i + availRotations, this.layouts[i + availRotations]);
-
-                this.firstSquarePos[i + availRotations] = 0;
-                while (this.firstSquarePos[i + availRotations] < this.layouts[i + availRotations][0].length && this.layouts[i + availRotations][0][this.firstSquarePos[i + availRotations]] === 0) {
-                    this.firstSquarePos[i + availRotations]++;
-                }
+        // 3d Z, 0,1,2,3...15 -> 16,..31  32..47  48..63
+        for (let a = 0; a < 16; ++a) {
+            for (let b = 1; b < 4; ++b) {
+                this.layouts[a+b*16] = this.realRotate2dZ(this.layouts[a+(b-1)*16]);
             }
         }
 
-        for (let rot = 0; rot < availRotations * symmetric; rot++) {
+        for (let rot = 0; rot < 64; rot++) {
             this.rowsSet[rot] = [this.totalThisFill];
             this.columnsSet[rot] = [this.totalThisFill];
             this.floorsSet[rot] = [this.totalThisFill];
@@ -137,7 +107,6 @@ class Piece3d {
         for (let i = 0; i < this.layouts.length-1; ++i) {
             this.swap(indices2, i, indices[i]);
             this.swap(this.layouts, i, indices[i]);
-            this.swap(this.firstSquarePos, i, indices[i]);
             this.swap(this.rowsSet, i, indices[i]);
             this.swap(this.columnsSet, i, indices[i]);
             this.swap(this.floorsSet, i, indices[i]);
@@ -148,10 +117,6 @@ class Piece3d {
         let h = arr[first];
         arr[first] = arr[second];
         arr[second] = h;
-    }
-
-    getFirstSquarePos() {
-        return this.firstSquarePos[this.currRotation];
     }
 
     getRowSet(i) {
@@ -167,51 +132,58 @@ class Piece3d {
     }
 
     getAvailRotations() {
-        return this.firstSquarePos.length;
+        return 64;
     }
 
     getLayout() {
         return this.layouts[this.currRotation];
     }
 
-    copySymmetric(original) {
-        let rows = original.length;
-        let result = new Array(rows).fill(0);
-
-        for (let i = 0; i < rows; i++) {
-            result[i] = new Array(original[rows-i-1].length).fill(0);
-            for (let j = 0; j < result[i].length; j++) {
-                result[i][j] = original[rows - i - 1][j];
-            }
-        }
-
-        return result;
-    }
-
-    realRotate(original, rows, columns, floors, index) {
-        let result = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
-        for (let k = 0; k < floors; k++) {
-            for (let i = 0; i < columns; i++) {
-                for (let j = 0; j < rows; j++) {
-                    result[rows - j - 1][i][k] = 0;
-                    if (original[i][j] === 1) {
-                        result[rows - j - 1][i][k] = 1;
-                    }
+    realRotate2d(original) {
+        let L = original.length;
+        let result = new Array(L).fill(0).map(_ => new Array(L).fill(0).map(_ => new Array(L).fill(0)));
+        for (let k = 0; k < L; k++) {
+            for (let i = 0; i < L; i++) {
+                for (let j = 0; j < L; j++) {
+                    result[k][L - j - 1][i] = original[k][i][j];
                 }
             }
         }
+        this.printPart(result);
+        return result;
+    }
 
-        this.firstSquarePos[index] = 0;
-        while (this.firstSquarePos[index]<result[0].length && result[0][this.firstSquarePos[index]] === 0) {
-            this.firstSquarePos[index]++;
+    realRotate2dY(original) {
+        let L = original.length;
+        let result = new Array(L).fill(0).map(_ => new Array(L).fill(0).map(_ => new Array(L).fill(0)));
+        for (let k = 0; k < L; k++) {
+            for (let i = 0; i < L; i++) {
+                for (let j = 0; j < L; j++) {
+                    result[L - k - 1][j][i] = original[k][i][j];
+                }
+            }
         }
+        this.printPart(result);
+        return result;
+    }
 
+    realRotate2dZ(original) {
+        let L = original.length;
+        let result = new Array(L).fill(0).map(_ => new Array(L).fill(0).map(_ => new Array(L).fill(0)));
+        for (let k = 0; k < L; k++) {
+            for (let i = 0; i < L; i++) {
+                for (let j = 0; j < L; j++) {
+                    result[k][j][L - i - 1] = original[k][i][j];
+                }
+            }
+        }
+        this.printPart(result);
         return result;
     }
 
     rotate() { // vs. clock-wise
         this.currRotation++;
-        if (this.currRotation === this.firstSquarePos.length) {
+        if (this.currRotation === 64) {
             this.currRotation = 0;
         }
     }
@@ -234,13 +206,13 @@ class Piece3d {
         return this.floor;
     }
 
-    printPart(l, layout) {
-        // console.debug("    layout=" + l);
-        for (let k=0; k<1; ++k) { // todo
+    printPart(layout) {
+        // console.debug("    layout="); // + l);
+        for (let k=0; k<layout.length; ++k) {
             for (let i = 0; i < layout.length; ++i) {
                 let line = "    ";
                 for (let j = 0; j < layout[i].length; ++j) {
-                    line += layout[i][j][k];
+                    line += layout[k][i][j];
                 }
                 // console.debug(line);
             }
