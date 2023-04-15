@@ -38,10 +38,13 @@ graphItButton.addEventListener('click', () => {
 document.getElementById('cube').addEventListener('click', () => {
     if (typeof DeviceMotionEvent.requestPermission === 'function') {
         // iOS 13+, click on the cube to save some user action
-        DeviceOrientationEvent.requestPermission()
+    DeviceOrientationEvent.requestPermission()
             .then(response => {
                 if (response === 'granted') {
                     window.addEventListener('deviceorientation', handleOrientation);
+                }
+                else {
+                    console.warn("DeviceOrientationEvent- access denied");
                 }
             })
         .catch(console.error);
