@@ -66,9 +66,11 @@ public final class Main {
 
     public void buildCases() {
         cases = ""; // "\n";
+        // todo if no such config folder (not only here in the code, see also JMain, ShowSol, ...)
+        //  then list/ open the resources content
         if (new File("config").list() == null)
             return ;
-        for (String s: new File("config").list()) 
+        for (String s: new File("config").list())
             if (s.contains("parts"))
                 cases += s.substring(0, s.indexOf("_parts")) + "\n";
     }

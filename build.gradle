@@ -10,9 +10,20 @@ gitProperties {
 
 apply plugin: 'java'
 
-sourceCompatibility = 17
+sourceCompatibility = 14
 tasks.withType(JavaCompile) {
     options.deprecation = true
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "edu.generalpuzzle.main.JMain"
+    }
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    from {
+        // todo copy config/ into resources
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 test {
@@ -33,10 +44,10 @@ repositories {
 dependencies {
     implementation group: 'org.apache-extras.beanshell', name: 'bsh', version: '2.0b6'
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.19.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.19.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.19.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.20.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.20.0'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
 }
