@@ -240,9 +240,10 @@ class Puzzle2d {
                     // "benchmarks", thanks to a Poly solution not found bug. avg of 3 runs, because of the shuffle. Timeout of 1.5 sec
                     // Chrome:
                     //      Core i7, 8th Gen, 8665U (Q2 2019) - 220, 227, 217 -> 221k pieces per sec,
+                    //      Core i7, 12th Gen, 1265U (Q1 2022) - 647, 581, 676 -> 634k
                     //      Mediatek MT6769T Helio G80 (Q1 2020) - 108, 119, 110-> ~112k
                     // Firefox Focus:
-                    //      i7 - 80, 76, 73 -> ~76k
+                    //      i7, 8th - 80, 76, 73 -> ~76k
                     //      Cell - 79, 72, 90 -> ~80k
                     // Samsung Internet:
                     //      no desktop.
