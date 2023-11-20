@@ -5,7 +5,9 @@ class Speed {
     // Chrome: most users don't use other browser
     //      Core i7, 8th Gen, 8665U (Q2 2019) - 3.2 sec - 53 sec with DevTools
     //      Core i7, 12th Gen, 1265U (Q1 2022) - 0.48 sec - 1.0 sec with DevTools
-    //      Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
+    //      Samsung Galaxy
+    //      - Exynos 1380 (Q1 2023) - 1.26
+    //      - Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
     //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
     // in fact, there's a way, with this input (vs 20,3..)
     // #3,20

@@ -153,7 +153,7 @@ class Puzzle3d {
                 return false;
             }
             let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)][this.currPiece.getFloorSet(setSoFar)];
-            if (gridRowiColumnJ === 0 && pieceVal === 1) {
+            if (gridRowiColumnJk === 0 && pieceVal === 1) {
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
                 floorsSet[setSoFar] = floorj;

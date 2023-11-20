@@ -22,15 +22,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
+    - uses: actions/checkout@v4
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
     - name: Change wrapper permissions
       run: chmod +x ./gradlew        
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@2.4.2
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: build
