@@ -244,13 +244,18 @@ class Puzzle2d {
                     //      Core i7, 12th Gen, 1265U (Q1 2022) - 647, 581, 676 -> 634k
                     //      Mediatek MT6769T Helio G80 (Q1 2020) - 108, 119, 110-> ~112k >> 210k
                     //      Exynos 1380 (Q1 2023) -> 460k
+                    //      iPhone 15 -> 1520k
                     // Firefox Focus:
                     //      i7, 8th - 80, 76, 73 -> ~76k
                     //      Cell - 79, 72, 90 -> ~80k
+                    //      iPhone -> 1250k
                     // Samsung Internet:
                     //      no desktop.
                     //      Cell Helio G80 - 180, 176, 169  -> ~175k
                     //      Cell Exynos 1380 - 430k
+                    // Safari:
+                    //      iPhone - 1355k
+                    // 
 
                     if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) { //
                         this.showGrid();
