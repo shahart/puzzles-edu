@@ -25,6 +25,7 @@ class GraphIt {
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
+            "<button onClick=\"window.close()\">Go Back</button>\n " +
 
             "<center>" +
             // solution.replaceAll("\n", "<p>") + //

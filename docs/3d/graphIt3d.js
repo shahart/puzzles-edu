@@ -12,6 +12,7 @@ class GraphIt3d {
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
+            "<button onClick=\"window.close()\">Go Back</button>\n " +
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE X3D SYSTEM \"x3dViewer/Xj3D/DTD/x3d-3.0.dtd\">\n" +
             "<X3D profile=\"Interchange\">\n" +
             "<Scene>\n" +
