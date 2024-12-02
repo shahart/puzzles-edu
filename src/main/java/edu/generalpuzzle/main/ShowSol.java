@@ -2,9 +2,13 @@ package edu.generalpuzzle.main;
 
 import edu.generalpuzzle.infra.*;
 import edu.generalpuzzle.infra.engines.EngineStrategy;
+import groovy.lang.GroovyShell;
 import bsh.Interpreter;
+import org.codehaus.groovy.control.CompilationFailedException;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,15 +16,17 @@ import javax.swing.*;
  */
 public class ShowSol { // show solution like \"A A A B B C\" without dangling edges (=keys)
 
-    public static void main(String args[]) throws bsh.EvalError {
+    public static void main(String args[]) throws bsh.EvalError, CompilationFailedException, IOException {
+
+        boolean isBsh = true; // TODOG false
 
         System.setProperty("log4j1.compatibility","true");
 
         String argsToScript[];
 
         if (args.length == 0) {
-            String puzzle = JOptionPane.showInputDialog("puzzle + extra argument (like 2d 8 8)");
-            if (puzzle == null || puzzle.length() == 0) 
+            String puzzle = JOptionPane.showInputDialog("puzzle + extra argument (like 2d_ascii 8 8)");
+            if (puzzle == null || puzzle.isEmpty())
                 return;
         
             args = puzzle.split(" ");
@@ -30,22 +36,48 @@ public class ShowSol { // show solution like \"A A A B B C\" without dangling ed
         System.arraycopy(args, 1, argsToScript, 0, args.length - 1);
 
         Interpreter interpreter = new Interpreter();
+        GroovyShell shell = new GroovyShell();
 
-        interpreter.set("bsh.args", argsToScript);
+        if (isBsh) {
+            interpreter.set("bsh.args", argsToScript);
+        }
+        else {
+            // TODOG how to inject bsh.args? shell.evaluate(new File("bsh.args"));
+        }
 
         IGrid grid;
 
-        try { grid = (IGrid) interpreter.source("config/" + args[0] + "_grid.bsh"); }
-        catch (Exception e) { e.printStackTrace(); return; }
+        if (isBsh) {
+            try {
+                grid = (IGrid) interpreter.source("config/" + args[0] + "_grid.bsh");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
 
-        if (grid == null) {
-            System.out.println(interpreter.get("error"));
-            return;
+            if (grid == null) {
+                System.out.println(interpreter.get("error"));
+                return;
+            }
+        }
+        else {
+            grid = (IGrid) shell.evaluate(new File("config/" + args[0] + "_grid.bsh"));
+            // TODOG how to handle interpreter.get("error")
         }
 
         Parts parts;
-        try { parts = (Parts) interpreter.source("config/" + args[0] + "_parts.bsh"); }
-        catch (Exception e) { e.printStackTrace(); return; }
+
+        if (isBsh) {
+            try {
+                parts = (Parts) interpreter.source("config/" + args[0] + "_parts.bsh");
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        else {
+            parts = (Parts) shell.evaluate(new File("config/" + args[0] + "_parts.bsh"));
+        }
 
         for (IPart part: parts.getParts())
             parts.complete(part);

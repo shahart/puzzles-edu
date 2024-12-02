@@ -5,7 +5,7 @@
   "scope": "/puzzles-edu/",
   "id": "/puzzles-edu/",
   "start_url": "/puzzles-edu/2dsolver.html",
-  "display": "minimal-ui",
+  "display": "standalone",
   "icons": [
     {
       "src": "https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif",
