@@ -25,7 +25,7 @@ class GraphIt {
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
-            "<button onClick=\"window.close()\">Go Back</button>\n " +
+            "<button onClick=\"window.close()\">Go Back</button>&nbsp;or back by clicking on some Cyan box\n " +
 
             "<center>" +
             // solution.replaceAll("\n", "<p>") + //
@@ -73,7 +73,9 @@ class GraphIt {
                             alert('For now supports up to ' + colors.length + ' pieces');
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
-                        res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"/></Shape>";
+                        res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"";
+                        if (idx-1 == 0) res += "onclick=\"window.close()\"";
+                        res += "/></Shape>";
                         res += " <!-- " + (idx-1) + " -->\n"
                         if (aquaBelleMode) {
                             res += "<Shape DEF=\"PIECE_" + idx + "_g\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Sphere radius='3'/></Shape>\n";
