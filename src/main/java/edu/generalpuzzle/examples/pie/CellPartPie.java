@@ -77,6 +77,7 @@ public class CellPartPie extends ICellPart {
         Element cyl = doc.createElement("Cylinder");
         cyl.setAttribute("radius","4.5");
         cyl.setAttribute("height","2");
+        cyl.setAttribute("onclick", "window.close()");
         return cyl;
     }
 

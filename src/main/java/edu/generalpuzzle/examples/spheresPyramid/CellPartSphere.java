@@ -107,6 +107,7 @@ public class CellPartSphere extends ICellPart {
     public Element graphCell(Document doc) {
         Element e = doc.createElement("Sphere");
         e.setAttribute("radius","4.7");
+        e.setAttribute("onclick", "window.close()");
         return e;
     }
 

@@ -4,6 +4,8 @@
     <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />
 </head>
 <body>
+<button onClick="window.close()">Go Back</button>&nbsp;
+or back by clicking on some Orange box
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE X3D SYSTEM "x3dViewer/Xj3D/DTD/x3d-3.0.dtd">
 <X3D profile="Interchange">
 <!--solution #0 Parts order M0 Eb T7 F7 L8 G5 S9 
@@ -28,7 +30,7 @@
 <Shape DEF="PIECE_M"><Appearance><Material diffuseColor="0 1 0"/></Appearance><Box size="7 7 7"/></Shape><!--green-->
 <Shape DEF="PIECE_E"><Appearance><Material diffuseColor="1 0 0"/></Appearance><Box size="7 7 7"/></Shape><!--red-->
 <Shape DEF="PIECE_F"><Appearance><Material diffuseColor="1 0.686 0.686"/></Appearance><Box size="7 7 7"/></Shape><!--pink-->
-<Shape DEF="PIECE_G"><Appearance><Material diffuseColor="1 0.784 0"/></Appearance><Box size="7 7 7"/></Shape><!--orange-->
+<Shape DEF="PIECE_G"><Appearance><Material diffuseColor="1 0.784 0"/></Appearance><Box size="7 7 7" onclick="window.close()"/></Shape><!--orange-->
 <Shape DEF="PIECE_L"><Appearance><Material diffuseColor="1 1 0"/></Appearance><Box size="7 7 7"/></Shape><!--yellow-->
 <Shape DEF="PIECE_S"><Appearance><Material diffuseColor="1 0 1"/></Appearance><Box size="7 7 7"/></Shape><!--magenta-->
 <Shape DEF="PIECE_T"><Appearance><Material diffuseColor="0 1 1"/></Appearance><Box size="7 7 7"/></Shape><!--cyan-->

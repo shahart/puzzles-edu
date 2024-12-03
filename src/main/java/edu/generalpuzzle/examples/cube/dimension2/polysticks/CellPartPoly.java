@@ -61,6 +61,7 @@ public class CellPartPoly extends ICellPart {
     public Element graphCell(Document doc) {
         Element box = doc.createElement("Box"); // TODO? line
         box.setAttribute("size",special == 1 ? /*direction == 0 */ "7 2 7" : "2 7 7");
+        box.setAttribute("onclick", "window.close()"); // todo if 1st color
         return box;
     }
 

@@ -345,6 +345,7 @@ public final class GraphIt {
                 if (this.shape == Shape.SPHERE) {
                     Element sphere = doc.createElement("Sphere");
                     sphere.setAttribute("radius","4.7");
+                    if (colorIdx == 0) sphere.setAttribute("onclick", "window.close()");
                     shape.appendChild(sphere);
                 }
                 else if (this.shape == Shape.HEXA_PYRAMID) {
@@ -368,15 +369,18 @@ public final class GraphIt {
                             "              5 0 2, 2.5 4.33 2, -2.5 4.33 2, -5 0 2,  -2.5 -4.33  2, 2.5 -4.33 2");
                     hexa.appendChild(coords);
                     shape.appendChild(hexa);
+                    // todo if (colorIdx == 0) .setAttribute("onclick", "window.close()");
                 }
                 else if (this.shape == Shape.BOX) {
                     Element box = doc.createElement("Box");
                     box.setAttribute("size","7 7 7");
+                    if (colorIdx == 0) box.setAttribute("onclick", "window.close()");
                     shape.appendChild(box);
                 }
                 else if (this.shape == Shape.POLY) {
                     Element box = doc.createElement("Box");
                     box.setAttribute("size","7 2 7");
+                    if (colorIdx == 0) box.setAttribute("onclick", "window.close()");
 //                    Element box = doc.createElement("Text");
 //                    box.setAttribute("string","/"); //"\\");
                     shape.appendChild(box);
@@ -385,6 +389,7 @@ public final class GraphIt {
                     Element cyl = doc.createElement("Cylinder");
                     cyl.setAttribute("radius","4.5");
                     cyl.setAttribute("height","2");
+                    if (colorIdx == 0) cyl.setAttribute("onclick", "window.close()");
                     shape.appendChild(cyl);
                 }
 
@@ -577,7 +582,9 @@ public final class GraphIt {
                 "    <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>\n" +
                 "    <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />\n" +
                 "</head>\n" +
-                "<body>\n"
+                "<body>\n" +
+                "<button onClick=\"window.close()\">Go Back</button>&nbsp;\n" +
+                "or back by clicking on some Red box"
 
                 + writer +
 

@@ -65,6 +65,7 @@ public class CellPart3D extends ICellPart {
 //    public static Element graphCell(Document doc) {
 //        Element box = doc.createElement("Box");
 //        box.setAttribute("size","7 7 7");
+    //         box.setAttribute("onclick", "window.close()");
 //        return box;
 //    }
 
