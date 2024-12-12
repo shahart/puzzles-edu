@@ -74,12 +74,16 @@ class GraphIt {
                             throw new Error('For now supports up to ' + colors.length + ' pieces');
                         }
                         res += "<Shape DEF=\"PIECE_" + idx + "_r\"><Appearance><Material diffuseColor=\"" + colors[idx-1] + "\"/></Appearance><Box size=\"7 7 7\"";
-                        if (idx-1 == 0) res += "onclick=\"window.close()\"";
+                        if (idx-1 == 0) res += " onclick=\"window.close()\"";
                         res += "/></Shape>";
                         res += " <!-- " + (idx-1) + " -->\n"
                         if (aquaBelleMode) {
-                            res += "<Shape DEF=\"PIECE_" + idx + "_g\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Sphere radius='3'/></Shape>\n";
-                            res += "<Shape DEF=\"PIECE_" + idx + "_b\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Torus innerRadius='0.6' outerRadius='2'/></Shape>\n";
+                            res += "<Shape DEF=\"PIECE_" + idx + "_g\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Sphere radius='3'";
+                            if (idx-1 == 0) res += " onclick=\"window.close()\"";
+                            res += "/></Shape>";
+                            res += "<Shape DEF=\"PIECE_" + idx + "_b\"><Appearance><Material diffuseColor=\"" + colors[idx - 1] + "\"/></Appearance><Torus innerRadius='0.6' outerRadius='2'";
+                            if (idx-1 == 0) res += " onclick=\"window.close()\"";
+                            res += "/></Shape>";
                         }
                         res += " <!-- " + (idx-1) + " -->\n"
                         if (checkersMode) {
