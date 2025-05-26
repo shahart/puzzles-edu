@@ -10,6 +10,7 @@ class Speed {
     //      - Mediatek MT6769T Helio G80 (Q1 2020) - 2.3
     //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
     //      iPhone (Chrome/ Safari/ Firefox) - 1.01
+    //      iWatch 9 (Safari) - 20.3 sec
     // in fact, there's a way, with this input (vs 20,3..)
     // #3,20
     // #end of grid. Pieces:Poly

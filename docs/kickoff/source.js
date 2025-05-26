@@ -706,6 +706,12 @@ solveButton.addEventListener('click', () => {
 
     let input = document.getElementById('input').value;
 
+    let inputIW = document.getElementById('inputIWatch').value;
+
+    if (inputIW != '') {
+        input = inputIW + '\n#end of grid. Pieces:Poly';
+    }
+
     let header = input.split('\n')[0];
 
     if (header.toLowerCase().trim() === 'speed') {

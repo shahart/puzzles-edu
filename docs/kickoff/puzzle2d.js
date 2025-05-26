@@ -255,7 +255,7 @@ class Puzzle2d {
                     //      Cell Exynos 1380 - 430k
                     // Safari:
                     //      iPhone - 1355k
-                    // 
+                    //      iWatch9 -
 
                     if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) { //
                         this.showGrid();

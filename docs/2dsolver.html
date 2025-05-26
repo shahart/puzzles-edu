@@ -126,6 +126,7 @@ aka Put together puzzles
 <h3>Puzzle</h3>
 <textarea id="input" rows="12" cols="30" aria-label="input">
 </textarea>
+<input type="input" id="inputIWatch" value="" hidden="hidden"/>
 <p>
 <button id="solveButton" type="button">Solve</button>
 <h3>Solution...</h3>
@@ -153,5 +154,11 @@ Mail 📧 me your puzzle,
 <p>
 I'll add it above.
 <!--<script src="index.js"></script>-->
+<script>
+    if (navigator.userAgent.indexOf('CriOS') >= 0) {
+        // console.log('CriOS');
+        document.getElementById('inputIWatch').hidden='';
+    }
+</script>
 </body>
 </html>
