@@ -126,7 +126,7 @@ aka Put together puzzles
 <h3>Puzzle</h3>
 <textarea id="input" rows="12" cols="30" aria-label="input">
 </textarea>
-<input type="input" id="inputIWatch" value="" hidden="hidden"/>
+<input type="text" id="inputIWatch" value="" hidden="hidden"/>
 <p>
 <button id="solveButton" type="button">Solve</button>
 <h3>Solution...</h3>
@@ -156,8 +156,14 @@ I'll add it above.
 <!--<script src="index.js"></script>-->
 <script>
     if (navigator.userAgent.indexOf('CriOS') < 0 && navigator.userAgent.indexOf('iPhone') >= 0) {
-        // console.log('CriOS');
-        document.getElementById('inputIWatch').hidden='';
+        // console.log('iWatch/ or some iPhone browser');
+        let a = document.createElement('audio');
+        let supportsAAC =  !! (a.canPlayType && a.canPlayType('audio/mp4; codecs="mp4a.40.2"').replace(/no/, ''));
+        let is_iphone = ['iPhone'].includes(navigator.platform);
+        if (is_iphone && ! supportsAAC) {
+        // if (navigator.userAgent.indexOf('Version') >= 0 && navigator.userAgent.indexOf('Gecko') >= 0) {
+            document.getElementById('inputIWatch').hidden='';
+        }
     }
 </script>
 </body>
