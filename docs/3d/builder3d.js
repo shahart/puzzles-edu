@@ -111,7 +111,7 @@ class Builder3d {
                     }
 
                     puzzle.pieces[i] = new Piece3d(piece, layout, puzzle.names.charAt(i));
-                    puzzle.pieces[i].shuffle(); //
+                    // puzzle.pieces[i].shuffle(); //
                 }
                 return;
             }
@@ -182,7 +182,7 @@ class Builder3d {
                     window.globalTotalFill = globalTotalFill;
                     for (let z = 0; z < currMultiplier; ++z) {
                         puzzle.pieces[pieceIdx] = new Piece3d(pieceIdx + z, layout, puzzle.names[pieceIdx]);
-                        puzzle.pieces[pieceIdx].shuffle(); //
+                        // puzzle.pieces[pieceIdx].shuffle(); //
                         ++pieceIdx;
                     }
                     currMultiplier = 1;
@@ -205,7 +205,7 @@ class Builder3d {
                 for (let z = 1; z < currMultiplier; ++z) {
                     puzzle.names += String.fromCharCode(line["#Piece".length].charCodeAt(0) + z);
                 }
-                // console.log("Parsing piece " + line["#Piece".length]);
+                console.log("Parsing piece " + line["#Piece".length]);
             }
             else if (line.length > 0 && doneWithGrid) {
                 pieceLines.push(line);

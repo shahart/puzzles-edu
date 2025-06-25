@@ -36,18 +36,18 @@ class Puzzle3d {
         this.totalFillInGrid = 0;
         this.allPieces = [
             // Poly
-            [[1],[1],[1],[1,1]],        //4-2 (2)   L sym = indicates it is symmetric // TODO write flip
-            [[1,1],[1],[1,1]],          //4-1 (5)   U
-            [[0,1,1],[1,1],[0,1]],      //4-2 (9)   F sym - used to eliminate "dups"
-            [[0,1],[1,1,1],[0,1]],      //1-1 (6)   X
-            [[1,1,1,1],[0,0,1]],        //4-2 (3)   Y sym
-            [[0,1],[1,1],[1],[1]],      //4-2 (12)  N sym
-            [[0,0,1],[0,1,1],[1,1]],    //4-1 (7)   W
-            [[1],[1,1],[1,1]],          //4-2 (4)   P sym
-            [[0,0,1],[1,1,1],[1]],      //2-2 (11)  Z sym ??
-            [[0,0,1],[0,0,1],[1,1,1]],  //4-1 (10)  V
-            [[0,0,1],[1,1,1],[0,0,1]],  //4-1 (8)   T
-            [[1,1,1,1,1]]               //2-1 (1)   I
+            [[[1],[1],[1],[1,1]]],        //4-2 (2)   L sym = indicates it is symmetric // TODO write flip
+            [[[1,1],[1],[1,1]]],          //4-1 (5)   U
+            [[[0,1,1],[1,1],[0,1]]],      //4-2 (9)   F sym - used to eliminate "dups"
+            [[[0,1],[1,1,1],[0,1]]],      //1-1 (6)   X
+            [[[1,1,1,1],[0,0,1]]],        //4-2 (3)   Y sym
+            [[[0,1],[1,1],[1],[1]]],      //4-2 (12)  N sym
+            [[[0,0,1],[0,1,1],[1,1]]],    //4-1 (7)   W
+            [[[1],[1,1],[1,1]]],          //4-2 (4)   P sym
+            [[[0,0,1],[1,1,1],[1]]],      //2-2 (11)  Z sym ??
+            [[[0,0,1],[0,0,1],[1,1,1]]],  //4-1 (10)  V
+            [[[0,0,1],[1,1,1],[0,0,1]]],  //4-1 (8)   T
+            [[[1,1,1,1,1]]]               //2-1 (1)   I
         ];
         this.names = "LUFXYNWPZVTI"; // Poly
         this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
@@ -67,7 +67,7 @@ class Puzzle3d {
                 let piece = i;
                 this.piecesIndices.push(piece);
                 this.pieces[i] = new Piece3d(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
-                this.pieces[i].shuffle();
+                // this.pieces[i].shuffle();
             }
             for (let i = 0; i < this.grid.length; i++) {
                 for (let j = 0; j < this.grid[i].length; j++) {
@@ -81,11 +81,12 @@ class Puzzle3d {
         while (this.grid[0][this.column][this.floor] === -1) {
             this.column++;
         }
-        this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
+        this.availInGrid = this.totalFillInGrid;
+        // this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
     }
 
     showGrid() {
-        // console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
+        console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
         for (let k=0; k<this.FLOORS; k++) {
             for (let i = 0; i < this.ROWS; i++) {
@@ -126,7 +127,7 @@ class Puzzle3d {
     }
 
     canPut(rowsSet, columnsSet, floorsSet) {
-        // console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
+        console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
         let setSoFar = 0;
         let columnj = this.column;
         let j = 0; // this.currPiece.getFirstSquarePos();
@@ -153,7 +154,7 @@ class Puzzle3d {
                 return false;
             }
             let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)][this.currPiece.getFloorSet(setSoFar)];
-            if (gridRowiColumnJ === 0 && pieceVal === 1) {
+            if (gridRowiColumnJk === 0 && pieceVal === 1) {
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
                 floorsSet[setSoFar] = floorj;
@@ -172,7 +173,7 @@ class Puzzle3d {
             return;
         }
         let leftPieces = this.piecesIndices.length;
-        // console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
+        console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
         if ((leftPieces === 0)) {
             this.totalSolutions++;
             console.log(new Date().getTime() - this.start + " [msec] Found a solution, click 'Show'");
@@ -183,11 +184,11 @@ class Puzzle3d {
                 this.totalSolutions = this.EXIT_SIGN;
             }
         }
-        // this.showGrid();
+        this.showGrid();
         if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
             return;
         }
-        let timeoutThreshold = 1500;
+        let timeoutThreshold = 0;
         if (new Date().getTime() - this.start > timeoutThreshold && timeoutThreshold > 0) {
             this.showGrid();
             let msg = new Date().toISOString() + ' Timeout, pieces per sec ' + Math.trunc(this.triedPieces / timeoutThreshold) + 'K';
@@ -202,7 +203,7 @@ class Puzzle3d {
         for (let i=0; i< leftPieces; i++) {
             let piece = this.piecesIndices[i];
             this.currPiece = this.pieces[piece];
-            for (let r = this.pieces[piece].getAvailRotations(); r > 0; r--, this.currPiece.rotate()) {
+            for (let r = 1 /*this.pieces[piece].getAvailRotations()*/; r > 0; r--, this.currPiece.rotate()) {
                 // currPieceLayout = currPiece.getLayout();
                 if (this.canPut(rowsSet, columnsSet, floorsSet)) {
                     this.piecesIndices.splice(i, 1);
@@ -229,8 +230,8 @@ class Puzzle3d {
     }
 
     putCurrPiece(rowsSet, columnsSet, floorsSet) {
-        // console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
-        this.currPiece.setPosition(this.row, this.column);
+        console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
+        this.currPiece.setPosition(this.row, this.column, this.floor);
         let currIndex = this.currPiece.index+1;
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
             this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = currIndex;
@@ -242,7 +243,7 @@ class Puzzle3d {
     }
 
     goForward() {
-        // console.debug(new Date().getTime() - this.start + " [msec] goForward");
+        console.debug(new Date().getTime() - this.start + " [msec] goForward");
         for (; this.floor<this.FLOORS; this.floor++) {
             for (; this.row < this.ROWS; this.row++) {
                 for (; this.column < this.COLUMNS; this.column++) {
@@ -258,13 +259,13 @@ class Puzzle3d {
 
     removeLast(piece, rowsSet, columnsSet, floorsSet) {
         this.currPiece = this.pieces[piece];
-        // console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
+        console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
         // currPieceLayout = this.currPiece.getLayout();
         // getPosition
         this.row = this.currPiece.getRow();
         this.column = this.currPiece.getColumn();
         this.floor = this.currPiece.getFloor();
-        // for debug- currPiece.setPosition(-1, -1);
+        // for debug- currPiece.setPosition(-1, -1, -1);
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
             this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = this.gridCopy[rowsSet[i]][columnsSet[i]][floorsSet[i]];
         }

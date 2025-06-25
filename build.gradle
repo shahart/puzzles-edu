@@ -51,13 +51,13 @@ repositories {
 dependencies {
     implementation group: 'org.beanshell', name: 'bsh', version: '3.0.0-SNAPSHOT' // migrate to Groovy 4 ?!
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.24.3'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.24.3'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.24.3'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.25.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.25.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.25.0'
 
     implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.24'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.12.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.12.2'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.1'
 }

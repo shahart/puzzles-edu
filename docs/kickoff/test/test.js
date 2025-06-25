@@ -6,7 +6,7 @@ describe('Mocha Puzzle2D tests', function () {
     it('10x6-12 pieces', function () {
         let puzzle2d = new Puzzle2d(12, 10, 6);
         let res = puzzle2d.solve();
-        console.log("6x6-10 pieces>>" + res);
+        console.log("10x6-12 pieces>>" + res);
         chai.assert.include(res, ' 1  ');
     });
 

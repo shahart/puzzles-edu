@@ -19,19 +19,19 @@ class Piece3d {
         }
         msg += ", Atoms=" + atoms;
         console.debug(msg);
-        let availRotations = 64; // todo if needed because of timeouts, maybe drop dups will help
+        let availRotations = 1; // todo if needed because of timeouts, maybe drop dups will help
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
-        this.layouts = new Array(64);
+        this.layouts = new Array(availRotations);
         for (let i = 0; i < this.layouts.length; i++) {
             this.layouts[i] = [];
         }
         this.layouts[0] = layout;
-        this.rowsSet = new Array(64).fill(0);
-        this.columnsSet = new Array(64).fill(0); //[];
-        this.floorsSet = new Array(64).fill(0);
+        this.rowsSet = new Array(availRotations).fill(0);
+        this.columnsSet = new Array(availRotations).fill(0); //[];
+        this.floorsSet = new Array(availRotations).fill(0);
         this.maxColumns = -1;
 
         for (let i = 0; i < layout.length; i++) {
@@ -73,7 +73,7 @@ class Piece3d {
             }
         }
 
-        for (let rot = 0; rot < 64; rot++) {
+        for (let rot = 0; rot < availRotations; rot++) {
             this.rowsSet[rot] = [this.totalThisFill];
             this.columnsSet[rot] = [this.totalThisFill];
             this.floorsSet[rot] = [this.totalThisFill];
@@ -149,7 +149,7 @@ class Piece3d {
                 }
             }
         }
-        this.printPart(result);
+        this.printPart(result); //
         return result;
     }
 
@@ -163,7 +163,7 @@ class Piece3d {
                 }
             }
         }
-        this.printPart(result);
+        this.printPart(result); //
         return result;
     }
 
@@ -177,13 +177,13 @@ class Piece3d {
                 }
             }
         }
-        this.printPart(result);
+        this.printPart(result); //
         return result;
     }
 
     rotate() { // vs. clock-wise
         this.currRotation++;
-        if (this.currRotation === 64) {
+        if (this.currRotation === this.availRotations) {
             this.currRotation = 0;
         }
     }
