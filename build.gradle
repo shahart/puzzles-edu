@@ -1,8 +1,10 @@
 plugins {
     // id 'pmd'
     id 'jacoco'
-    id 'com.gorylenko.gradle-git-properties' version '2.4.1'
+    id 'com.gorylenko.gradle-git-properties' version '2.4.2'
 //    id 'edu.sc.seis.launch4j' version '2.5.4'
+    id 'org.springframework.boot' version '3.5.4'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 //launch4j {
@@ -51,13 +53,17 @@ repositories {
 dependencies {
     implementation group: 'org.beanshell', name: 'bsh', version: '3.0.0-SNAPSHOT' // migrate to Groovy 4 ?!
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.25.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.25.0'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.25.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.25.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.25.1'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.25.1'
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.24'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.28'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }

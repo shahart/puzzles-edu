@@ -175,18 +175,25 @@ public final class Main {
     }
 
     public static void main(String args[]) {
+        Main.mainGo(args);
+    }
+
+    public static String mainGo(String args[]) {
 
         System.setProperty("log4j1.compatibility","true");
 
         Main main = new Main();
         main.buildCases();
         try {
-            main.go(args);
+            String res = main.go(args);
+            System.out.println("\nDONE\n" + res);
+            return res;
         }
         catch (Exception e) {
             e.printStackTrace();
+            return e.getMessage();
         }
-        System.out.println("\nDONE\n");
+
     }
 
 //    private static final Ops.Procedure<ParallelEngineStrategy> solveIt =
@@ -342,12 +349,12 @@ public final class Main {
 
         System.out.println();
         GraphIt.setFolderArgs(argsBuffer + "/");
-        GraphIt.setArgs(argsBuffer.toString() + "_" +
+        GraphIt.setArgs(argsBuffer + "_" +
             (EngineStrategy.get_ENGINE_TYPE() == EngineStrategy.ENGINE_TYPE_DLX  ? "MC" : "BT") +
             (EngineStrategy.S_HEURISTIC ? "_SZ" : "") +
             (EngineStrategy.ST_HEURISTIC ? "_ST" : ""));
 
-        new File("tmp" + File.separator + argsBuffer.toString()); //args[0]);
+        new File("tmp" + File.separator + argsBuffer); //args[0]);
 
         int enginePart = partsSize/ engine.length;
         int currPart = fromPart;
@@ -382,7 +389,7 @@ public final class Main {
         ExecutorService executor = Executors.newFixedThreadPool(engines); //engine.length+1); // parArr
         try {
             new File("tmp").mkdir();
-            new File("tmp/" + argsBuffer.toString()).mkdir(); //Args.args[0]).mkdir();
+            new File("tmp/" + argsBuffer).mkdir(); //Args.args[0]).mkdir();
 
             executor.invokeAll(tasks);
         }
@@ -478,19 +485,19 @@ public final class Main {
             for (String arg: Args.args)
                 argsBuffer2.append(arg).append('_');
             argsBuffer2.setLength(argsBuffer2.length()-1);
-            String file = argsBuffer2.toString() + (EngineStrategy.get_ENGINE_TYPE() == EngineStrategy.ENGINE_TYPE_DLX ? "_MC" : "_BT");
+            String file = argsBuffer2 + (EngineStrategy.get_ENGINE_TYPE() == EngineStrategy.ENGINE_TYPE_DLX ? "_MC" : "_BT");
 			file += EngineStrategy.S_HEURISTIC ? "_SZ" : "";
 			file += EngineStrategy.ST_HEURISTIC ? "_ST" : "";
 			file += "_engine";
             new File("tmp").mkdir();
-            new File("tmp/" + argsBuffer.toString()).mkdir(); //Args.args[0]).mkdir();
+            new File("tmp/" + argsBuffer).mkdir(); //Args.args[0]).mkdir();
             if (System.getProperty("os.name").contains("Windows")) {
-                Runtime.getRuntime().exec("cmd /c copy GraphLayout.log tmp" + File.separator + argsBuffer.toString() /*Args.args[0] */+ File.separator + file + ".log");
-                Runtime.getRuntime().exec("cmd /c copy " + Tee.TEE_FILE + "  tmp" + File.separator + argsBuffer.toString() /*Args.args[0] */+ File.separator + file + "_console.log" );
+                Runtime.getRuntime().exec("cmd /c copy GraphLayout.log tmp" + File.separator + argsBuffer /*Args.args[0] */+ File.separator + file + ".log");
+                Runtime.getRuntime().exec("cmd /c copy " + Tee.TEE_FILE + "  tmp" + File.separator + argsBuffer /*Args.args[0] */+ File.separator + file + "_console.log" );
             }
             else {
-                Runtime.getRuntime().exec("/bin/cp GraphLayout.log tmp" + File.separator + argsBuffer.toString() /*Args.args[0] */+ File.separator + file + ".log");
-                Runtime.getRuntime().exec("/bin/cp " + Tee.TEE_FILE + "  tmp" + File.separator + argsBuffer.toString() /*Args.args[0] */+ File.separator + file + "_console.log" );
+                Runtime.getRuntime().exec("/bin/cp GraphLayout.log tmp" + File.separator + argsBuffer /*Args.args[0] */+ File.separator + file + ".log");
+                Runtime.getRuntime().exec("/bin/cp " + Tee.TEE_FILE + "  tmp" + File.separator + argsBuffer /*Args.args[0] */+ File.separator + file + "_console.log" );
             }
         }
         catch (Exception e) {
@@ -498,7 +505,7 @@ public final class Main {
         }
 
 
-        return null;
+        return nf.format(totalSolutions);
     }
 
     private void add_to_paper_Statistics(String args) throws Exception {
@@ -534,7 +541,7 @@ public final class Main {
             sb.append(stats[i]);
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
 
         List<String> lines = new ArrayList<String>();
         try {
@@ -547,7 +554,7 @@ public final class Main {
                 s = br.readLine();
             }
             br.close();
-            lines.add(sb.toString() + "\n");
+            lines.add(sb + "\n");
 //            lines.remove(0);
             Collections.sort(lines);
 
@@ -759,7 +766,7 @@ public final class Main {
                         atLeastGrid.show(); //GraphIt.getInstance().showGrid(atLeastGrid);// interpreter.source("showGrid.bsh");
                     }
                     catch (Exception e2) {
-                        System.out.println("but can't show it: " + e2.toString());
+                        System.out.println("but can't show it: " + e2);
                     }
                 return "At least the grid is valid...";            // TODO + the error from the catches
             }

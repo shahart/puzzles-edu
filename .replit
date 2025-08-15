@@ -1,0 +1,71 @@
+# compile = "javac -classpath .:target/dependency/* -d . $(find ./src/main/java/edu/generalpuzzle/kickoff -type f -name '*.java')"
+# run = "java -classpath .:target/dependency/* edu.generalpuzzle.kickoff.Puzzle2D 0 0"
+# 10 6
+# entrypoint = "Puzzle2D.java"
+
+hidden = ["**/*.class"]
+
+# compile = "javac -classpath .:target/dependency/* -d . $(find ./src/main/java/edu/generalpuzzle -type f -name '*.java')"
+# run = "java -classpath .:target/dependency/* edu.generalpuzzle.main.JMain"
+# entrypoint = "JMain.java"
+
+run = "mvn spring-boot:run"
+#run = "gradle bootRun"
+entrypoint = "src/main/java/edu/generalpuzzle/Application.java" # Replace with your main application class path
+
+# USAGE: curl http://localhost:8080/solve/3d_SIMPLE/3_4_5 or 2d_ascii/null
+
+[packager]
+language = "java"
+
+[packager.features]
+packageSearch = true
+
+[languages.java]
+pattern = "**/*.java"
+
+[languages.java.languageServer]
+start = "jdt-language-server"
+
+[unitTest]
+language = "java"
+
+[nix]
+channel = "stable-22_11"
+
+[debugger]
+support = true
+
+[debugger.compile]
+command = "javac -classpath .:/run_dir/junit-4.12.jar:target/dependency/* -g -d . $(find . -type f -name '*.java')"
+
+[debugger.interactive]
+transport = "localhost:0"
+connectTimeout = 60
+startCommand = "java-debug"
+
+[debugger.interactive.initializeMessage]
+command = "initialize"
+type = "request"
+
+[debugger.interactive.initializeMessage.arguments]
+adapterID = "cppdbg"
+clientID = "replit"
+clientName = "replit.com"
+columnsStartAt1 = true
+linesStartAt1 = true
+locale = "en-us"
+pathFormat = "path"
+supportsInvalidatedEvent = true
+supportsProgressReporting = true
+supportsRunInTerminalRequest = true
+supportsVariablePaging = true
+supportsVariableType = true
+
+[debugger.interactive.launchMessage]
+command = "launch"
+type = "request"
+
+[debugger.interactive.launchMessage.arguments]
+classPaths = ["."]
+# mainClass = "Puzzle2D"

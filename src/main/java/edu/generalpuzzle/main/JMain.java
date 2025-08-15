@@ -372,7 +372,7 @@ final class JMain extends JFrame {
 
         try {
             String s = main.go(args);
-            if (s != null)
+            if (s != null && ! Character.isDigit(s.charAt(0)))
                 JOptionPane.showMessageDialog(this, s);
         }
         catch (Exception e) {
