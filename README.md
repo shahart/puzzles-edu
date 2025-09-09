@@ -1,6 +1,6 @@
 **Solving General Lattice Puzzles**
 
-M.Sc. thesis (2010) - http://www.cs.technion.ac.il/~barequet/theses/tal-s-msc-thesis.pdf
+M.Sc. thesis (2010) - ![http://www.cs.technion.ac.il/~barequet/theses/tal-s-msc-thesis.pdf](https://github.com/shahart/puzzles-edu/blob/master/doc/tal-s-msc-thesis.pdf)
 
 https://cris.technion.ac.il/en/publications/solving-general-lattice-puzzles-2
 
@@ -15,4 +15,5 @@ https://link.springer.com/chapter/10.1007/978-3-642-14553-7_14
 [![Java CI with Gradle](https://github.com/shahart/puzzles-edu/actions/workflows/gradle.yml/badge.svg)](https://github.com/shahart/puzzles-edu/actions/workflows/gradle.yml)
 
 [![pages-build-deployment](https://github.com/shahart/puzzles-edu/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/shahart/puzzles-edu/actions/workflows/pages/pages-build-deployment)
+
 
