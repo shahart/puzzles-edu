@@ -1,6 +1,10 @@
 .Lattice, puzzle name, puzzle size, Parts orig., Parts total, parts reduced, Solutions unique, symmetries, method, branches, Time to first, time to all, solution, short solution, date
 2d_SIMPLE_10_6, , 60, 12, 57, 57, 2339, 4, MC+SZ+ST, 1477999, 0.285, 12.203,  I Y F V V V I Y F F F V I Y Y F X V I Y W X X X I P W W X L P P T W W L P P T T T L U U T Z L L U N N Z Z Z U U N N N Z, I1 Y5 F1 V1 X0 W3 P4 L4 T2 U1 Z2 N1 , 7/3/2022
 2d_SIMPLE_12_5, , 60, 12, 57, 57, 1010, 4, MC+SZ+ST, 825773, 0.334, 5.352,  L L V V V L U U U V L U F U V L X F F F X X X F Z N X Z Z Z N N Z W W I N W W Y I N W Y Y I P P T Y I P P T Y I P T T T, L6 V1 U0 F1 X0 Z0 N4 W2 I1 Y7 P6 T3 , 7/3/2022
+2d_ascii, , 36, 10, 28, 28, 41288, 8, MC+SZ+ST, 1100511, 0.278, 2.093,  I I E E G J I I B E G J D B B B F J D D C C F J A D A C C H A A A H H H, I0 E1 G1 J1 B0 D1 F1 C2 A0 H0 , 3/3/2024
+2d_ascii_10_6, , 36, 10, 28, 28, 41288, 8, MC+SZ+ST, 1111252, 0.729, 2.579,  A A C C F F A G G C C H A A B H H H I I B B E E I I B D D E J J J J D D, A3 C2 F0 G0 H0 B3 I0 E1 D2 J0 , 13/8/2025
 2d_ascii_6_6, , 36, 10, 28, 28, 41288, 8, MC+SZ+ST, 1111619, 0.68, 2.9,  G G C C F F A A B C C H A B B H H H A A B D D E I I D D E E I I J J J J, G0 C2 F0 A3 B1 H0 D0 E0 I0 J0 , 24/1/2023
 2d_bedlam, , 64, 13, 208, 208, 19186, 24, MC+SZ+ST, 52191929, 0.877, 132.522,  D F A G D C C G C C J G C B J J F F A A D F G G D D M M B B B J I A A H L F K M L L K M L B E J I K H H I K K H I I E H L E E E, Dk F0 Ad Gh Cb Jc B2 M9 Ib Hl Li K8 E5 , 7/3/2022
+3d_Graatsma, , 27, 9, 21, 21, 1, 24, MC+SZ+ST, 515238, 0.607, 0.977,  O O P Q Q P Q Q A O O P R B P R S S C T T R T T R S S, O2 P0 Q1 A0 R0 B0 S2 C0 T1 , 10/10/2024
+3d_SIMPLE_3_4_5, , 60, 12, 168, 142, 3940, 8, MC+SZ+ST, 10261888, 0.865, 38.97,  I I I I I V L L L L V N N N L V T Z N N P P P X U V F X X X F F F X U F T Z Z Z P P W Y U V W W Y U W W Y Y U T T T Y Z, I0 Va L0 N1 T5 Z6 P7 X1 U2 F1 W1 Y3 , 13/8/2025
 3d_gaya, , 27, 7, 121, 121, 2, 24, BT+SZ+ST, 3808071, 0.063, 2.234,  P P P A O X M M L N P X A O X A M L N O X N O L N M L,  P3 A2 O8 X0 M6 L8 Nk, 7/3/2022
