@@ -3,7 +3,7 @@
 Purpose: help an AI coding agent become productive quickly in this repository.
 
 - **Big picture**: This is a Java-based puzzle solver project (Spring Boot). Core solver code lives under `src/main/java` (package `edu.generalpuzzle.*`). Puzzles and puzzle definitions are expressed as Beanshell scripts in `config/` (files like `2d_ascii_grid.bsh`, `2d_ascii_parts.bsh`) and consumed at runtime by the solver.
-- **Build systems**: The repo contains both Gradle and Maven builds. Primary Gradle configuration is `build.gradle` (Spring Boot 3.5.4, Java 21). A `pom.xml` exists (packaging=`war`) — be careful: some tasks expect Gradle (CI uses Gradle). Prefer `./gradlew` for day-to-day tasks unless the change explicitly targets Maven.
+- **Build systems**: The repo contains both Gradle and Maven builds. Primary Gradle configuration is `build.gradle` (Spring Boot 4.0.6, Java 24). A `pom.xml` exists (packaging=`war`) — be careful: some tasks expect Gradle (CI uses Gradle). Prefer `./gradlew` for day-to-day tasks unless the change explicitly targets Maven.
 
 - **How to build / run / test**
   - Build (Gradle): `./gradlew build` (on Windows in bash shell use `./gradlew`); CI uses `./gradlew` as well.
@@ -13,7 +13,7 @@ Purpose: help an AI coding agent become productive quickly in this repository.
   - Quick API smoke test: `curl http://localhost:8080/solve/2d_ascii` (exists in README as a simple check).
 
 - **Runtime / platform details**
-  - Java version: 21 (see `build.gradle` sourceCompatibility and `pom.xml` settings).
+  - Java version: 24 (see `build.gradle` sourceCompatibility and `pom.xml` settings).
   - BeanShell (`bsh`) and Groovy are used for dynamic puzzle scripts (`build.gradle` has `bsh` and `groovy` dependencies). When changing how puzzle scripts are parsed/executed, check `config/` and `src/main/java` usage first.
   - Packaging: Gradle `jar` manifest sets `Main-Class: edu.generalpuzzle.main.JMain`. `pom.xml` historically produces a `war` artifact — don't assume both produce identical artifacts.
 
@@ -38,7 +38,7 @@ Purpose: help an AI coding agent become productive quickly in this repository.
 
 - **When editing code**
   - If a change affects how `.bsh` puzzle scripts are interpreted, update at least one example file in `config/` and run the server locally to exercise the API endpoint (see `curl` example).
-  - Keep the Java target at 21 unless the change requires a different JDK — CI and Gradle are configured for Java 21.
+  - Keep the Java target at 24 unless the change requires a different JDK — CI and Gradle are configured for Java 24.
   - Prefer incremental, small changes and run `./gradlew test` locally. Check `build/reports/tests` or `target/surefire-reports` for failures.
 
 - **CI & deployment notes**

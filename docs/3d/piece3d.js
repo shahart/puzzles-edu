@@ -19,11 +19,12 @@ class Piece3d {
         }
         msg += ", Atoms=" + atoms;
         console.debug(msg);
-        let availRotations = 1; // todo if needed because of timeouts, maybe drop dups will help
+        let availRotations = 64;
         this.index = index;
         this.totalThisFill = 0;
         this.name = name;
         this.currRotation = 0;
+        this.availRotations = availRotations;
         this.layouts = new Array(availRotations);
         for (let i = 0; i < this.layouts.length; i++) {
             this.layouts[i] = [];
@@ -78,10 +79,11 @@ class Piece3d {
             this.columnsSet[rot] = [this.totalThisFill];
             this.floorsSet[rot] = [this.totalThisFill];
             let setSoFar = 0;
-            for (let k = 0; k < 1; k++) {
-                for (let i = 0; i < this.layouts[rot].length; i++) {
-                    for (let j = 0; j < this.layouts[rot][i].length; j++) {
-                        if (this.layouts[rot][i][j][k] >= 1) {
+            // layout indexing is [floor][row][col]
+            for (let k = 0; k < this.layouts[rot].length; k++) {
+                for (let i = 0; i < this.layouts[rot][k].length; i++) {
+                    for (let j = 0; j < this.layouts[rot][k][i].length; j++) {
+                        if (this.layouts[rot][k][i][j] >= 1) {
                             this.rowsSet[rot][setSoFar] = i;
                             this.columnsSet[rot][setSoFar] = j;
                             this.floorsSet[rot][setSoFar] = k;

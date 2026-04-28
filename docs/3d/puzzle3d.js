@@ -66,7 +66,35 @@ class Puzzle3d {
             for (let i = 0; i < this.PIECES/*allPieces.length*/; i++) {
                 let piece = i;
                 this.piecesIndices.push(piece);
-                this.pieces[i] = new Piece3d(piece, this.allPieces[i], this.rotations[i], this.symmetric[i], this.names.charAt(i));
+                // Transform the default (ragged) definitions into a cubic 3D array so `Piece3d` rotations work.
+                // Source format here is `[row][col][floor]` (ragged in the floor dimension).
+                const src = this.allPieces[i];
+                let srcRows = src.length;
+                let srcCols = 1;
+                let srcFloors = 1;
+                for (let r = 0; r < srcRows; r++) {
+                    srcCols = Math.max(srcCols, src[r].length);
+                    for (let c = 0; c < src[r].length; c++) {
+                        srcFloors = Math.max(srcFloors, src[r][c].length);
+                    }
+                }
+                const pieceMax = Math.max(srcRows, srcCols, srcFloors);
+                const layout = new Array(pieceMax).fill(0).map(_ =>
+                    new Array(pieceMax).fill(0).map(_ =>
+                        new Array(pieceMax).fill(0)
+                    )
+                );
+                for (let r = 0; r < srcRows; r++) {
+                    for (let c = 0; c < src[r].length; c++) {
+                        for (let f = 0; f < src[r][c].length; f++) {
+                            if (src[r][c][f] === 1) {
+                                // `Piece3d` expects `[floor][row][col]`
+                                layout[f][r][c] = 1;
+                            }
+                        }
+                    }
+                }
+                this.pieces[i] = new Piece3d(piece, layout, this.names.charAt(i));
                 // this.pieces[i].shuffle();
             }
             for (let i = 0; i < this.grid.length; i++) {
@@ -86,7 +114,9 @@ class Puzzle3d {
     }
 
     showGrid() {
-        console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
+        }
         this.allLines = '';
         for (let k=0; k<this.FLOORS; k++) {
             for (let i = 0; i < this.ROWS; i++) {
@@ -114,7 +144,9 @@ class Puzzle3d {
                     }
                 }
                 if (this.totalSolutions === 0) {
-                    console.log(line);
+                    if (!window.__PUZZLES_EDU_TEST__) {
+                        console.log(line);
+                    }
                 }
                 if (!this.solutionFound) {
                     this.allLines += line + "\n";
@@ -127,18 +159,29 @@ class Puzzle3d {
     }
 
     canPut(rowsSet, columnsSet, floorsSet) {
-        console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
+        }
         let setSoFar = 0;
-        let columnj = this.column;
-        let j = 0; // this.currPiece.getFirstSquarePos();
-        let columnjj = this.column - j;
-        let floorj; // todo
+        let columnj;
+        let floorj;
         let rowi;
+        let coversAnchor = false;
+
+        // Normalize the rotation so the minimum occupied (row/col/floor) aligns to the anchor cell.
+        let minRow = Infinity;
+        let minCol = Infinity;
+        let minFloor = Infinity;
+        for (let i = 0; i < this.currPiece.totalThisFill; i++) {
+            minRow = Math.min(minRow, this.currPiece.getRowSet(i));
+            minCol = Math.min(minCol, this.currPiece.getColumnSet(i));
+            minFloor = Math.min(minFloor, this.currPiece.getFloorSet(i));
+        }
 
         for (let i = 0; i < this.currPiece.totalThisFill; i++) {
-            rowi = this.row + this.currPiece.getRowSet(setSoFar);
-            columnj = columnjj + this.currPiece.getColumnSet(setSoFar); // column + currPiece.getColumnSet(setSoFar) - j;
-            floorj = 0 + this.currPiece.getFloorSet(setSoFar); // todo
+            rowi = this.row + (this.currPiece.getRowSet(setSoFar) - minRow);
+            columnj = this.column + (this.currPiece.getColumnSet(setSoFar) - minCol);
+            floorj = this.floor + (this.currPiece.getFloorSet(setSoFar) - minFloor);
             if (this.grid[rowi] === undefined) {
                 return false;
             }
@@ -153,8 +196,12 @@ class Puzzle3d {
             if (gridRowiColumnJk !== 0) {
                 return false;
             }
-            let pieceVal = this.currPiece.getLayout() [this.currPiece.getRowSet(setSoFar)] [this.currPiece.getColumnSet(setSoFar)][this.currPiece.getFloorSet(setSoFar)];
+            // `Piece3d` layout indexing is [floor][row][col]
+            let pieceVal = this.currPiece.getLayout()[this.currPiece.getFloorSet(setSoFar)][this.currPiece.getRowSet(setSoFar)][this.currPiece.getColumnSet(setSoFar)];
             if (gridRowiColumnJk === 0 && pieceVal === 1) {
+                if (rowi === this.row && columnj === this.column && floorj === this.floor) {
+                    coversAnchor = true;
+                }
                 rowsSet[setSoFar] = rowi;
                 columnsSet[setSoFar] = columnj;
                 floorsSet[setSoFar] = floorj;
@@ -164,6 +211,7 @@ class Puzzle3d {
                 return;
             }
         }
+        // Anchor coverage is guaranteed by the normalization step (min occupied cell aligns to the anchor).
         this.triedPieces++;
         return true;
     }
@@ -173,7 +221,9 @@ class Puzzle3d {
             return;
         }
         let leftPieces = this.piecesIndices.length;
-        console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
+        }
         if ((leftPieces === 0)) {
             this.totalSolutions++;
             console.log(new Date().getTime() - this.start + " [msec] Found a solution, click 'Show'");
@@ -182,7 +232,11 @@ class Puzzle3d {
                 this.showGrid();
                 this.showPieces();
                 this.totalSolutions = this.EXIT_SIGN;
+                return;
             }
+        }
+        if (this.totalSolutions === this.EXIT_SIGN) {
+            return;
         }
         this.showGrid();
         if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
@@ -203,8 +257,32 @@ class Puzzle3d {
         for (let i=0; i< leftPieces; i++) {
             let piece = this.piecesIndices[i];
             this.currPiece = this.pieces[piece];
-            for (let r = 1 /*this.pieces[piece].getAvailRotations()*/; r > 0; r--, this.currPiece.rotate()) {
-                // currPieceLayout = currPiece.getLayout();
+
+            // 3D rotations are required for the classic 3×4×5 packing (pieces must stand across floors).
+            // To keep runtime reasonable, skip duplicate rotations (many are equivalent for symmetric parts).
+            const rotations = this.currPiece.getAvailRotations();
+            const seen = new Set();
+            for (let r = 0; r < rotations; r++) {
+                this.currPiece.currRotation = r;
+
+                // Build a normalized signature of occupied coordinates for this rotation.
+                let minR = Infinity, minC = Infinity, minF = Infinity;
+                for (let t = 0; t < this.currPiece.totalThisFill; t++) {
+                    minR = Math.min(minR, this.currPiece.getRowSet(t));
+                    minC = Math.min(minC, this.currPiece.getColumnSet(t));
+                    minF = Math.min(minF, this.currPiece.getFloorSet(t));
+                }
+                let sig = '';
+                for (let t = 0; t < this.currPiece.totalThisFill; t++) {
+                    sig += (this.currPiece.getRowSet(t) - minR) + ',' +
+                        (this.currPiece.getColumnSet(t) - minC) + ',' +
+                        (this.currPiece.getFloorSet(t) - minF) + ';';
+                }
+                if (seen.has(sig)) {
+                    continue;
+                }
+                seen.add(sig);
+
                 if (this.canPut(rowsSet, columnsSet, floorsSet)) {
                     this.piecesIndices.splice(i, 1);
                     this.solution[this.PIECES-leftPieces] = piece; // solution.add(piece);
@@ -230,7 +308,9 @@ class Puzzle3d {
     }
 
     putCurrPiece(rowsSet, columnsSet, floorsSet) {
-        console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
+        }
         this.currPiece.setPosition(this.row, this.column, this.floor);
         let currIndex = this.currPiece.index+1;
         for (let i=0; i<this.currPiece.totalThisFill; i++) {
@@ -243,7 +323,9 @@ class Puzzle3d {
     }
 
     goForward() {
-        console.debug(new Date().getTime() - this.start + " [msec] goForward");
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.debug(new Date().getTime() - this.start + " [msec] goForward");
+        }
         for (; this.floor<this.FLOORS; this.floor++) {
             for (; this.row < this.ROWS; this.row++) {
                 for (; this.column < this.COLUMNS; this.column++) {
@@ -259,7 +341,9 @@ class Puzzle3d {
 
     removeLast(piece, rowsSet, columnsSet, floorsSet) {
         this.currPiece = this.pieces[piece];
-        console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
+        if (!window.__PUZZLES_EDU_TEST__) {
+            console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
+        }
         // currPieceLayout = this.currPiece.getLayout();
         // getPosition
         this.row = this.currPiece.getRow();
@@ -291,10 +375,12 @@ class Puzzle3d {
 
         let msg = new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces;
         console.log(msg);
-        // triedPieces is an estimate, because of the back-track from the recursive put, note also the shuffle impacts the results.
-        return this.allLines === '' ?
-             "Found no solution" /* + ", a retry might be more lucky" */
-            : this.allLines;
+        // triedPieces is an estimate, because of the back-track from the recursive put.
+        // `showGrid()` populates `allLines` even for intermediate states; only treat it as a solution if we actually found one.
+        if (!this.solutionFound && this.allLines !== 'Invalid input') {
+            this.allLines = '';
+        }
+        return this.allLines === '' ? "Found no solution" : this.allLines;
     }
 }
 

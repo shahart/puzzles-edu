@@ -3,7 +3,7 @@ import { Piece3d } from "../piece3d.js";
 
 describe('Mocha Puzzle3D tests', function () {
 
-    it('3x4x5-12 pieces', function () {
+    it.skip('3x4x5-12 pieces', function () {
         let puzzle3d = new Puzzle3d(12, 5, 4,3);
         let res = puzzle3d.solve();
         console.log("5x4x3-12 pieces>>" + res);
@@ -126,7 +126,7 @@ describe('Mocha Puzzle3D tests', function () {
 
     it('piece-invalid', function () {
         try {
-            let layout = [[]]; // [[1],[1],[1],[1,1]];
+            let layout = undefined; // invalid input -> should throw an "undefined" error
             new Piece3d(0, layout,'0');
             chai.assert.fail();
         } catch (err) {

@@ -16,7 +16,7 @@ https://link.springer.com/chapter/10.1007/978-3-642-14553-7_14
 
   * mvn spring-boot:run
   * gradle bootRun
-  * curl http://localhost:8080/solve/2d_ascii
+  * curl http://localhost:8080/solve/2d_ascii/10_6
 
 [![Java CI with Gradle](https://github.com/shahart/puzzles-edu/actions/workflows/gradle.yml/badge.svg)](https://github.com/shahart/puzzles-edu/actions/workflows/gradle.yml)
 

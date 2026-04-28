@@ -11,18 +11,21 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class Controller {
 
     private static final Logger log = LoggerFactory.getLogger(Controller.class);
 
-    @GetMapping("solve/{problemId}/{dimensions}")
+    @GetMapping(value = {"solve/{problemId}", "solve/{problemId}/{dimensions}"})
     public ResponseEntity<String> solve(
             @PathVariable("problemId") String problemId,
-            @PathVariable("dimensions") String dimensions
+            @PathVariable("dimensions") Optional<String> optDimensions
             ) {
 
+        String dimensions = "null";
+        if (optDimensions.isPresent()) dimensions = optDimensions.get();
         List<String> args = new ArrayList<>();
         args.add(problemId);
         if (! dimensions.isEmpty() && ! dimensions.equals("null")) {
