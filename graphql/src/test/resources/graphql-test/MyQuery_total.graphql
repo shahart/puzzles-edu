@@ -1,0 +1,8 @@
+query MyQuery($id: ID) {
+    puzzlesById(id: $id) {
+        id,
+        solutions {
+            total
+        }
+    }
+}

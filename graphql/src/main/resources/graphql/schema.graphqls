@@ -1,0 +1,15 @@
+type Query {
+    puzzlesById(id: ID): Puzzle
+}
+
+type Puzzle {
+    id: ID
+    aSolution: String
+    solutions: Solutions
+}
+
+type Solutions {
+    id: ID
+    total: Int
+    allSolutions: [String]
+}
