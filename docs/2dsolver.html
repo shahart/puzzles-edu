@@ -8,6 +8,10 @@
     <meta name="keywords" content="puzzle,solver,backtrack">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
     <link rel="shortcut icon" href="#">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ui-refresh.css">
     <link rel="stylesheet" href="kickoff/GyroCube.css">
     <title>2D Solver</title>
     <!--script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script-->
@@ -77,82 +81,152 @@
 <noscript>
     <p style="color:red">JavaScript should be enabled!</p>
 </noscript>
-<h1>Naïve 2D Solver</h1>
-Solve your puzzle on your phone, 📝<p>
-with a simple back-tracking algorithm<p>
-for a planar orthogonal lattice.
-<p>
-<img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" style="max-width: 40%;" alt="a puzzle">
-<p>
-aka Put together puzzles
-<p>
-<label for="PuzzleSelect"></label>
-<select id="PuzzleSelect">
-    <optgroup label="Polyominos">
-        <option value="Poly 8x8">Poly 8x8</option>
-        <option value="Poly 8x8, Hole">Poly 8x8, Hole</option>
-        <option value="Poly 12x5">Poly 12x5</option>
-        <option value="Poly 10x6">Poly 10x6</option>
-        <option value="Katamino">Katamino, Classic</option>
-        <option value="Katamino, Cup">Katamino, a Cup 🍷</option>
-    </optgroup>
-    <optgroup label="Tetrominoes">
-        <option value="Tetris 4x10">Tetris 4x10</option>
-        <option value="Tetris 5x8">Tetris 5x8</option>
-    </optgroup>
-    <optgroup label="Checkers">
-        <option value="Checkers">Checkers 🏁</option>
-        <option value="Eureka">Eureka</option> <!-- todo checkerboard version -->
+<div class="site-shell">
+    <header class="topbar">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">2D</span>
+            <span class="brand-copy">
+                <span class="brand-title">Naïve 2D Solver</span>
+                <span class="brand-subtitle">Solve your puzzle 📝 with a simple back-tracking algorithm for a planar orthogonal lattice. A.k.a. Put together puzzles</span>
+            </span>
+        </a>
+        <nav class="nav-links">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="more.html">More Puzzles</a>
+            <a class="nav-link" href="3dsolver.html">3D Solver</a>
+        </nav>
+    </header>
+
+    <section class="solver-hero">
+        <span class="eyebrow">Naive 2D Solver</span>
+        <h1>Draft a board, load a preset, and brute-force the fit.</h1>
+        <p class="solver-copy">This page keeps the original simple backtracking flow, but frames it as a cleaner solver workspace for phones and desktops. Use presets, save scratch states, and render the solution once it resolves.</p>
+    </section>
+
+    <div class="solver-grid">
+        <section class="solver-card">
+            <div class="control-row">
+                <div>
+                    <label for="PuzzleSelect">Preset Puzzle</label>
+                    <select id="PuzzleSelect">
+                        <optgroup label="Polyominos">
+                            <option value="Poly 8x8">Poly 8x8</option>
+                            <option value="Poly 8x8, Hole">Poly 8x8, Hole</option>
+                            <option value="Poly 12x5">Poly 12x5</option>
+                            <option value="Poly 10x6">Poly 10x6</option>
+                            <option value="Katamino">Katamino, Classic</option>
+                            <option value="Katamino, Cup">Katamino, a Cup 🍷</option>
+                        </optgroup>
+                        <optgroup label="Tetrominoes">
+                            <option value="Tetris 4x10">Tetris 4x10</option>
+                            <option value="Tetris 5x8">Tetris 5x8</option>
+                        </optgroup>
+                        <optgroup label="Checkers">
+                            <option value="Checkers">Checkers 🏁</option>
+                            <option value="Eureka">Eureka</option> <!-- todo checkerboard version -->
         <!--option value="Checkers 6x6">Checkers 6x6</option-->
-    </optgroup>
-    <optgroup label="AquaBelle Game">
-        <option value="AquaBelle0">Starter</option>
-        <option value="AquaBelle1">Junior</option>
-        <option value="AquaBelle2">Expert</option>
-        <option value="AquaBelle3">Master</option>
-    </optgroup>
-    <option value="6x6, 10 pieces">6x6, 10 pieces</option>
-    <option value="Custom">Custom</option>
-    <option value="Presets" disabled selected>Presets</option>
-</select>
-<p>Load my own 💾
-    <button id="restoreButton1" type="button">A</button>
-    <button id="restoreButton2" type="button">B</button>
-    <button id="restoreButton3" type="button">C</button>
-<p>Save the input to:
-    <button id="saveButton1" type="button">A</button>
-    <button id="saveButton2" type="button">B</button>
-    <button id="saveButton3" type="button">C</button>
-<h3>Puzzle</h3>
-<textarea id="input" rows="12" cols="30" aria-label="input">
-</textarea>
-<input type="text" id="inputIWatch" value="" hidden="hidden"/>
-<p>
-<button id="solveButton" type="button">Solve</button>
-<h3>Solution...</h3>
-<textarea id="output" disabled="disabled" rows="12" cols="30" aria-label="Solution">
-</textarea>
-<p>
-<button id="graphItButton" type="button" disabled>Show</button>
-<h4><a href="index.html">Back ... to more 🧩s</a></h4>
-<h5><a href="kickoff/test/test.html">(Tests)</a></h5>
-<h4>Next? 3D Solver...</h4>
-<div class="post--2021--water-line--gyro-cube" onclick="example3d()">
-    <div class="gyro-cube-container">
-        <div id="cube" class="gyro-cube" >
-            <div class="gyro-cube-side gyro-cube-front">1</div>
-            <div class="gyro-cube-side gyro-cube-back">6</div>
-            <div class="gyro-cube-side gyro-cube-left">4</div>
-            <div class="gyro-cube-side gyro-cube-right">3</div>
-            <div class="gyro-cube-side gyro-cube-top">2</div>
-            <div class="gyro-cube-side gyro-cube-bottom">5</div>
-        </div>
+                        </optgroup>
+                        <optgroup label="AquaBelle Game">
+                            <option value="AquaBelle0">Starter</option>
+                            <option value="AquaBelle1">Junior</option>
+                            <option value="AquaBelle2">Expert</option>
+                            <option value="AquaBelle3">Master</option>
+                        </optgroup>
+                        <option value="6x6, 10 pieces">6x6, 10 pieces</option>
+                        <option value="Custom">Custom</option>
+                        <option value="Presets" disabled selected>Presets</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div class="field-label">Load my own 💾</div>
+                    <div class="save-grid">
+                        <button id="restoreButton1" type="button">A</button>
+                        <button id="restoreButton2" type="button">B</button>
+                        <button id="restoreButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="field-label">Save the input to</div>
+                    <div class="save-grid">
+                        <button id="saveButton1" type="button">A</button>
+                        <button id="saveButton2" type="button">B</button>
+                        <button id="saveButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="input">Puzzle Definition</label>
+                    <textarea id="input" rows="12" cols="30" aria-label="input"></textarea>
+                    <input type="text" id="inputIWatch" value="" hidden="hidden"/>
+                </div>
+
+                <div class="button-row solver-actions">
+                    <button id="solveButton" type="button">Solve</button>
+                    <button id="graphItButton" type="button" disabled>Show</button>
+                </div>
+
+                <div>
+                    <label for="output">Solution</label>
+                    <textarea id="output" disabled="disabled" rows="12" cols="30" aria-label="Solution"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel-card">
+            <h2 class="panel-title">How To Use It</h2>
+            <p class="solver-note">Pick a preset or paste your own board and piece definition, then run the solver. The exact input format is unchanged from the original page.</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>Preset shelf</strong>
+                    Load polyomino, tetromino, checker, or AquaBelle examples.
+                </div>
+                <div class="feature-item">
+                    <strong>Scratch slots</strong>
+                    Save and restore up to three local variants while experimenting.
+                </div>
+                <div class="feature-item">
+                    <strong>Render path</strong>
+                    Use `Show` after solving to visualize the result when available.
+                </div>
+            </div>
+
+            <div class="hero-card" style="margin-top: 18px;">
+                <img src="https://www.cimt.org.uk/resources/puzzles/pentoes/pent35.gif" alt="A 2D pentomino-style puzzle">
+                <p>AKA put-together puzzles on a planar orthogonal lattice.</p>
+            </div>
+
+            <div class="footer-card" style="margin-top: 18px;">
+                <div>
+                    <p class="tiny muted">Need a volumetric version or the browser test harness?</p>
+                </div>
+                <div class="button-row">
+                    <a class="pill-link" href="kickoff/test/test.html">Tests</a>
+                    <a class="pill-link" href="index.html">Back to demos</a>
+                </div>
+            </div>
+
+            <section style="margin-top: 22px;">
+                <h2 class="panel-title">Next? 3D Solver</h2>
+                <p class="solver-note">The same puzzle-editing idea, but extended into volumetric shapes.</p>
+                <div class="post--2021--water-line--gyro-cube" onclick="example3d()" style="cursor:pointer;">
+                    <div class="gyro-cube-container">
+                        <div id="cube" class="gyro-cube" >
+                            <div class="gyro-cube-side gyro-cube-front">1</div>
+                            <div class="gyro-cube-side gyro-cube-back">6</div>
+                            <div class="gyro-cube-side gyro-cube-left">4</div>
+                            <div class="gyro-cube-side gyro-cube-right">3</div>
+                            <div class="gyro-cube-side gyro-cube-top">2</div>
+                            <div class="gyro-cube-side gyro-cube-bottom">5</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="solver-note">Mail me your puzzle, I&apos;ll add it above.</p>
+            </section>
+        </aside>
     </div>
 </div>
-<p>
-Mail 📧 me your puzzle,
-<p>
-I'll add it above.
 <!--<script src="index.js"></script>-->
 <script>
     if (navigator.userAgent.indexOf('CriOS') < 0 && navigator.userAgent.indexOf('iPhone') >= 0) {

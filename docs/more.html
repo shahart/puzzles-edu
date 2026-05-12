@@ -1,60 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	 <title>Solving General Lattice Puzzles</title>
-	 <link rel="icon" href="favicon.ico">
+	<title>Solving General Lattice Puzzles</title>
+	<meta charset="utf-8">
+	<meta name="author" content="Shahar">
+	<meta name="description" content="More generated puzzle pages and reference links for lattice puzzle experiments.">
+	<meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
+	<link rel="icon" href="favicon.ico">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="ui-refresh.css">
 </head>
-<body style="text-align: left">
-	<h3>Solving General Lattice Puzzles - More</h3>
-	<h4><a href="index.html">Back ...</a></h4>
-	<br/>
-	<a href="x3d/2d_classicMatches_matches_MC_SZ_ST_0.html" target="_blank">Matches</a>
-	<br/>
-	<a href="x3d/3d_eureka_MC_SZ_ST_0.html" target="_blank">Eureka</a> 8 pieces, 8x8 <a href="https://www.mrpuzzle.com.au/eureka-puzzle-8-piece-checkerboard-puzzle/">Mr Puzzle</a>
-	<br/>
-	<a href="x3d/2d_poly_MC_SZ_ST_0.html" target="_blank">Poly</a> (visual: work-in-progress)
-	<br/>
-	<br/>
-	<a href="x3d/3d_happycube_1_MC_SZ_ST_0.html" target="_blank">Happy Cube (Red) - Medium</a>
-	<br/>
-	<a href="x3d/3d_happycube_2_MC_SZ_ST_0.html" target="_blank">Happy Cube (Orange) - Hardest</a>
-	<br/>
-	<a href="x3d/3d_pairs_MC_SZ_ST_0.html" target="_blank">Patio</a> 4x4x5 <a href="https://puzzleworld.org/PuzzlingWorld/chap03.htm#p6">Puzzle World</a>
-	<br/>
-	<a href="x3d/3d_Graatsma_MC_SZ_ST_0.html" target="_blank">Graatsma</a> 3x3x3 Single Solution <a href="https://en.wikipedia.org/wiki/Slothouber%E2%80%93Graatsma_puzzle">Wiki</a>
-	<br/>
-	<a href="x3d/3d_variousCases_3_MC_SZ_ST_0.html" target="_blank">Stairs</a>
-	<br/>
-	<a href="x3d/3d_variousCases_4_MC_SZ_ST_0.html" target="_blank">Strip</a>
-	<br/>
-	<a href="x3d/3d_variousCases_5_MC_SZ_ST_0.html" target="_blank">Big T letter</a>
-	<br/>
-	<a href="x3d/3d_variousCases_6_MC_SZ_ST_0.html" target="_blank">Big "Kaf" letter</a>
-	<br/>
-	<a href="x3d/3d_variousCases_7_MC_SZ_ST_0.html" target="_blank">Big Y letter</a>
-	<br/>
-	<br/>
-	And even more..
-	<br/>
-	<br/>
-	<a href="https://en.wikipedia.org/wiki/Conway_puzzle">Conway</a>
-	<br/>
-	<a href="https://www.youtube.com/watch?v=dusP-UVhfQw">Dudeney</a>
-	<br/>
-	<a href="https://mathforums.com/education/the-broken-chessboard">The Broken Chess Board</a>
-	<br/>
-	<a href="http://www.danieltebbutt.com/bedlam.html">Bedlam Cube Solver</a>
-	<br/>
-	<a href="https://puzzleworld.org/PuzzleWorld/puz/pythagoras.htm">Pythagoras</a>
-	<br/>
-	<a href="https://www.smartwood.co.il/%D7%9E%D7%95%D7%A6%D7%A8/hexiamond-puzzle/">Hexiamond</a>
-	<br/>
-	<br/>
-	<a href="https://en.wikipedia.org/wiki/Wang_tile">Wang Tile</a>
-	<br/>
-	<a href="https://en.wikipedia.org/wiki/Dancing_Links">DLX - Dancing Links</a>
-	<br/>
-	<a href="https://en.wikipedia.org/wiki/Burr_puzzle">Inter-locking puzzles</a> Order of construction is important.<a href="https://github.com/shahart/puzzles-edu/issues/2">TODO</a>
-	<br/>
+<body>
+	<div class="site-shell">
+		<header class="topbar">
+			<a class="brand" href="index.html">
+				<span class="brand-mark">GL</span>
+				<span class="brand-copy">
+					<span class="brand-title">General Lattice Puzzles</span>
+					<span class="brand-subtitle">Extended demo shelf</span>
+				</span>
+			</a>
+			<nav class="nav-links">
+				<a class="nav-link" href="index.html">Home</a>
+				<a class="nav-link" href="2dsolver.html">2D Solver</a>
+				<a class="nav-link" href="3dsolver.html">3D Solver</a>
+			</nav>
+		</header>
+
+		<section class="hero">
+			<div class="hero-grid">
+				<div>
+					<span class="eyebrow">Archive</span>
+					<h1>More generated pages, more odd shapes, more packing problems.</h1>
+					<p>This page collects the less-prominent puzzle demos together with a small reading list of related classics and techniques.</p>
+				</div>
+				<div class="hero-visual">
+					<div class="hero-card">
+						<p class="mono">Generated pages live in `x3d/`; this page is the quick index when the homepage is too selective.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<div class="section-heading">
+				<div>
+					<h2>Generated Demo Pages</h2>
+					<p class="section-subtitle">Direct links into additional examples and shape families.</p>
+				</div>
+			</div>
+			<div class="cards-grid">
+				<article class="list-card">
+					<span class="card-tag">2D Match</span>
+					<h3>Matches</h3>
+					<p>A generated matching puzzle page with a ready-made interactive output.</p>
+					<div class="link-row">
+						<a href="x3d/2d_classicMatches_matches_MC_SZ_ST_0.html" target="_blank">Open Demo</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">Checkerboard</span>
+					<h3>Eureka</h3>
+					<p>Eight pieces on an 8x8 board, paired with an external product reference.</p>
+					<div class="link-row">
+						<a href="x3d/3d_eureka_MC_SZ_ST_0.html" target="_blank">Open Demo</a>
+						<a href="https://www.mrpuzzle.com.au/eureka-puzzle-8-piece-checkerboard-puzzle/" target="_blank">Reference</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">Work In Progress</span>
+					<h3>Poly</h3>
+					<p>A visual experiment that is still rough around the edges, but useful as a generated reference page.</p>
+					<div class="link-row">
+						<a href="x3d/2d_poly_MC_SZ_ST_0.html" target="_blank">Open Demo</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">Happy Cube</span>
+					<h3>Red and Orange Variants</h3>
+					<p>The more difficult Happy Cube presets, linked separately from the homepage highlight.</p>
+					<div class="link-row">
+						<a href="x3d/3d_happycube_1_MC_SZ_ST_0.html" target="_blank">Red</a>
+						<a href="x3d/3d_happycube_2_MC_SZ_ST_0.html" target="_blank">Orange</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">3D Packing</span>
+					<h3>Patio</h3>
+					<p>A 4x4x5 arrangement puzzle with an external write-up in Puzzle World.</p>
+					<div class="link-row">
+						<a href="x3d/3d_pairs_MC_SZ_ST_0.html" target="_blank">Open Demo</a>
+						<a href="https://puzzleworld.org/PuzzlingWorld/chap03.htm#p6" target="_blank">Reference</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">Single Solution</span>
+					<h3>Graatsma</h3>
+					<p>A 3x3x3 Slothouber-Graatsma style puzzle with a single-solution emphasis.</p>
+					<div class="link-row">
+						<a href="x3d/3d_Graatsma_MC_SZ_ST_0.html" target="_blank">Open Demo</a>
+						<a href="https://en.wikipedia.org/wiki/Slothouber%E2%80%93Graatsma_puzzle" target="_blank">Wiki</a>
+					</div>
+				</article>
+				<article class="list-card">
+					<span class="card-tag">Shape Study</span>
+					<h3>Various Cases</h3>
+					<p>Small generated pages for stairs, strip, and large letter-shaped constructions.</p>
+					<div class="link-row">
+						<a href="x3d/3d_variousCases_3_MC_SZ_ST_0.html" target="_blank">Stairs</a>
+						<a href="x3d/3d_variousCases_4_MC_SZ_ST_0.html" target="_blank">Strip</a>
+						<a href="x3d/3d_variousCases_5_MC_SZ_ST_0.html" target="_blank">Big T</a>
+						<a href="x3d/3d_variousCases_6_MC_SZ_ST_0.html" target="_blank">Big Kaf</a>
+						<a href="x3d/3d_variousCases_7_MC_SZ_ST_0.html" target="_blank">Big Y</a>
+					</div>
+				</article>
+			</div>
+		</section>
+
+		<section>
+			<div class="section-heading">
+				<div>
+					<h2>Read Next</h2>
+					<p class="section-subtitle">A short external reference list for related puzzles and solving techniques.</p>
+				</div>
+			</div>
+			<div class="stack-list">
+				<a href="https://en.wikipedia.org/wiki/Conway_puzzle" target="_blank">
+					<span>Conway</span>
+					<small>Classic reference</small>
+				</a>
+				<a href="https://www.youtube.com/watch?v=dusP-UVhfQw" target="_blank">
+					<span>Dudeney</span>
+					<small>Video reference</small>
+				</a>
+				<a href="https://mathforums.com/education/the-broken-chessboard" target="_blank">
+					<span>The Broken Chess Board</span>
+					<small>Board dissection</small>
+				</a>
+				<a href="http://www.danieltebbutt.com/bedlam.html" target="_blank">
+					<span>Bedlam Cube Solver</span>
+					<small>External solver</small>
+				</a>
+				<a href="https://puzzleworld.org/PuzzleWorld/puz/pythagoras.htm" target="_blank">
+					<span>Pythagoras</span>
+					<small>Puzzle World</small>
+				</a>
+				<a href="https://www.smartwood.co.il/%D7%9E%D7%95%D7%A6%D7%A8/hexiamond-puzzle/" target="_blank">
+					<span>Hexiamond</span>
+					<small>Commercial reference</small>
+				</a>
+				<a href="https://en.wikipedia.org/wiki/Wang_tile" target="_blank">
+					<span>Wang Tile</span>
+					<small>Tiling theory</small>
+				</a>
+				<a href="https://en.wikipedia.org/wiki/Dancing_Links" target="_blank">
+					<span>DLX / Dancing Links</span>
+					<small>Algorithmic technique</small>
+				</a>
+				<a href="https://en.wikipedia.org/wiki/Burr_puzzle" target="_blank">
+					<span>Inter-locking puzzles</span>
+					<small>Order of construction matters</small>
+				</a>
+			</div>
+		</section>
+
+		<section class="footer-card">
+			<div>
+				<p class="tiny muted">There is still an open note around inter-locking puzzle support.</p>
+				<p class="tiny"><a class="accent" href="https://github.com/shahart/puzzles-edu/issues/2" target="_blank">Track TODO on GitHub</a></p>
+			</div>
+			<a class="pill-link" href="index.html">Back to the main page</a>
+		</section>
+	</div>
 </body>
 </html>

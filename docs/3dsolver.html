@@ -8,6 +8,10 @@
     <meta name="keywords" content="puzzle,solver,backtrack">
     <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>
     <link rel="shortcut icon" href="#">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ui-refresh.css">
     <title>3D Solver</title>
 <!--    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous" type="text/javascript"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.3/cash.min.js" integrity="sha256-KU3WNi23kKKR5HDFtqqOJpEBoX/pa8vPDw4xOuobnVk=" crossorigin="anonymous"></script>
@@ -65,46 +69,78 @@
 <noscript>
     <p style="color:red">JavaScript should be enabled!</p>
 </noscript>
-<h1>3D Solver</h1>
-Solve your puzzle on your phone, 📝<p>
-with a simple back-tracking algorithm<p>
-for a planar orthogonal lattice.
-<p>
-<img src="https://github.com/shahart/puzzles-edu/blob/master/src/main/resources/background.png?raw=true">
-<p>
-aka Put together puzzles
-<p>
-<label for="PuzzleSelect"></label>
-<select id="PuzzleSelect">
-    <option value="Soma">Soma</option>
-<!--    <option value="Bedlam">Bedlam</option>--> <!-- what is this bedlam 3,3,3, isn't it 4,4,4 -->
-    <option value="Graatsma">Graatsma</option>
-    <option value="Conway">Conway</option>
-    <optgroup label="Happy Cube">
-        <option value="HappyCubeG">Green</option>
-        <option value="HappyCubeR">Red</option>
-        <option value="HappyCubeO">Orange</option>
-    </optgroup>
-<!--    <option value="Live Cube">Live Cube</option>-->
-<!--    ...-->
-    <option value="Custom">Custom</option>
-    <option value="Presets" disabled selected>Presets</option>
-</select>
-<p>Load my own 💾
-    <button id="restoreButton1" type="button">A</button>
-    <button id="restoreButton2" type="button">B</button>
-    <button id="restoreButton3" type="button">C</button>
-<p>Save the input to:
-    <button id="saveButton1" type="button">A</button>
-    <button id="saveButton2" type="button">B</button>
-    <button id="saveButton3" type="button">C</button>
-<h3>Puzzle</h3>
-<textarea id="input" rows="12" cols="30" aria-label="input">
-</textarea>
-<p>
-<button id="solveButton" type="button">Solve</button>
-<h3>Solution...</h3>
-<textarea id="output" disabled rows="12" cols="30" aria-label="Solution">
+<div class="site-shell">
+    <header class="topbar">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">3D</span>
+            <span class="brand-copy">
+                <span class="brand-title">Volumetric Puzzle Solver</span>
+                <span class="brand-subtitle">Browser-based lattice packing</span>
+            </span>
+        </a>
+        <nav class="nav-links">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="more.html">More Puzzles</a>
+            <a class="nav-link" href="2dsolver.html">2D Solver</a>
+        </nav>
+    </header>
+
+    <section class="solver-hero">
+        <span class="eyebrow">3D Solver</span>
+        <h1>Switch from boards to volumes and pack full spatial shapes.</h1>
+        <p class="solver-copy">The original solver flow is intact: pick a preset, edit the puzzle text, solve, then render. The layout is just cleaner and more usable on modern screens.</p>
+    </section>
+
+    <div class="solver-grid">
+        <section class="solver-card">
+            <div class="control-row">
+                <div>
+                    <label for="PuzzleSelect">Preset Puzzle</label>
+                    <select id="PuzzleSelect">
+                        <option value="Soma">Soma</option>
+                        <option value="Graatsma">Graatsma</option>
+                        <option value="Conway">Conway</option>
+                        <optgroup label="Happy Cube">
+                            <option value="HappyCubeG">Green</option>
+                            <option value="HappyCubeR">Red</option>
+                            <option value="HappyCubeO">Orange</option>
+                        </optgroup>
+                        <option value="Custom">Custom</option>
+                        <option value="Presets" disabled selected>Presets</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div class="field-label">Load my own 💾</div>
+                    <div class="save-grid">
+                        <button id="restoreButton1" type="button">A</button>
+                        <button id="restoreButton2" type="button">B</button>
+                        <button id="restoreButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="field-label">Save the input to</div>
+                    <div class="save-grid">
+                        <button id="saveButton1" type="button">A</button>
+                        <button id="saveButton2" type="button">B</button>
+                        <button id="saveButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="input">Puzzle Definition</label>
+                    <textarea id="input" rows="12" cols="30" aria-label="input"></textarea>
+                </div>
+
+                <div class="button-row solver-actions">
+                    <button id="solveButton" type="button">Solve</button>
+                    <button id="graphItButton" type="button">Show</button>
+                </div>
+
+                <div>
+                    <label for="output">Solution</label>
+                    <textarea id="output" disabled rows="12" cols="30" aria-label="Solution">
  1  M  M  M
  2  M  E  G
  3  S  G  G
@@ -117,13 +153,46 @@ aka Put together puzzles
  8  T  L  L
  9  T  S  L
 </textarea>
-<p>
-<button id="graphItButton" type="button" >Show</button> <!-- disabled -->
-<h4><a href="index.html">Back ... to more 🧩s</a></h4>
-<h5><a href="3d/test/test.html">(Tests)</a></h5>
-<p>
-Mail 📧 me your puzzle,
-<p>
-I'll add it above.
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel-card">
+            <h2 class="panel-title">What&apos;s Here</h2>
+            <p class="solver-note">This solver targets planar orthogonal lattice pieces arranged in 3D volumes. Presets include Soma, Graatsma, Conway, and Happy Cube variants.</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>Preset families</strong>
+                    Swap between classic cube packings and foldable Happy Cube variants.
+                </div>
+                <div class="feature-item">
+                    <strong>Editable input</strong>
+                    Override the generated input directly when you want to test a custom set.
+                </div>
+                <div class="feature-item">
+                    <strong>Solution preview</strong>
+                    A sample arrangement is present by default so the output area does not start empty.
+                </div>
+            </div>
+
+            <div class="hero-card" style="margin-top: 18px;">
+                <img src="https://github.com/shahart/puzzles-edu/blob/master/src/main/resources/background.png?raw=true" alt="3D lattice puzzle illustration">
+                <p>AKA put-together puzzles, but now with actual volume.</p>
+            </div>
+
+            <div class="footer-card" style="margin-top: 18px;">
+                <div>
+                    <p class="tiny muted">Check the 3D browser harness or jump back to the curated landing page.</p>
+                </div>
+                <div class="button-row">
+                    <a class="pill-link" href="3d/test/test.html">Tests</a>
+                    <a class="pill-link" href="index.html">Back to demos</a>
+                </div>
+            </div>
+
+            <p class="solver-note" style="margin-top: 20px;">Mail me your puzzle, I&apos;ll add it above.</p>
+        </aside>
+    </div>
+</div>
 </body>
 </html>
