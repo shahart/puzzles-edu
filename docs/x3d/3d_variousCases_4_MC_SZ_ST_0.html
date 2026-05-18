@@ -1,11 +1,187 @@
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Puzzle solution view</title>
     <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>
     <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0c111a;
+            --bg2: #101826;
+            --panel: rgba(16, 24, 38, 0.9);
+            --panel-border: rgba(255, 255, 255, 0.10);
+            --text: #e8edf7;
+            --muted: #aab6cc;
+            --accent: #f59e0b;
+            --accent-2: #ffb84d;
+            --shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top, rgba(245, 158, 11, 0.16), transparent 34%),
+                radial-gradient(circle at right top, rgba(56, 189, 248, 0.10), transparent 28%),
+                linear-gradient(160deg, var(--bg) 0%, var(--bg2) 100%);
+        }
+
+        .page {
+            min-height: 100%;
+            box-sizing: border-box;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .topbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 18px;
+            border: 1px solid var(--panel-border);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(20, 29, 45, 0.96), rgba(13, 18, 29, 0.88));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .titleblock {
+            display: grid;
+            gap: 4px;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent-2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(20px, 2.3vw, 30px);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .back-button {
+            appearance: none;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.95), rgba(217, 119, 6, 0.95));
+            color: #1b1203;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(245, 158, 11, 0.22);
+            transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.04);
+            box-shadow: 0 16px 34px rgba(245, 158, 11, 0.28);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .viewer-shell {
+            flex: 1;
+            min-height: 0;
+            padding: 14px;
+            border-radius: 24px;
+            border: 1px solid var(--panel-border);
+            background: linear-gradient(180deg, rgba(20, 29, 45, 0.82), rgba(10, 15, 25, 0.92));
+            box-shadow: var(--shadow);
+        }
+
+        .viewer {
+            width: 100%;
+            height: min(78vh, 860px);
+            min-height: 560px;
+            border-radius: 18px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 45%),
+                linear-gradient(180deg, rgba(10, 15, 25, 0.95), rgba(8, 12, 20, 0.98));
+        }
+
+        x3d {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding: 12px;
+            }
+
+            .topbar {
+                padding: 12px 14px;
+            }
+
+            .viewer-shell {
+                padding: 10px;
+            }
+
+            .viewer {
+                height: min(72vh, 680px);
+                min-height: 460px;
+            }
+
+            .hint {
+                white-space: normal;
+            }
+        }
+    </style>
 </head>
 <body>
-<button onClick="window.close()">Go Back</button>&nbsp;
-or back by clicking on some Orange box
+<div class="page">
+<div class="topbar">
+    <div class="titleblock">
+        <div class="eyebrow">Puzzle solution</div>
+        <h1>Puzzle solution view</h1>
+        <p class="subtitle">Click the orange box or use the button to close this page.</p>
+    </div>
+    <div class="actions">
+        <button class="back-button" onClick="window.close()">Go Back</button>
+        <div class="hint">Tip: click the orange box in the model to exit.</div>
+    </div>
+</div>
+<div class="viewer-shell">
+<div class="viewer">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE X3D SYSTEM "x3dViewer/Xj3D/DTD/x3d-3.0.dtd">
 <X3D profile="Interchange" showStat='false' showLog='true' >
 <!--solution #0 Parts order V5 U8 X1 Z3 Y2 P2 I0 W2 L4 N3 T1 F3 
@@ -119,5 +295,8 @@ or back by clicking on some Orange box
 <Transform DEF="POINT80_id_90303" translation="-20 20 80"><Shape USE="PIECE_N"/></Transform>
 </Transform>
 </Scene></X3D>
+</div>
+</div>
+</div>
 </body>
 </html>
