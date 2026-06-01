@@ -11,6 +11,7 @@ class Speed {
     //      Qualcomm SnapDragon 808 (Q2 2014) - 4.2
     //      iPhone (Chrome/ Safari/ Firefox) - 1.01
     //      iWatch 9 (Safari) - 20.3 sec
+    //      mac-mini 2024 - 0.81 (2.1 low power mode)
     // in fact, there's a way, with this input (vs 20,3..)
     // #3,20
     // #end of grid. Pieces:Poly
