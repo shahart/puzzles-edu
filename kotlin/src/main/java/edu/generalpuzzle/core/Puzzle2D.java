@@ -53,7 +53,10 @@ public class Puzzle2D {
     {
         piecesIndices = new LinkedList<>();
         solution = new Integer[PIECES];
-
+        
+        totalSolutions = 0;
+        triedPieces = 0;
+        
         ROWS = rows;
         COLUMNS = columns;
 
