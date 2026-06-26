@@ -1,0 +1,17 @@
+{
+  "name": "generalpuzzle",
+  "version": "1.0.0",
+  "description": "Node.js port of the pentomino puzzle solver",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "jest --verbose --forceExit"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
