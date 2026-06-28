@@ -10,6 +10,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./node-js
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,11 +25,9 @@ jobs:
           cache: 'npm'       # Automatically caches your npm dependencies
 
       - name: Install dependencies
-        run:  |
-          cd node-js
+        run:
           npm ci
 
       - name: Run tests
-        run:  |
-          cd node-js
+        run:
           npm test
