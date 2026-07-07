@@ -6,3 +6,4 @@ bin/
 .settings/
 tmp/
 node_modules/
+typescript/dist/
