@@ -151,6 +151,7 @@ func (p *Puzzle2D) Put() {
 	columnsSet := make([]int, 5)
 
 	for i := 0; i < leftPieces; i++ {
+		// TOOD separate co-routine for the 1st piece at least
 		pieceIdx := p.PiecesIndices[i]
 		p.CurrPiece = p.Pieces[pieceIdx]
 		for r := p.CurrPiece.GetAvailRotations(); r > 0; r-- {
