@@ -6,9 +6,9 @@ const router = express.Router();
 const SOLVE_TIMEOUT_MS = 5000;
 const workerPath = path.join(__dirname, '../workers/solve.js');
 
-function solveInWorker(problemId) {
+function solveInWorker(problemId, countSolutions) {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(workerPath, { workerData: { problemId } });
+    const worker = new Worker(workerPath, { workerData: { problemId, countSolutions } });
     let settled = false;
 
     const finish = (callback, value) => {
@@ -41,10 +41,11 @@ function solveInWorker(problemId) {
 
 router.get('/solve/:problemId', async (req, res) => {
   const { problemId } = req.params;
+  const countSolutions = req.query.count === 'true';
   console.log(`Starting id ${problemId}`);
 
   try {
-    const result = await solveInWorker(problemId);
+    const result = await solveInWorker(problemId, countSolutions);
     console.log(`Done id ${problemId} with result ${result}`);
     res.json(result);
   } catch (err) {

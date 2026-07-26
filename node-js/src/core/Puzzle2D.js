@@ -1,4 +1,5 @@
 const Piece = require('./Piece');
+const ExactCoverCounter = require('./ExactCoverCounter');
 
 class Puzzle2D {
   constructor() {
@@ -18,6 +19,7 @@ class Puzzle2D {
     this.totalFillInGrid = 0;
     this.availInGrid = 0;
     this._aborted = false;
+    this.enumerateAllSolutions = false;
   }
 
   set(rows, columns) {
@@ -129,7 +131,7 @@ class Puzzle2D {
       }
     }
 
-    if (this.totalSolutions >= 1) return;
+    if (!this.enumerateAllSolutions && this.totalSolutions >= 1) return;
 
     const rowsSet = new Array(5);
     const columnsSet = new Array(5);
@@ -222,8 +224,59 @@ class Puzzle2D {
     return true;
   }
 
-  solve(signal) {
+  buildExactCoverRows() {
+    const cellColumns = new Array(this.ROWS);
+    let cellColumn = 0;
+    for (let row = 0; row < this.ROWS; row++) {
+      cellColumns[row] = new Array(this.COLUMNS);
+      for (let column = 0; column < this.COLUMNS; column++) {
+        cellColumns[row][column] = this.grid[row][column] === -1 ? -1 : cellColumn++;
+      }
+    }
+
+    const exactCoverRows = [];
+    for (let pieceIndex = 0; pieceIndex < this.PIECES; pieceIndex++) {
+      const piece = this.pieces[pieceIndex];
+      for (let rotation = 0; rotation < piece.getAvailRotations(); rotation++) {
+        const rows = piece.rowsSet[piece.currRotation];
+        const columns = piece.columnsSet[piece.currRotation];
+        const minRow = Math.min(...rows);
+        const maxRow = Math.max(...rows);
+        const minColumn = Math.min(...columns);
+        const maxColumn = Math.max(...columns);
+
+        for (let rowOffset = -minRow; rowOffset + maxRow < this.ROWS; rowOffset++) {
+          for (
+            let columnOffset = -minColumn;
+            columnOffset + maxColumn < this.COLUMNS;
+            columnOffset++
+          ) {
+            const exactCoverRow = [];
+            let available = true;
+            for (let cell = 0; cell < piece.totalThisFill; cell++) {
+              const gridRow = rowOffset + rows[cell];
+              const gridColumn = columnOffset + columns[cell];
+              if (this.grid[gridRow][gridColumn] === -1) {
+                available = false;
+                break;
+              }
+              exactCoverRow.push(cellColumns[gridRow][gridColumn]);
+            }
+            if (available) {
+              exactCoverRow.push(this.totalFillInGrid + pieceIndex);
+              exactCoverRows.push(exactCoverRow);
+            }
+          }
+        }
+        piece.rotate();
+      }
+    }
+    return exactCoverRows;
+  }
+
+  solve(signal, enumerateAllSolutions = false) {
     const start = Date.now();
+    this.enumerateAllSolutions = enumerateAllSolutions;
 
     if (signal) {
       signal.addEventListener('abort', () => {
@@ -233,6 +286,13 @@ class Puzzle2D {
 
     if (this.totalFillInGrid !== Piece.totalFill) {
       console.error(`Invalid config, grid ${this.totalFillInGrid} pieces ${Piece.totalFill}`);
+    } else if (enumerateAllSolutions) {
+      const result = ExactCoverCounter.count(
+        this.totalFillInGrid + this.PIECES,
+        this.buildExactCoverRows()
+      );
+      this.totalSolutions = result.solutions;
+      this.triedPieces = result.triedRows;
     } else {
       Piece.totalFill = 0;
       console.log(`Starting rows ${this.ROWS} cols ${this.COLUMNS}`);
@@ -244,7 +304,10 @@ class Puzzle2D {
     if (elapsedTime > 0) {
       console.log(`at ${(this.triedPieces / elapsedTime).toLocaleString()} pieces per sec`);
     }
-    console.log(`number of solutions ${this.totalSolutions * (this.ROWS === this.COLUMNS ? 8 : 4)}`);
+    const reportedSolutions = enumerateAllSolutions
+      ? this.totalSolutions
+      : this.totalSolutions * (this.ROWS === this.COLUMNS ? 8 : 4);
+    console.log(`number of solutions ${reportedSolutions}`);
 
     return this.totalSolutions;
   }
