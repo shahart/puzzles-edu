@@ -9,11 +9,6 @@ class Piece(
     symmetric: Int,
     val name: Char
 ) {
-    companion object {
-        @JvmField
-        var totalFill = 0
-    }
-
     private val log = LoggerFactory.getLogger(Piece::class.java)
 
     var totalThisFill = 0
@@ -61,7 +56,6 @@ class Piece(
         for (row in layout) {
             for (value in row) {
                 if (value == 1) {
-                    totalFill++
                     totalThisFill++
                 }
             }

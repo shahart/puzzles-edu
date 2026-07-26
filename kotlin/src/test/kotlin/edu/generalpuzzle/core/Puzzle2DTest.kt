@@ -1,18 +1,12 @@
 package edu.generalpuzzle.core
 
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class Puzzle2DTest {
-
-    @BeforeEach
-    fun resetGlobals() {
-        Piece.totalFill = 0
-    }
 
     @Autowired
     private lateinit var puzzle2D: Puzzle2D

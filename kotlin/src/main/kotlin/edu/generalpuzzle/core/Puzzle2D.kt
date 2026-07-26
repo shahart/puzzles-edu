@@ -1,10 +1,8 @@
 package edu.generalpuzzle.core
 
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Service
 import java.text.NumberFormat
 
-@Service
 class Puzzle2D {
 
     private val log = LoggerFactory.getLogger(Puzzle2D::class.java)
@@ -234,11 +232,11 @@ class Puzzle2D {
 
     fun solve(): Int {
         val start = System.currentTimeMillis()
+        val totalFillInPieces = pieces.filterNotNull().sumOf { it.totalThisFill }
 
-        if (totalFillInGrid != Piece.totalFill) {
-            log.error("Id {}_{}. Invalid config, grid {} pieces {}", ROWS, COLUMNS, totalFillInGrid, Piece.totalFill)
+        if (totalFillInGrid != totalFillInPieces) {
+            log.error("Id {}_{}. Invalid config, grid {} pieces {}", ROWS, COLUMNS, totalFillInGrid, totalFillInPieces)
         } else {
-            Piece.totalFill = 0
             log.info("Starting rows {} cols {}", ROWS, COLUMNS)
             put()
         }

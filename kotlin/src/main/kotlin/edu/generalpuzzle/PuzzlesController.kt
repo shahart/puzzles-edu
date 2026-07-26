@@ -2,6 +2,7 @@ package edu.generalpuzzle
 
 import edu.generalpuzzle.core.Puzzle2D
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 @RestController
-class PuzzlesController(private val puzzle2D: Puzzle2D) {
+class PuzzlesController(private val puzzle2DProvider: ObjectProvider<Puzzle2D>) {
 
     private val log = LoggerFactory.getLogger(PuzzlesController::class.java)
 
@@ -26,6 +27,7 @@ class PuzzlesController(private val puzzle2D: Puzzle2D) {
         log.info("Starting id {}", problemId)
 
         val rowsCols = problemId.split("_")
+        val puzzle2D = puzzle2DProvider.getObject()
         puzzle2D.set(rowsCols[0].toInt(), rowsCols[1].toInt())
 
         val executor = Executors.newSingleThreadExecutor()
