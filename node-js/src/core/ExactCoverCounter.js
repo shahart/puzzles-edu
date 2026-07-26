@@ -17,11 +17,14 @@ class Column extends Node {
 }
 
 class ExactCoverCounter {
-  constructor(columnCount, rows) {
+  constructor(columnCount, rows, solutionLimit = Infinity) {
     this.root = new Column();
     this.columns = new Array(columnCount);
     this.solutions = 0;
     this.triedRows = 0;
+    this.solutionLimit = solutionLimit;
+    this.selectedRows = new Array(columnCount);
+    this.solutionRows = [];
 
     let previous = this.root;
     for (let index = 0; index < columnCount; index++) {
@@ -32,18 +35,28 @@ class ExactCoverCounter {
     }
     this._linkHorizontally(previous, this.root);
 
-    for (const row of rows) {
-      this._addRow(row);
+    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+      this._addRow(rows[rowIndex], rowIndex);
     }
   }
 
   static count(columnCount, rows) {
     const counter = new ExactCoverCounter(columnCount, rows);
-    counter._search();
+    counter._search(0);
     return { solutions: counter.solutions, triedRows: counter.triedRows };
   }
 
-  _addRow(columnIndexes) {
+  static findOne(columnCount, rows) {
+    const counter = new ExactCoverCounter(columnCount, rows, 1);
+    counter._search(0);
+    return {
+      solutions: counter.solutions,
+      triedRows: counter.triedRows,
+      selectedRows: counter.solutionRows
+    };
+  }
+
+  _addRow(columnIndexes, rowIndex) {
     let first = null;
     let previous = null;
 
@@ -51,6 +64,7 @@ class ExactCoverCounter {
       const column = this.columns[columnIndex];
       const node = new Node();
       node.column = column;
+      node.rowIndex = rowIndex;
 
       node.down = column;
       node.up = column.up;
@@ -68,27 +82,34 @@ class ExactCoverCounter {
     this._linkHorizontally(previous, first);
   }
 
-  _search() {
+  _search(depth) {
     if (this.root.right === this.root) {
       this.solutions++;
-      return;
+      this.solutionRows = this.selectedRows.slice(0, depth);
+      return this.solutions >= this.solutionLimit;
     }
 
     const column = this._smallestColumn();
-    if (column.size === 0) return;
+    if (column.size === 0) return false;
 
     this._cover(column);
     for (let row = column.down; row !== column; row = row.down) {
       this.triedRows++;
+      this.selectedRows[depth] = row.rowIndex;
       for (let node = row.right; node !== row; node = node.right) {
         this._cover(node.column);
       }
-      this._search();
+      const limitReached = this._search(depth + 1);
       for (let node = row.left; node !== row; node = node.left) {
         this._uncover(node.column);
       }
+      if (limitReached) {
+        this._uncover(column);
+        return true;
+      }
     }
     this._uncover(column);
+    return false;
   }
 
   _smallestColumn() {

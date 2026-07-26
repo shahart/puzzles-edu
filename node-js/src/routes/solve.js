@@ -6,9 +6,11 @@ const router = express.Router();
 const SOLVE_TIMEOUT_MS = 5000;
 const workerPath = path.join(__dirname, '../workers/solve.js');
 
-function solveInWorker(problemId, countSolutions) {
+function solveInWorker(problemId, countSolutions, dimensions = 2) {
   return new Promise((resolve, reject) => {
-    const worker = new Worker(workerPath, { workerData: { problemId, countSolutions } });
+    const worker = new Worker(workerPath, {
+      workerData: { problemId, countSolutions, dimensions }
+    });
     let settled = false;
 
     const finish = (callback, value) => {
@@ -50,6 +52,20 @@ router.get('/solve/:problemId', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Solve error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/solve3d/:problemId', async (req, res) => {
+  const { problemId } = req.params;
+  console.log(`Starting 3D id ${problemId}`);
+
+  try {
+    const result = await solveInWorker(problemId, false, 3);
+    console.log(`Done 3D id ${problemId} with result ${result}`);
+    res.json(result);
+  } catch (err) {
+    console.error('3D solve error:', err);
     res.status(500).json({ error: err.message });
   }
 });
