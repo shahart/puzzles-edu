@@ -77,6 +77,8 @@ public class Puzzle2D {
 
     private int totalFillInGrid;
     private int availInGrid;
+    private boolean enumerateAllSolutions;
+    private boolean showAllSolutions;
 
     Puzzle2D(int rows, int columns)
     {
@@ -339,20 +341,20 @@ public class Puzzle2D {
 
     public void put()
     {
+        if (!enumerateAllSolutions && totalSolutions >= 1) {
+            return;
+        }
+
         int leftPieces = piecesIndices.size();
 
         if (leftPieces == 0) { //  && availInGrid == 0) {
             totalSolutions++;
-            System.out.println("\n"+ totalSolutions);
-            if (totalSolutions == 1) {
-                System.out.println("Found a solution");
+            if (showAllSolutions && (totalSolutions == 1 || enumerateAllSolutions)) {
+                System.out.println();
+                System.out.println(enumerateAllSolutions ? "Found solution " + totalSolutions : "Found a solution");
                 showGrid();
                 showPieces();
             }
-        }
-
-        if (totalSolutions >= 1) {
-            return;
         }
 
         int []rowsSet = new int[5]; // TODO chng 5 to const
@@ -368,7 +370,7 @@ public class Puzzle2D {
                     solution[PIECES-leftPieces] = piece; // solution.add(piece);
                     putCurrPiece(rowsSet, columnsSet);
 
-                    if (triedPieces % 50000 == 0 /* || leftPieces <= 2 */) {
+                    if (showAllSolutions && triedPieces % 50000 == 0 /* || leftPieces <= 2 */) {
                         this.showGrid();
                         this.showPieces();
                     }
@@ -470,6 +472,105 @@ public class Puzzle2D {
     }
 
     public boolean solve() {
+        return solveInternal(false, true);
+    }
+
+    /**
+     * Solves the puzzle, optionally continuing after the first solution.
+     *
+     * @param showAllSolutions when {@code true}, enumerate and print every solution
+     */
+    public boolean solve(boolean showAllSolutions) {
+        return solveInternal(showAllSolutions, true);
+    }
+
+    /**
+     * Enumerates every solution without printing individual solution grids.
+     *
+     * @return the number of solutions found
+     */
+    public int countSolutions() {
+        enumerateAllSolutions = true;
+        showAllSolutions = false;
+        totalSolutions = 0;
+        triedPieces = 0;
+
+        long start = System.currentTimeMillis();
+        if (totalFillInGrid == Piece.getTotalFill()) {
+            ExactCoverCounter.Result result = ExactCoverCounter.count(
+                    totalFillInGrid + PIECES, buildExactCoverRows());
+            totalSolutions = Math.toIntExact(result.solutions());
+            triedPieces = Math.toIntExact(result.triedRows());
+        }
+
+        long elapsedTime = (System.currentTimeMillis() - start) / 1000;
+        NumberFormat nf = NumberFormat.getInstance();
+        System.out.println("\nelapsed time in seconds " + elapsedTime);
+        System.out.println("tried " + nf.format(triedPieces) + " pieces");
+        if (elapsedTime > 0) {
+            System.out.println("at " + nf.format(triedPieces / elapsedTime) + " pieces per second");
+        }
+        System.out.println("number of solutions " + totalSolutions);
+        return totalSolutions;
+    }
+
+    private List<int[]> buildExactCoverRows() {
+        List<int[]> exactCoverRows = new ArrayList<>();
+        int[][] cellColumns = new int[ROWS][COLUMNS];
+        int cellColumn = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int column = 0; column < COLUMNS; column++) {
+                cellColumns[row][column] = grid[row][column] == -1 ? -1 : cellColumn++;
+            }
+        }
+
+        for (int pieceIndex = 0; pieceIndex < PIECES; pieceIndex++) {
+            Piece piece = pieces[pieceIndex];
+            for (int rotation = 0; rotation < piece.getAvailRotations(); rotation++, piece.rotate()) {
+                int[][] layout = piece.getLayout();
+                int maxRow = 0;
+                int maxColumn = 0;
+                for (int row = 0; row < layout.length; row++) {
+                    for (int column = 0; column < layout[row].length; column++) {
+                        if (layout[row][column] == 1) {
+                            maxRow = Math.max(maxRow, row);
+                            maxColumn = Math.max(maxColumn, column);
+                        }
+                    }
+                }
+
+                for (int rowOffset = 0; rowOffset + maxRow < ROWS; rowOffset++) {
+                    for (int columnOffset = 0; columnOffset + maxColumn < COLUMNS; columnOffset++) {
+                        int[] exactCoverRow = new int[piece.getTotalThisFill() + 1];
+                        int cellIndex = 0;
+                        boolean available = true;
+                        for (int row = 0; row < layout.length; row++) {
+                            for (int column = 0; column < layout[row].length; column++) {
+                                if (layout[row][column] == 0) {
+                                    continue;
+                                }
+                                int gridRow = rowOffset + row;
+                                int gridColumn = columnOffset + column;
+                                if (grid[gridRow][gridColumn] == -1) {
+                                    available = false;
+                                }
+                                exactCoverRow[cellIndex++] = cellColumns[gridRow][gridColumn];
+                            }
+                        }
+                        if (available) {
+                            exactCoverRow[cellIndex] = totalFillInGrid + pieceIndex;
+                            exactCoverRows.add(exactCoverRow);
+                        }
+                    }
+                }
+            }
+        }
+        return exactCoverRows;
+    }
+
+    private boolean solveInternal(boolean enumerateAllSolutions, boolean showSolutions) {
+        this.enumerateAllSolutions = enumerateAllSolutions;
+        this.showAllSolutions = showSolutions;
         long start = System.currentTimeMillis();
 
         if (totalFillInGrid != Piece.getTotalFill()) {
@@ -489,19 +590,30 @@ public class Puzzle2D {
         }
 
         System.out.print("number of solutions ");
-        System.out.println(totalSolutions * ((ROWS == COLUMNS) ? 8 : 4)); // TODO compute this symmetric magic number
+        if (enumerateAllSolutions) {
+            System.out.println(totalSolutions);
+        } else {
+            System.out.println(totalSolutions * ((ROWS == COLUMNS) ? 8 : 4)); // TODO compute this symmetric magic number
+        }
 
         return totalSolutions >= 1;
     }
 
     public static void main(String[] args)
     {
-        if (args.length < 2) {
-            System.out.println("usage: MAIN rows columns");
+        if (args.length < 2 || args.length > 3
+                || (args.length == 3
+                && !args[2].equals("--all")
+                && !args[2].equals("--count"))) {
+            System.out.println("usage: Puzzle2D rows columns [--all|--count]");
         }
         else {
             Puzzle2D puzzle2d = new Puzzle2D(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-            puzzle2d.solve();
+            if (args.length == 3 && args[2].equals("--count")) {
+                puzzle2d.countSolutions();
+            } else {
+                puzzle2d.solve(args.length == 3);
+            }
         }
     }
 }

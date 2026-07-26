@@ -46,6 +46,8 @@ public class Puzzle3D {
     private final List<Placement>[] placementsByCell;
     private int usedPieces;
     private long occupiedCells;
+    private boolean enumerateAllSolutions;
+    private boolean showAllSolutions;
 
     @SuppressWarnings("unchecked")
     Puzzle3D(int rows, int columns, int depth) {
@@ -71,6 +73,177 @@ public class Puzzle3D {
      * @return {@code true} when all twelve pentominoes fit exactly
      */
     public boolean solve() {
+        return solveInternal(false, false);
+    }
+
+    /**
+     * Solves the puzzle, optionally continuing after the first solution.
+     *
+     * @param showAllSolutions when {@code true}, enumerate and print every solution
+     */
+    public boolean solve(boolean showAllSolutions) {
+        return solveInternal(showAllSolutions, showAllSolutions);
+    }
+
+    /**
+     * Enumerates every solution without printing individual solution grids.
+     *
+     * @return the number of solutions found
+     */
+    public int countSolutions() {
+        totalSolutions = 0;
+        triedPieces = 0;
+        long start = System.currentTimeMillis();
+        if ((long) ROWS * COLUMNS * DEPTH == PIECES * 5L) {
+            Set<Placement> uniquePlacements =
+                    java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+            for (List<Placement> placements : placementsByCell) {
+                uniquePlacements.addAll(placements);
+            }
+            List<int[]> exactCoverRows = new ArrayList<>(uniquePlacements.size());
+            List<Placement> rowPlacements = new ArrayList<>(uniquePlacements.size());
+            List<int[]> boxSymmetries = buildBoxSymmetries();
+            int cellCount = ROWS * COLUMNS * DEPTH;
+            for (Placement placement : uniquePlacements) {
+                // The L pentomino is asymmetric, so exactly one of its placements
+                // can represent each orbit under the box's rotations/reflections.
+                if (placement.piece() == 0
+                        && !isCanonicalLPlacement(placement, boxSymmetries)) {
+                    continue;
+                }
+                int[] row = Arrays.copyOf(placement.cells(), placement.cells().length + 1);
+                row[row.length - 1] = cellCount + placement.piece();
+                exactCoverRows.add(row);
+                rowPlacements.add(placement);
+            }
+            ExactCoverCounter.Result result =
+                    ExactCoverCounter.count(
+                            cellCount + PIECES,
+                            exactCoverRows,
+                            selectedRows -> isCanonicalSolution(
+                                    selectedRows, rowPlacements, boxSymmetries));
+            totalSolutions = Math.toIntExact(result.solutions());
+            triedPieces = result.triedRows();
+        }
+        long elapsedMillis = System.currentTimeMillis() - start;
+        System.out.println("elapsed time in milliseconds " + elapsedMillis);
+        System.out.println("tried " + NumberFormat.getInstance().format(triedPieces) + " pieces");
+        System.out.println("number of solutions " + totalSolutions);
+        return totalSolutions;
+    }
+
+    private boolean isCanonicalLPlacement(
+            Placement placement, List<int[]> boxSymmetries) {
+        long canonicalMask = placement.cellMask();
+        for (int[] transformation : boxSymmetries) {
+            long transformedMask = transformMask(placement.cells(), transformation);
+            if (Long.compareUnsigned(transformedMask, canonicalMask) < 0) {
+                canonicalMask = transformedMask;
+            }
+        }
+        return placement.cellMask() == canonicalMask;
+    }
+
+    private boolean isCanonicalSolution(
+            int[] selectedRows,
+            List<Placement> rowPlacements,
+            List<int[]> boxSymmetries) {
+        int[] solution = new int[ROWS * COLUMNS * DEPTH];
+        long lMask = 0;
+        for (int selectedRow : selectedRows) {
+            Placement placement = rowPlacements.get(selectedRow);
+            for (int cell : placement.cells()) {
+                solution[cell] = placement.piece() + 1;
+            }
+            if (placement.piece() == 0) {
+                lMask = placement.cellMask();
+            }
+        }
+
+        for (int[] transformation : boxSymmetries) {
+            long transformedLMask = 0;
+            int[] transformed = new int[solution.length];
+            for (int cell = 0; cell < solution.length; cell++) {
+                transformed[transformation[cell]] = solution[cell];
+                if (solution[cell] == 1) {
+                    transformedLMask |= 1L << transformation[cell];
+                }
+            }
+            if (transformedLMask == lMask && lexicographicallyLess(transformed, solution)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean lexicographicallyLess(int[] left, int[] right) {
+        for (int index = 0; index < left.length; index++) {
+            if (left[index] != right[index]) {
+                return left[index] < right[index];
+            }
+        }
+        return false;
+    }
+
+    private static long transformMask(int[] cells, int[] transformation) {
+        long result = 0;
+        for (int cell : cells) {
+            result |= 1L << transformation[cell];
+        }
+        return result;
+    }
+
+    private List<int[]> buildBoxSymmetries() {
+        List<int[]> transformations = new ArrayList<>();
+        int[] dimensions = {ROWS, COLUMNS, DEPTH};
+        int[][] permutations = {
+                {0, 1, 2}, {0, 2, 1}, {1, 0, 2},
+                {1, 2, 0}, {2, 0, 1}, {2, 1, 0}
+        };
+        for (int[] permutation : permutations) {
+            if (dimensions[0] != dimensions[permutation[0]]
+                    || dimensions[1] != dimensions[permutation[1]]
+                    || dimensions[2] != dimensions[permutation[2]]) {
+                continue;
+            }
+            for (int flipMask = 0; flipMask < 8; flipMask++) {
+                int[] transformation = new int[ROWS * COLUMNS * DEPTH];
+                for (int cell = 0; cell < transformation.length; cell++) {
+                    int row = cell / (COLUMNS * DEPTH);
+                    int remainder = cell % (COLUMNS * DEPTH);
+                    int[] coordinates = {row, remainder / DEPTH, remainder % DEPTH};
+                    int transformedRow = transformedCoordinate(
+                            coordinates, dimensions, permutation, flipMask, 0);
+                    int transformedColumn = transformedCoordinate(
+                            coordinates, dimensions, permutation, flipMask, 1);
+                    int transformedDepth = transformedCoordinate(
+                            coordinates, dimensions, permutation, flipMask, 2);
+                    int transformedCell =
+                            (transformedRow * COLUMNS + transformedColumn) * DEPTH
+                                    + transformedDepth;
+                    transformation[cell] = transformedCell;
+                }
+                transformations.add(transformation);
+            }
+        }
+        return transformations;
+    }
+
+    private static int transformedCoordinate(
+            int[] coordinates,
+            int[] dimensions,
+            int[] permutation,
+            int flipMask,
+            int targetAxis) {
+        int coordinate = coordinates[permutation[targetAxis]];
+        return (flipMask & (1 << targetAxis)) == 0
+                ? coordinate
+                : dimensions[targetAxis] - coordinate - 1;
+    }
+
+    private boolean solveInternal(boolean enumerateAllSolutions, boolean showSolutions) {
+        this.enumerateAllSolutions = enumerateAllSolutions;
+        this.showAllSolutions = showSolutions;
         totalSolutions = 0;
         triedPieces = 0;
         usedPieces = 0;
@@ -82,8 +255,8 @@ public class Puzzle3D {
         }
 
         long start = System.currentTimeMillis();
-        if ((long) ROWS * COLUMNS * DEPTH == PIECES * 5L && put()) {
-            totalSolutions = 1;
+        if ((long) ROWS * COLUMNS * DEPTH == PIECES * 5L) {
+            put();
         }
 
         long elapsedMillis = System.currentTimeMillis() - start;
@@ -97,7 +270,15 @@ public class Puzzle3D {
     private boolean put() {
         int empty = mostConstrainedEmptyCell();
         if (empty == -1) {
-            return usedPieces == (1 << PIECES) - 1;
+            if (usedPieces != (1 << PIECES) - 1) {
+                return false;
+            }
+            totalSolutions++;
+            if (showAllSolutions) {
+                System.out.println("solution " + totalSolutions);
+                showGrid();
+            }
+            return !enumerateAllSolutions;
         }
 
         for (Placement placement : placementsByCell[empty]) {
@@ -318,15 +499,23 @@ public class Puzzle3D {
     }
 
     public static void main(String[] args) {
-        if (args.length < 3) {
-            System.out.println("usage: Puzzle3D rows columns depth");
+        if (args.length < 3 || args.length > 4
+                || (args.length == 4
+                && !args[3].equals("--all")
+                && !args[3].equals("--count"))) {
+            System.out.println("usage: Puzzle3D rows columns depth [--all|--count]");
             return;
         }
+        String option = args.length == 4 ? args[3] : "";
         Puzzle3D puzzle = new Puzzle3D(
                 Integer.parseInt(args[0]),
                 Integer.parseInt(args[1]),
                 Integer.parseInt(args[2]));
-        if (puzzle.solve()) {
+        if (option.equals("--count")) {
+            puzzle.countSolutions();
+        } else if (option.equals("--all")) {
+            puzzle.solve(true);
+        } else if (puzzle.solve()) {
             puzzle.showGrid();
         }
     }

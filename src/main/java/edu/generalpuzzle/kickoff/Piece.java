@@ -24,7 +24,7 @@ public class Piece {
     private int []firstSquarePos;
     public int getFirstSquarePos() { return firstSquarePos[currRotation]; }
 
-    private static int [][][]layouts;
+    private int [][][]layouts;
 
     private int [][]rowsSet;
     private int [][]columnsSet;
