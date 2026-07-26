@@ -17,6 +17,12 @@ test('has solution for 10x6', () => {
   expect(puzzle2D.solve()).toBe(1);
 }, 60000);
 
+test('has solution for 20x3', () => {
+  const puzzle2D = new Puzzle2D();
+  puzzle2D.set(20, 3);
+  expect(puzzle2D.solve()).toBe(1);
+}, 60000);
+
 test('no solution for 5x13', () => {
   const puzzle2D = new Puzzle2D();
   puzzle2D.set(5, 13);

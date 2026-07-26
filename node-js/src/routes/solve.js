@@ -1,30 +1,55 @@
 const express = require('express');
-const Puzzle2D = require('../core/Puzzle2D');
-const Piece = require('../core/Piece');
+const path = require('path');
+const { Worker } = require('worker_threads');
 
 const router = express.Router();
+const SOLVE_TIMEOUT_MS = 5000;
+const workerPath = path.join(__dirname, '../workers/solve.js');
 
-router.get('/solve/:problemId', (req, res) => {
+function solveInWorker(problemId) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(workerPath, { workerData: { problemId } });
+    let settled = false;
+
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      callback(value);
+    };
+
+    const timeout = setTimeout(() => {
+      finish(reject, new Error(`Solve timed out after ${SOLVE_TIMEOUT_MS}ms`));
+      void worker.terminate();
+    }, SOLVE_TIMEOUT_MS);
+
+    worker.once('message', ({ result, error }) => {
+      if (error) {
+        finish(reject, new Error(error));
+      } else {
+        finish(resolve, result);
+      }
+    });
+    worker.once('error', (error) => finish(reject, error));
+    worker.once('exit', (code) => {
+      if (code !== 0) {
+        finish(reject, new Error(`Solve worker stopped with exit code ${code}`));
+      }
+    });
+  });
+}
+
+router.get('/solve/:problemId', async (req, res) => {
   const { problemId } = req.params;
   console.log(`Starting id ${problemId}`);
 
-  const rowsCols = problemId.split('_');
-  const puzzle2D = new Puzzle2D();
-  Piece.totalFill = 0;
-  puzzle2D.set(parseInt(rowsCols[0], 10), parseInt(rowsCols[1], 10));
-
-  const abortController = new AbortController();
-  const timeout = setTimeout(() => abortController.abort(), 5000);
-
   try {
-    const result = puzzle2D.solve(abortController.signal);
+    const result = await solveInWorker(problemId);
     console.log(`Done id ${problemId} with result ${result}`);
     res.json(result);
   } catch (err) {
     console.error('Solve error:', err);
     res.status(500).json({ error: err.message });
-  } finally {
-    clearTimeout(timeout);
   }
 });
 

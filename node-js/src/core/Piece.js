@@ -138,10 +138,8 @@ class Piece {
 
     for (let i = 0; i < columns; i++) {
       for (let j = 0; j < rows; j++) {
-        try {
+        if (i < original.length && j < original[i].length) {
           result[rows - j - 1][i] = original[i][j];
-        } catch (_) {
-          // out of bounds
         }
       }
     }
