@@ -22,15 +22,16 @@ class Puzzle2D:
         self.grid: list[list[int]] = []
         self.curr_piece: Optional[Piece] = None
         self.total_fill_in_grid = 0
+        self.total_fill_in_pieces = 0
         self.avail_in_grid = 0
         self._aborted = False
 
     def set(self, rows: int, columns: int) -> None:
-        Piece.total_fill = 0
         self.pieces_indices = []
         self.solution = [0] * self.PIECES
         self.total_solutions = 0
         self.tried_pieces = 0
+        self.total_fill_in_pieces = 0
         self._aborted = False
 
         self.ROWS = rows
@@ -68,6 +69,7 @@ class Puzzle2D:
                 self.pieces[i] = Piece(
                     i, all_pieces[i], rotations[i], symmetric[i], self.names[i]
                 )
+                self.total_fill_in_pieces += self.pieces[i].total_this_fill
             if self.ROWS == self.COLUMNS and self.ROWS == 8:
                 self.grid[0][0] = -1
                 self.grid[7][0] = -1
@@ -217,12 +219,12 @@ class Puzzle2D:
             if abort_event.is_set():  # type: ignore[union-attr]
                 self._aborted = True
 
-        if self.total_fill_in_grid != Piece.total_fill:
+        if self.total_fill_in_grid != self.total_fill_in_pieces:
             print(
-                f"Invalid config, grid {self.total_fill_in_grid} pieces {Piece.total_fill}"
+                f"Invalid config, grid {self.total_fill_in_grid} "
+                f"pieces {self.total_fill_in_pieces}"
             )
         else:
-            Piece.total_fill = 0
             print(f"Starting rows {self.ROWS} cols {self.COLUMNS}")
             self.put()
 

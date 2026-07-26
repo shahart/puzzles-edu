@@ -2,7 +2,6 @@ import threading
 
 from flask import Blueprint, jsonify
 
-from src.core.piece import Piece
 from src.core.puzzle2d import Puzzle2D
 
 solve_bp = Blueprint("solve", __name__)
@@ -14,7 +13,6 @@ def solve(problem_id: str):
 
     rows_cols = problem_id.split("_")
     puzzle2d = Puzzle2D()
-    Piece.total_fill = 0
     puzzle2d.set(int(rows_cols[0]), int(rows_cols[1]))
 
     abort_event = threading.Event()

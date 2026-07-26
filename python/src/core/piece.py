@@ -2,8 +2,6 @@ from __future__ import annotations
 
 
 class Piece:
-    total_fill: int = 0
-
     def __init__(
         self,
         index: int,
@@ -38,7 +36,6 @@ class Piece:
         for row in layout:
             for value in row:
                 if value == 1:
-                    Piece.total_fill += 1
                     self.total_this_fill += 1
             if len(row) > max_columns:
                 max_columns = len(row)

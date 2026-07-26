@@ -15,4 +15,4 @@ if __name__ == "__main__":
     app = create_app()
     port = int(os.environ.get("PORT", 8080))
     print(f"Puzzle solver server running on http://localhost:{port}")
-    app.run(port=port)
+    app.run(port=port, threaded=True)

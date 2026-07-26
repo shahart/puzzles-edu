@@ -3,12 +3,7 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from src.core.piece import Piece
 from src.core.puzzle2d import Puzzle2D
-
-
-def setup_function():
-    Piece.total_fill = 0
 
 
 def test_has_solution_for_12x5():
