@@ -1,13 +1,43 @@
 import { assert } from 'chai';
 
-import { Puzzle3d } from '../../docs/3d/puzzle3d.js';
-import { Piece3d } from '../../docs/3d/piece3d.js';
+import {
+  Puzzle3d,
+  buildOrientations,
+  parsePuzzle3d
+} from '../../docs/3d/puzzle3d.js';
+import { GraphIt3d } from '../../docs/3d/graphIt3d.js';
 
 describe('Puzzle3D (Node)', function () {
-  it.skip('3x4x5-12 pieces', function () {
+  it('3x4x5-12 pieces', function () {
     const puzzle3d = new Puzzle3d(12, 5, 4, 3);
     const res = puzzle3d.solve();
     assert.include(res, ' 1  ');
+  });
+
+  it('deduplicates cube rotations', function () {
+    assert.lengthOf(buildOrientations([[0, 0, 0]]), 1);
+    assert.lengthOf(buildOrientations([[0, 0, 0], [1, 0, 0]]), 3);
+  });
+
+  it('reports line-aware parser errors', function () {
+    assert.throws(
+      () => parsePuzzle3d('#1,1,1\n?\n#end of grid\n#piece-End'),
+      /Line 2: invalid grid character/
+    );
+  });
+
+  it('renders solved coordinates without parsing formatted output', function () {
+    const puzzle3d = new Puzzle3d(
+      1,
+      1,
+      1,
+      1,
+      '#1,1,1\nx\n\n#end of grid\n#PieceA\nx\n\n#piece-End\n'
+    );
+    puzzle3d.solve();
+    const markup = new GraphIt3d().get3dX3d(puzzle3d.result, 'unit test');
+    assert.include(markup, 'DEF="PIECE_0"');
+    assert.include(markup, 'translation="0 0 0"');
   });
 
   it('1x1x1-1 piece', function () {
@@ -88,32 +118,4 @@ describe('Puzzle3D (Node)', function () {
     assert.equal(res, 'Invalid input');
   });
 
-  it('piece-valid', function () {
-    const layout = [[[1], [1], [1], [1, 1]]];
-    const piece = new Piece3d(0, layout, '0');
-    assert.equal(piece.totalThisFill, 5);
-  });
-
-  it('piece-invalid', function () {
-    try {
-      const layout = undefined;
-      // eslint-disable-next-line no-new
-      new Piece3d(0, layout, '0');
-      assert.fail('expected constructor to throw');
-    } catch (err) {
-      assert.include(String(err?.message ?? err), 'undefined');
-    }
-  });
-
-  it('piece-empty', function () {
-    try {
-      const layout = [[[]]];
-      const piece = new Piece3d(0, layout, '0');
-      assert.equal(piece.totalThisFill, 0);
-      assert.fail('expected constructor to throw');
-    } catch (err) {
-      assert.include(String(err?.message ?? err), 'empty piece');
-    }
-  });
 });
-

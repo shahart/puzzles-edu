@@ -1,5 +1,4 @@
 import { Puzzle3d } from "../puzzle3d.js";
-import { Piece3d } from "../piece3d.js";
 
 describe('Mocha Puzzle3D tests', function () {
 
@@ -115,36 +114,5 @@ describe('Mocha Puzzle3D tests', function () {
             chai.assert.include(err.message, 'Timeout');
         }
     }); // made app timeout < 2s - people has no patience
-
-    // todo separate describe, for 'piece-' tests
-
-    it('piece-valid', function () {
-        let layout = [[[1],[1],[1],[1,1]]];
-        let piece = new Piece3d(0, layout,'0');
-        chai.assert.equal(piece.totalThisFill, 5);
-    });
-
-    it('piece-invalid', function () {
-        try {
-            let layout = undefined; // invalid input -> should throw an "undefined" error
-            new Piece3d(0, layout,'0');
-            chai.assert.fail();
-        } catch (err) {
-            console.warn('piece-invalid>>' + err);
-            chai.assert.include(err.message, 'undefined'); // Cannot read properties of undefined (reading 'length') at new Piece (piece.js:24:58) - layouts[0][0].length
-        }
-    });
-
-    it('piece-empty', function () {
-        try {
-            let layout = [[[]]];
-            let piece = new Piece3d(0, layout,'0');
-            chai.assert.equal(piece.totalThisFill, 0);
-            chai.assert.fail();
-        } catch (err) {
-            console.warn('piece-empty>>' + err.message);
-            chai.assert.include(err.message, 'empty piece');
-        }
-    });
 
 });

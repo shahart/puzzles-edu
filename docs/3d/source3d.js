@@ -1,15 +1,29 @@
-import { Puzzle3d } from "./puzzle3d.js";
 import { GraphIt3d } from "./graphIt3d.js";
 
 let solveButton = document.getElementById('solveButton');
 let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
+let activeWorker = null;
+let currentResult = null;
+
+graphItButton.disabled = true;
+
+function cancelActiveSolve() {
+    if (activeWorker !== null) {
+        activeWorker.terminate();
+        activeWorker = null;
+        solveButton.textContent = 'Solve';
+    }
+}
 
 graphItButton.addEventListener('click', () => {
-    let solution = document.getElementById('output').innerHTML;
-    if (solution !== '' && solution.startsWith(" 1  ")) {
+    if (currentResult?.solved) {
         let title = dropdownButton.value;
-        new GraphIt3d().graphIt3d(solution, title);
+        try {
+            new GraphIt3d().graphIt3d(currentResult, title);
+        } catch (error) {
+            document.getElementById('output').value = `Render error: ${error.message}`;
+        }
     }
 });
 
@@ -22,10 +36,12 @@ let saveButton2 = document.getElementById('saveButton2');
 let saveButton3 = document.getElementById('saveButton3');
 
 function restoreButton(id) {
+    cancelActiveSolve();
+    currentResult = null;
     let input = loadPuzzle("preset" + id);
     console.log('cls');
     graphItButton.disabled = true;
-    document.getElementById('output').innerHTML = '';
+    document.getElementById('output').value = '';
     if (input !== "") {
         document.getElementById('input').value = input;
     }
@@ -68,11 +84,13 @@ let lastRun = loadPuzzle("lastRun3d");
 document.getElementById('input').value = lastRun !== '' ? lastRun : "#3,4,5\n#end of grid. Pieces:Poly";
 
 dropdownButton.addEventListener('change', () => {
+    cancelActiveSolve();
+    currentResult = null;
 
     if (dropdownButton.value === 'Custom') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#3,4,5\n" +
             "#end of grid. Pieces:Poly";
@@ -81,7 +99,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'Bedlam') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#3,3,3 # Bedlam\n" +
             "#end of grid\n" +
@@ -125,7 +143,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'Conway') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#5,5,5 # Conway\n" +
             "#end of grid\n" +
@@ -153,7 +171,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'Soma') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#3,3,3 # Soma\n" +
             "#end of grid\n" +
@@ -197,7 +215,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'HappyCubeG') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#5,5,5 # Green (Easy)\n" +
             "xxxxx\n" +
@@ -279,7 +297,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'HappyCubeR') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#5,5,5 # Red (Medium)\n" +
             "xxxxx\n" +
@@ -361,7 +379,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'HappyCubeO') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#5,5,5 # Orange (Hard)\n" +
             "xxxxx\n" +
@@ -444,7 +462,7 @@ dropdownButton.addEventListener('change', () => {
     if (dropdownButton.value === 'Graatsma') {
         console.log('cls');
         graphItButton.disabled = true;
-        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').value = '';
         document.getElementById('input').value =
             "#3,3,3 # Slothouber–Graatsma\n" +
             "#end of grid\n" +
@@ -461,27 +479,62 @@ dropdownButton.addEventListener('change', () => {
 });
 
 solveButton.addEventListener('click', () => {
-
     let output = document.getElementById('output');
-    console.log('Started');
-
-    let input = document.getElementById('input').value;
-
-    let puzzle3d;
-
-    if (input !== "") {
-        savePuzzle("lastRun3d", input);
-        puzzle3d = new Puzzle3d(0, 0, 0, 0, input);
-        output.innerHTML = puzzle3d.solve();
-        graphItButton.disabled =
-            output.innerHTML.indexOf("no solution") !== -1 ||
-            output.innerHTML.indexOf("Invalid input") !== -1 ||
-            !output.innerHTML.startsWith(" 1  ");
+    if (activeWorker !== null) {
+        cancelActiveSolve();
+        output.value = 'Solve cancelled';
+        return;
     }
-    else {
-        console.warn('Invalid input. Follow an example');
-        output.innerHTML = ' Invalid input. Follow an example';
+
+    const input = document.getElementById('input').value;
+    if (input.trim() === "") {
+        output.value = 'Invalid input. Follow an example';
+        return;
     }
+
+    savePuzzle("lastRun3d", input);
+    currentResult = null;
+    graphItButton.disabled = true;
+    output.value = 'Solving…';
+    solveButton.textContent = 'Cancel';
+    const worker = new Worker(new URL('./worker3d.js', import.meta.url), { type: 'module' });
+    activeWorker = worker;
+
+    const finish = () => {
+        worker.terminate();
+        if (activeWorker === worker) {
+            activeWorker = null;
+            solveButton.textContent = 'Solve';
+        }
+    };
+
+    worker.addEventListener('message', (event) => {
+        if (activeWorker !== worker) {
+            return;
+        }
+        if (event.data.type === 'error') {
+            output.value = `Invalid input: ${event.data.error}`;
+            finish();
+            return;
+        }
+        currentResult = event.data.result;
+        output.value = event.data.output;
+        graphItButton.disabled = !currentResult.solved;
+        console.log(
+            `Ended in ${currentResult.elapsedMs} msec. Tried placements ${currentResult.triedRows}`
+        );
+        finish();
+    }, { once: true });
+
+    worker.addEventListener('error', (event) => {
+        if (activeWorker !== worker) {
+            return;
+        }
+        output.value = `Solver error: ${event.message}`;
+        finish();
+    }, { once: true });
+
+    worker.postMessage({ text: input });
 });
 
 function savePuzzle(cname, cvalue) {

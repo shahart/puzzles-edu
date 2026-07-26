@@ -1,387 +1,560 @@
-import { Piece3d } from "./piece3d.js";
-import { Builder3d } from "./builder3d.js";
+import { ExactCover3d } from "./exactCover3d.js";
 
-window.globalTotalFill = 0;
+const POLY_NAMES = "LUFXYNWPZVTI";
+const POLY_LAYOUTS = [
+    [[1], [1], [1], [1, 1]],
+    [[1, 1], [1], [1, 1]],
+    [[0, 1, 1], [1, 1], [0, 1]],
+    [[0, 1], [1, 1, 1], [0, 1]],
+    [[1, 1, 1, 1], [0, 0, 1]],
+    [[0, 1], [1, 1], [1], [1]],
+    [[0, 0, 1], [0, 1, 1], [1, 1]],
+    [[1], [1, 1], [1, 1]],
+    [[0, 0, 1], [1, 1, 1], [1]],
+    [[0, 0, 1], [0, 0, 1], [1, 1, 1]],
+    [[0, 0, 1], [1, 1, 1], [0, 0, 1]],
+    [[1, 1, 1, 1, 1]]
+];
 
-class Puzzle3d {
-    constructor(pieces, rows, columns, floors, input) {
-        if (columns > rows) {
-            console.warn('You might want to switch dimensions.');
-        }
-        window.globalTotalFill = 0;
-        this.allLines = '';
-        this.start = new Date().getTime();
-        this.PIECES = pieces;
-        this.ROWS = rows;
-        this.COLUMNS = columns;
-        this.FLOORS = floors;
-        this.totalSolutions = 0;
-        this.EXIT_SIGN = 100000;
-        this.triedPieces = 0;
-        this.solutionFound = false;
-        this.row = 0;
-        this.column = 0;
-        this.floor = 0;
-        this.piecesIndices = new Array();
-        this.solution = new Array(this.PIECES).fill(0);
-        this.pieces = [this.PIECES];
-        this.names;
-        if (rows !== rows || columns !== columns) { // NaN check, result of parseInt of Not-a-Number
-            console.error('RangeError: Invalid array length');
-            alert('RangeError: Invalid array length');
-        }
-        this.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
-        this.gridCopy = new Array(rows).fill(0).map(_ => new Array(columns).fill(0).map(_ => new Array(floors).fill(0)));
-        this.currPiece;
-        this.totalFillInGrid = 0;
-        this.allPieces = [
-            // Poly
-            [[[1],[1],[1],[1,1]]],        //4-2 (2)   L sym = indicates it is symmetric // TODO write flip
-            [[[1,1],[1],[1,1]]],          //4-1 (5)   U
-            [[[0,1,1],[1,1],[0,1]]],      //4-2 (9)   F sym - used to eliminate "dups"
-            [[[0,1],[1,1,1],[0,1]]],      //1-1 (6)   X
-            [[[1,1,1,1],[0,0,1]]],        //4-2 (3)   Y sym
-            [[[0,1],[1,1],[1],[1]]],      //4-2 (12)  N sym
-            [[[0,0,1],[0,1,1],[1,1]]],    //4-1 (7)   W
-            [[[1],[1,1],[1,1]]],          //4-2 (4)   P sym
-            [[[0,0,1],[1,1,1],[1]]],      //2-2 (11)  Z sym ??
-            [[[0,0,1],[0,0,1],[1,1,1]]],  //4-1 (10)  V
-            [[[0,0,1],[1,1,1],[0,0,1]]],  //4-1 (8)   T
-            [[[1,1,1,1,1]]]               //2-1 (1)   I
-        ];
-        this.names = "LUFXYNWPZVTI"; // Poly
-        this.rotations = [4, 4, 2/*4*/, 1, 4, 4, 4, 4, 2, 4, 4, 2];
-        this.symmetric = [2, 1, 1/*2*/, 1, 2, 2, 1, 2, 2, 1, 1, 1];
-        this.totalFillInGrid = this.ROWS * this.COLUMNS * this.FLOORS;
-        if (input) {
-            new Builder3d(this, input);
-            if (this.PIECES === 12 && this.names === "LUFXYNWPZVTI") {
-                console.log("Polyominos");
-            }
-        }
-        else {
-            if (this.allPieces.length > this.PIECES) {
-                console.warn("using first pieces from the whole set");
-            }
-            for (let i = 0; i < this.PIECES/*allPieces.length*/; i++) {
-                let piece = i;
-                this.piecesIndices.push(piece);
-                // Transform the default (ragged) definitions into a cubic 3D array so `Piece3d` rotations work.
-                // Source format here is `[row][col][floor]` (ragged in the floor dimension).
-                const src = this.allPieces[i];
-                let srcRows = src.length;
-                let srcCols = 1;
-                let srcFloors = 1;
-                for (let r = 0; r < srcRows; r++) {
-                    srcCols = Math.max(srcCols, src[r].length);
-                    for (let c = 0; c < src[r].length; c++) {
-                        srcFloors = Math.max(srcFloors, src[r][c].length);
-                    }
-                }
-                const pieceMax = Math.max(srcRows, srcCols, srcFloors);
-                const layout = new Array(pieceMax).fill(0).map(_ =>
-                    new Array(pieceMax).fill(0).map(_ =>
-                        new Array(pieceMax).fill(0)
-                    )
-                );
-                for (let r = 0; r < srcRows; r++) {
-                    for (let c = 0; c < src[r].length; c++) {
-                        for (let f = 0; f < src[r][c].length; f++) {
-                            if (src[r][c][f] === 1) {
-                                // `Piece3d` expects `[floor][row][col]`
-                                layout[f][r][c] = 1;
-                            }
-                        }
-                    }
-                }
-                this.pieces[i] = new Piece3d(piece, layout, this.names.charAt(i));
-                // this.pieces[i].shuffle();
-            }
-            for (let i = 0; i < this.grid.length; i++) {
-                for (let j = 0; j < this.grid[i].length; j++) {
-                    if (this.grid[i][j] === -1) {
-                        this.totalFillInGrid--;
-                    }
-                }
-            }
-            console.log("Found " + this.ROWS + " rows, " + this.COLUMNS + " cols, " + this.FLOORS + " floors, with total of cells " + this.totalFillInGrid);
-        }
-        while (this.grid[0][this.column][this.floor] === -1) {
-            this.column++;
-        }
-        this.availInGrid = this.totalFillInGrid;
-        // this.piecesIndices = this.piecesIndices.sort(function () { return Math.random() - 0.5; });
-    }
-
-    showGrid() {
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
-        }
-        this.allLines = '';
-        for (let k=0; k<this.FLOORS; k++) {
-            for (let i = 0; i < this.ROWS; i++) {
-                let line = "";
-                if (i + 1 < 10) {
-                    line += " " + (i + 1);
-                } else {
-                    line += (i + 1);
-                }
-                line += "  ";
-                for (let j = 0; j < this.COLUMNS; j++) {
-                    if (this.grid[i] === undefined || this.grid[i][j] === undefined || this.grid[i][j][k] === undefined) {
-                        console.error("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
-                        alert("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
-                        throw new Error("undefined grid cell, row " + i + " column " + j + " floor " + k + " make sure `#rows,columns,floors` is correct");
-                    }
-                    if (this.grid[i][j][k] === -1) {
-                        line += "*  ";
-                        // } else if (this.totalSolutions === 0) {
-                    } else if (this.grid[i][j][k] === 0) {
-                        line += "-  ";
-                    } else {
-                        let ch = this.names.charAt(this.grid[i][j][k] - 1);
-                        line += ch + "  ";
-                    }
-                }
-                if (this.totalSolutions === 0) {
-                    if (!window.__PUZZLES_EDU_TEST__) {
-                        console.log(line);
-                    }
-                }
-                if (!this.solutionFound) {
-                    this.allLines += line + "\n";
-                }
-            }
-        }
-        if (this.totalSolutions > 0 && this.totalSolutions < this.EXIT_SIGN) {
-            this.solutionFound = true;
-        }
-    }
-
-    canPut(rowsSet, columnsSet, floorsSet) {
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.debug(new Date().getTime() - this.start + " [msec] canPut " + this.currPiece.name + " R" + this.currPiece.currRotation);
-        }
-        let setSoFar = 0;
-        let columnj;
-        let floorj;
-        let rowi;
-        let coversAnchor = false;
-
-        // Normalize the rotation so the minimum occupied (row/col/floor) aligns to the anchor cell.
-        let minRow = Infinity;
-        let minCol = Infinity;
-        let minFloor = Infinity;
-        for (let i = 0; i < this.currPiece.totalThisFill; i++) {
-            minRow = Math.min(minRow, this.currPiece.getRowSet(i));
-            minCol = Math.min(minCol, this.currPiece.getColumnSet(i));
-            minFloor = Math.min(minFloor, this.currPiece.getFloorSet(i));
-        }
-
-        for (let i = 0; i < this.currPiece.totalThisFill; i++) {
-            rowi = this.row + (this.currPiece.getRowSet(setSoFar) - minRow);
-            columnj = this.column + (this.currPiece.getColumnSet(setSoFar) - minCol);
-            floorj = this.floor + (this.currPiece.getFloorSet(setSoFar) - minFloor);
-            if (this.grid[rowi] === undefined) {
-                return false;
-            }
-            let gridRowiColumnJ = this.grid[rowi][columnj];
-            if (gridRowiColumnJ === undefined) {
-                return false;
-            }
-            let gridRowiColumnJk = this.grid[rowi][columnj][floorj];
-            if (gridRowiColumnJk === undefined) {
-                return false;
-            }
-            if (gridRowiColumnJk !== 0) {
-                return false;
-            }
-            // `Piece3d` layout indexing is [floor][row][col]
-            let pieceVal = this.currPiece.getLayout()[this.currPiece.getFloorSet(setSoFar)][this.currPiece.getRowSet(setSoFar)][this.currPiece.getColumnSet(setSoFar)];
-            if (gridRowiColumnJk === 0 && pieceVal === 1) {
-                if (rowi === this.row && columnj === this.column && floorj === this.floor) {
-                    coversAnchor = true;
-                }
-                rowsSet[setSoFar] = rowi;
-                columnsSet[setSoFar] = columnj;
-                floorsSet[setSoFar] = floorj;
-                setSoFar++;
-            }
-            else {
-                return;
-            }
-        }
-        // Anchor coverage is guaranteed by the normalization step (min occupied cell aligns to the anchor).
-        this.triedPieces++;
-        return true;
-    }
-
-    put() {
-        if (this.totalSolutions === this.EXIT_SIGN) {
-            return;
-        }
-        let leftPieces = this.piecesIndices.length;
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.debug(new Date().getTime() - this.start + " [msec] put, leftPieces " + leftPieces);
-        }
-        if ((leftPieces === 0)) {
-            this.totalSolutions++;
-            console.log(new Date().getTime() - this.start + " [msec] Found a solution, click 'Show'");
-
-            if (this.totalSolutions === 1) {
-                this.showGrid();
-                this.showPieces();
-                this.totalSolutions = this.EXIT_SIGN;
-                return;
-            }
-        }
-        if (this.totalSolutions === this.EXIT_SIGN) {
-            return;
-        }
-        this.showGrid();
-        if (this.totalSolutions > 1) { // replacement of the above throw new Error(notif)
-            return;
-        }
-        let timeoutThreshold = 0;
-        if (new Date().getTime() - this.start > timeoutThreshold && timeoutThreshold > 0) {
-            this.showGrid();
-            let msg = new Date().toISOString() + ' Timeout, pieces per sec ' + Math.trunc(this.triedPieces / timeoutThreshold) + 'K';
-            console.warn(msg);
-            this.totalSolutions = this.EXIT_SIGN;
-            this.allLines = msg;
-        }
-        let rowsSet = new Array(5).fill(0); // TODO dynamic, per the rows in the piece
-        let columnsSet = new Array(5).fill(0);
-        let floorsSet = new Array(5).fill(0);
-
-        for (let i=0; i< leftPieces; i++) {
-            let piece = this.piecesIndices[i];
-            this.currPiece = this.pieces[piece];
-
-            // 3D rotations are required for the classic 3×4×5 packing (pieces must stand across floors).
-            // To keep runtime reasonable, skip duplicate rotations (many are equivalent for symmetric parts).
-            const rotations = this.currPiece.getAvailRotations();
-            const seen = new Set();
-            for (let r = 0; r < rotations; r++) {
-                this.currPiece.currRotation = r;
-
-                // Build a normalized signature of occupied coordinates for this rotation.
-                let minR = Infinity, minC = Infinity, minF = Infinity;
-                for (let t = 0; t < this.currPiece.totalThisFill; t++) {
-                    minR = Math.min(minR, this.currPiece.getRowSet(t));
-                    minC = Math.min(minC, this.currPiece.getColumnSet(t));
-                    minF = Math.min(minF, this.currPiece.getFloorSet(t));
-                }
-                let sig = '';
-                for (let t = 0; t < this.currPiece.totalThisFill; t++) {
-                    sig += (this.currPiece.getRowSet(t) - minR) + ',' +
-                        (this.currPiece.getColumnSet(t) - minC) + ',' +
-                        (this.currPiece.getFloorSet(t) - minF) + ';';
-                }
-                if (seen.has(sig)) {
-                    continue;
-                }
-                seen.add(sig);
-
-                if (this.canPut(rowsSet, columnsSet, floorsSet)) {
-                    this.piecesIndices.splice(i, 1);
-                    this.solution[this.PIECES-leftPieces] = piece; // solution.add(piece);
-                    this.putCurrPiece(rowsSet, columnsSet, floorsSet);
-                    if (this.triedPieces % 50000 === 0 /* || leftPieces <= 2 */) {
-                        this.showGrid();
-                        this.showPieces();
-                    }
-                    this.put(); // the recurse
-                    this.removeLast(piece, rowsSet, columnsSet, floorsSet);
-                    this.piecesIndices.splice(i, 0, piece);
-                }
-            }
-        }
-    }
-
-    showPieces() {
-        let line = '';
-        for (let i=0; i<this.PIECES - this.piecesIndices.length; i++) {
-            line += this.names.charAt(this.solution[i]) + " ";
-        }
-        console.log(new Date().getTime() - this.start + " [msec] pieces " + line + " tried pieces " + this.triedPieces);
-    }
-
-    putCurrPiece(rowsSet, columnsSet, floorsSet) {
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.debug(new Date().getTime() - this.start + " [msec] putCurrPiece " + this.currPiece.name);
-        }
-        this.currPiece.setPosition(this.row, this.column, this.floor);
-        let currIndex = this.currPiece.index+1;
-        for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = currIndex;
-        }
-        // this.showGrid();
-        // find next avail free position
-        this.goForward();
-        this.availInGrid -= this.currPiece.totalThisFill;
-    }
-
-    goForward() {
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.debug(new Date().getTime() - this.start + " [msec] goForward");
-        }
-        for (; this.floor<this.FLOORS; this.floor++) {
-            for (; this.row < this.ROWS; this.row++) {
-                for (; this.column < this.COLUMNS; this.column++) {
-                    if (this.grid[this.row][this.column][this.floor] === 0) {
-                        return;
-                    }
-                }
-                this.column = 0;
-            }
-            this.row = 0;
-        }
-    }
-
-    removeLast(piece, rowsSet, columnsSet, floorsSet) {
-        this.currPiece = this.pieces[piece];
-        if (!window.__PUZZLES_EDU_TEST__) {
-            console.debug(new Date().getTime() - this.start + " [msec] removeLast " + this.currPiece.name);
-        }
-        // currPieceLayout = this.currPiece.getLayout();
-        // getPosition
-        this.row = this.currPiece.getRow();
-        this.column = this.currPiece.getColumn();
-        this.floor = this.currPiece.getFloor();
-        // for debug- currPiece.setPosition(-1, -1, -1);
-        for (let i=0; i<this.currPiece.totalThisFill; i++) {
-            this.grid[rowsSet[i]][columnsSet[i]][floorsSet[i]] = this.gridCopy[rowsSet[i]][columnsSet[i]][floorsSet[i]];
-        }
-        this.availInGrid += this.currPiece.totalThisFill;
-    }
-
-    solve() {
-        this.start = new Date().getTime();
-        this.triedPieces = 0;
-
-        if (this.totalFillInGrid !== window.globalTotalFill) {
-            let msg = "invalid config, grid " + this.totalFillInGrid + " pieces " + window.globalTotalFill + " - make sure #rows,columns,floors is in the correct order";
-            this.allLines = 'Invalid input';
-            console.error(msg);
-            alert(msg);
-        } else {
-            try {
-                this.put();
-            } catch (err) {
-                console.error(err.stack);
-            }
-        }
-
-        let msg = new Date().getTime() - this.start + " [msec] Ended. Tried pieces ~ " + this.triedPieces;
-        console.log(msg);
-        // triedPieces is an estimate, because of the back-track from the recursive put.
-        // `showGrid()` populates `allLines` even for intermediate states; only treat it as a solution if we actually found one.
-        if (!this.solutionFound && this.allLines !== 'Invalid input') {
-            this.allLines = '';
-        }
-        return this.allLines === '' ? "Found no solution" : this.allLines;
+class PuzzleInputError extends Error {
+    constructor(message, lineNumber) {
+        super(lineNumber ? `Line ${lineNumber}: ${message}` : message);
+        this.name = "PuzzleInputError";
+        this.lineNumber = lineNumber;
     }
 }
 
-export { Puzzle3d }
+function coordinateKey(row, column, floor) {
+    return `${row},${column},${floor}`;
+}
+
+function normalizeCoordinates(cells) {
+    const minimum = [Infinity, Infinity, Infinity];
+    for (const cell of cells) {
+        minimum[0] = Math.min(minimum[0], cell[0]);
+        minimum[1] = Math.min(minimum[1], cell[1]);
+        minimum[2] = Math.min(minimum[2], cell[2]);
+    }
+    const normalized = cells.map((cell) => [
+        cell[0] - minimum[0],
+        cell[1] - minimum[1],
+        cell[2] - minimum[2]
+    ]);
+    normalized.sort((left, right) =>
+        left[0] - right[0] || left[1] - right[1] || left[2] - right[2]
+    );
+    return normalized;
+}
+
+function permutationSign(permutation) {
+    let inversions = 0;
+    for (let first = 0; first < permutation.length; first++) {
+        for (let second = first + 1; second < permutation.length; second++) {
+            if (permutation[first] > permutation[second]) {
+                inversions++;
+            }
+        }
+    }
+    return inversions % 2 === 0 ? 1 : -1;
+}
+
+function buildOrientations(cells) {
+    const permutations = [
+        [0, 1, 2], [0, 2, 1], [1, 0, 2],
+        [1, 2, 0], [2, 0, 1], [2, 1, 0]
+    ];
+    const orientations = [];
+    const seen = new Set();
+
+    for (const permutation of permutations) {
+        const parity = permutationSign(permutation);
+        for (const firstSign of [-1, 1]) {
+            for (const secondSign of [-1, 1]) {
+                for (const thirdSign of [-1, 1]) {
+                    if (parity * firstSign * secondSign * thirdSign !== 1) {
+                        continue;
+                    }
+                    const signs = [firstSign, secondSign, thirdSign];
+                    const transformed = cells.map((cell) =>
+                        signs.map((sign, axis) => sign * cell[permutation[axis]])
+                    );
+                    const normalized = normalizeCoordinates(transformed);
+                    const key = normalized.map((cell) => cell.join(",")).join(";");
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        orientations.push(normalized);
+                    }
+                }
+            }
+        }
+    }
+    return orientations;
+}
+
+function parseHeader(line) {
+    const match = line.match(/^#\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s|$)/);
+    if (!match) {
+        throw new PuzzleInputError("expected #rows,columns,floors", 1);
+    }
+    const dimensions = match.slice(1, 4).map(Number);
+    if (dimensions.some((dimension) => !Number.isInteger(dimension) || dimension < 1)) {
+        throw new PuzzleInputError("dimensions must be positive integers", 1);
+    }
+    return dimensions;
+}
+
+function parseExplicitGrid(lines, rows, columns, floors, startLine) {
+    const usableCells = [];
+    let floor = 0;
+    let row = 0;
+
+    for (let index = 0; index < lines.length; index++) {
+        const line = lines[index];
+        if (line === "") {
+            if (row > 0) {
+                if (row !== rows) {
+                    throw new PuzzleInputError(`grid floor has ${row} rows; expected ${rows}`, startLine + index);
+                }
+                floor++;
+                row = 0;
+            }
+            continue;
+        }
+        if (floor >= floors) {
+            throw new PuzzleInputError(`grid has more than ${floors} floors`, startLine + index);
+        }
+        if (row >= rows) {
+            throw new PuzzleInputError(`grid floor has more than ${rows} rows`, startLine + index);
+        }
+        if (line.length > columns) {
+            throw new PuzzleInputError(`grid row has ${line.length} columns; expected at most ${columns}`, startLine + index);
+        }
+        for (let column = 0; column < columns; column++) {
+            const character = line[column] ?? " ";
+            if (character === "x" || character === "X") {
+                usableCells.push([row, column, floor]);
+            } else if (character !== "-" && character !== "_" && character !== " ") {
+                throw new PuzzleInputError(`invalid grid character '${character}'`, startLine + index);
+            }
+        }
+        row++;
+    }
+
+    if (row > 0) {
+        if (row !== rows) {
+            throw new PuzzleInputError(`grid floor has ${row} rows; expected ${rows}`, startLine + lines.length - 1);
+        }
+        floor++;
+    }
+    if (floor !== floors) {
+        throw new PuzzleInputError(`grid has ${floor} floors; expected ${floors}`, startLine);
+    }
+    return usableCells;
+}
+
+function polyPieces() {
+    return POLY_LAYOUTS.map((layout, index) => {
+        const cells = [];
+        for (let row = 0; row < layout.length; row++) {
+            for (let column = 0; column < layout[row].length; column++) {
+                if (layout[row][column] === 1) {
+                    cells.push([row, column, 0]);
+                }
+            }
+        }
+        return {
+            name: POLY_NAMES[index],
+            typeName: POLY_NAMES[index],
+            cells
+        };
+    });
+}
+
+function parsePieces(lines, startLine) {
+    const pieces = [];
+    const usedNames = new Set();
+    let current = null;
+
+    function finishPiece(lineNumber) {
+        if (current === null) {
+            return;
+        }
+        if (current.cells.length === 0) {
+            throw new PuzzleInputError(`piece ${current.name} is empty`, lineNumber);
+        }
+        for (let copy = 0; copy < current.multiplier; copy++) {
+            const name = String.fromCharCode(current.name.charCodeAt(0) + copy);
+            if (usedNames.has(name)) {
+                throw new PuzzleInputError(`piece name '${name}' is duplicated`, current.lineNumber);
+            }
+            usedNames.add(name);
+            pieces.push({
+                name,
+                typeName: current.name,
+                cells: current.cells.map((cell) => [...cell])
+            });
+        }
+        current = null;
+    }
+
+    let foundEnd = false;
+    for (let index = 0; index < lines.length; index++) {
+        const line = lines[index];
+        const lineNumber = startLine + index;
+        if (/^#piece-end(?:\s|$)/i.test(line)) {
+            finishPiece(lineNumber);
+            foundEnd = true;
+            break;
+        }
+        const directive = line.match(/^#piece(.)?(?:\s+x(\d+))?(?:\s|$)/i);
+        if (directive) {
+            finishPiece(lineNumber);
+            const name = directive[1];
+            if (!name || /\s/.test(name)) {
+                throw new PuzzleInputError("piece directive requires a one-character name", lineNumber);
+            }
+            const multiplier = directive[2] === undefined ? 1 : Number(directive[2]);
+            if (!Number.isInteger(multiplier) || multiplier < 1) {
+                throw new PuzzleInputError("piece multiplier must be a positive integer", lineNumber);
+            }
+            current = {
+                name,
+                multiplier,
+                cells: [],
+                floor: 0,
+                row: 0,
+                lineNumber
+            };
+            continue;
+        }
+        if (line === "") {
+            continue;
+        }
+        if (current === null) {
+            throw new PuzzleInputError("expected a #Piece definition", lineNumber);
+        }
+        if (/^\d+$/.test(line)) {
+            const requestedFloor = Number(line);
+            if (requestedFloor < 2) {
+                throw new PuzzleInputError("piece floor markers start at 2", lineNumber);
+            }
+            current.floor = requestedFloor - 1;
+            current.row = 0;
+            continue;
+        }
+        for (let column = 0; column < line.length; column++) {
+            const character = line[column];
+            if (character === "x" || character === "X") {
+                current.cells.push([current.row, column, current.floor]);
+            } else if (character !== "-" && character !== "_" && character !== " ") {
+                throw new PuzzleInputError(`invalid piece character '${character}'`, lineNumber);
+            }
+        }
+        current.row++;
+    }
+
+    if (!foundEnd) {
+        throw new PuzzleInputError("missing #piece-End", startLine + lines.length);
+    }
+    if (pieces.length === 0) {
+        throw new PuzzleInputError("no pieces were defined", startLine);
+    }
+    return pieces;
+}
+
+function parsePuzzle3d(text) {
+    if (typeof text !== "string" || text.trim() === "") {
+        throw new PuzzleInputError("puzzle input is empty");
+    }
+    const lines = text.replace(/\r\n?/g, "\n").split("\n");
+    const [rows, columns, floors] = parseHeader(lines[0]);
+    const endIndex = lines.findIndex((line, index) =>
+        index > 0 && /^#end of grid(?:\s|\.|$)/i.test(line)
+    );
+    if (endIndex === -1) {
+        throw new PuzzleInputError("missing #end of grid");
+    }
+
+    const gridLines = lines.slice(1, endIndex);
+    const hasExplicitGrid = gridLines.some((line) => line !== "");
+    const usableCells = hasExplicitGrid
+        ? parseExplicitGrid(gridLines, rows, columns, floors, 2)
+        : Array.from({ length: rows * columns * floors }, (_, index) => {
+            const floor = Math.floor(index / (rows * columns));
+            const remainder = index % (rows * columns);
+            return [Math.floor(remainder / columns), remainder % columns, floor];
+        });
+
+    const pieces = /pieces\s*:\s*poly/i.test(lines[endIndex])
+        ? polyPieces()
+        : parsePieces(lines.slice(endIndex + 1), endIndex + 2);
+    const pieceCells = pieces.reduce((total, piece) => total + piece.cells.length, 0);
+    if (pieceCells !== usableCells.length) {
+        throw new PuzzleInputError(
+            `grid has ${usableCells.length} cells but pieces contain ${pieceCells}`
+        );
+    }
+
+    return {
+        rows,
+        columns,
+        floors,
+        usableCells,
+        pieces
+    };
+}
+
+function buildPlacements(definition) {
+    const cellIndex = new Map();
+    definition.usableCells.forEach((cell, index) =>
+        cellIndex.set(coordinateKey(...cell), index)
+    );
+    const groups = [];
+    const groupIndexByKey = new Map();
+    definition.pieces.forEach((piece) => {
+        const shapeKey = normalizeCoordinates(piece.cells)
+            .map((cell) => cell.join(","))
+            .join(";");
+        const groupKey = `${piece.typeName}\u0000${shapeKey}`;
+        let groupIndex = groupIndexByKey.get(groupKey);
+        if (groupIndex === undefined) {
+            groupIndex = groups.length;
+            groupIndexByKey.set(groupKey, groupIndex);
+            groups.push({
+                cells: piece.cells,
+                names: [],
+                placements: []
+            });
+        }
+        groups[groupIndex].names.push(piece.name);
+    });
+
+    const placements = [];
+    groups.forEach((group, groupIndex) => {
+        const seenPlacements = new Set();
+        for (const orientation of buildOrientations(group.cells)) {
+            const maxRow = Math.max(...orientation.map((cell) => cell[0]));
+            const maxColumn = Math.max(...orientation.map((cell) => cell[1]));
+            const maxFloor = Math.max(...orientation.map((cell) => cell[2]));
+            for (let floorOffset = 0; floorOffset + maxFloor < definition.floors; floorOffset++) {
+                for (let rowOffset = 0; rowOffset + maxRow < definition.rows; rowOffset++) {
+                    for (let columnOffset = 0; columnOffset + maxColumn < definition.columns; columnOffset++) {
+                        const cells = [];
+                        let valid = true;
+                        for (const [row, column, floor] of orientation) {
+                            const index = cellIndex.get(coordinateKey(
+                                row + rowOffset,
+                                column + columnOffset,
+                                floor + floorOffset
+                            ));
+                            if (index === undefined) {
+                                valid = false;
+                                break;
+                            }
+                            cells.push(index);
+                        }
+                        if (!valid) {
+                            continue;
+                        }
+                        cells.sort((left, right) => left - right);
+                        const placementKey = cells.join(",");
+                        if (seenPlacements.has(placementKey)) {
+                            continue;
+                        }
+                        seenPlacements.add(placementKey);
+                        const placementIndex = placements.length;
+                        placements.push({ groupIndex, cells });
+                        group.placements.push(placementIndex);
+                    }
+                }
+            }
+        }
+    });
+    return { groups, placements };
+}
+
+function findCountedExactCover(cellCount, groups, placements) {
+    const placementsByCell = Array.from({ length: cellCount }, () => []);
+    placements.forEach((placement, placementIndex) => {
+        placement.cells.forEach((cell) => placementsByCell[cell].push(placementIndex));
+    });
+    const covered = new Uint8Array(cellCount);
+    const remaining = groups.map((group) => group.names.length);
+    const selected = [];
+    let triedRows = 0;
+
+    function isAvailable(placement) {
+        if (remaining[placement.groupIndex] === 0) {
+            return false;
+        }
+        return placement.cells.every((cell) => covered[cell] === 0);
+    }
+
+    function search(coveredCount) {
+        if (coveredCount === cellCount) {
+            return remaining.every((count) => count === 0);
+        }
+
+        let candidates = null;
+        for (let cell = 0; cell < cellCount; cell++) {
+            if (covered[cell] !== 0) {
+                continue;
+            }
+            const available = placementsByCell[cell].filter(
+                (placementIndex) => isAvailable(placements[placementIndex])
+            );
+            if (available.length === 0) {
+                return false;
+            }
+            if (candidates === null || available.length < candidates.length) {
+                candidates = available;
+                if (candidates.length === 1) {
+                    break;
+                }
+            }
+        }
+
+        for (const placementIndex of candidates) {
+            const placement = placements[placementIndex];
+            triedRows++;
+            remaining[placement.groupIndex]--;
+            placement.cells.forEach((cell) => {
+                covered[cell] = 1;
+            });
+            selected.push(placementIndex);
+            if (search(coveredCount + placement.cells.length)) {
+                return true;
+            }
+            selected.pop();
+            placement.cells.forEach((cell) => {
+                covered[cell] = 0;
+            });
+            remaining[placement.groupIndex]++;
+        }
+        return false;
+    }
+
+    return {
+        solved: search(0),
+        selectedRows: selected,
+        triedRows
+    };
+}
+
+function solvePuzzle3d(definition) {
+    const startedAt = Date.now();
+    const { groups, placements } = buildPlacements(definition);
+    const hasMultipliers = groups.some((group) => group.names.length > 1);
+    const exactCover = hasMultipliers
+        ? findCountedExactCover(definition.usableCells.length, groups, placements)
+        : ExactCover3d.findOne(
+            definition.usableCells.length + groups.length,
+            placements.map((placement) => [
+                ...placement.cells,
+                definition.usableCells.length + placement.groupIndex
+            ])
+        );
+    const assignments = new Array(definition.usableCells.length).fill(null);
+
+    if (exactCover.solved) {
+        const usedNames = groups.map(() => 0);
+        for (const rowIndex of exactCover.selectedRows) {
+            const placement = placements[rowIndex];
+            const group = groups[placement.groupIndex];
+            const name = group.names[usedNames[placement.groupIndex]++];
+            for (const cell of placement.cells) {
+                assignments[cell] = name;
+            }
+        }
+    }
+    return {
+        solved: exactCover.solved,
+        rows: definition.rows,
+        columns: definition.columns,
+        floors: definition.floors,
+        usableCells: definition.usableCells,
+        assignments,
+        triedRows: exactCover.triedRows,
+        elapsedMs: Date.now() - startedAt
+    };
+}
+
+function formatSolution(result) {
+    if (!result.solved) {
+        return "Found no solution";
+    }
+    const values = new Map();
+    result.usableCells.forEach((cell, index) =>
+        values.set(coordinateKey(...cell), result.assignments[index])
+    );
+    const lines = [];
+    for (let floor = 0; floor < result.floors; floor++) {
+        for (let row = 0; row < result.rows; row++) {
+            const label = String(row + 1 + floor * result.rows).padStart(2, " ");
+            const cells = [];
+            for (let column = 0; column < result.columns; column++) {
+                cells.push(values.get(coordinateKey(row, column, floor)) ?? "*");
+            }
+            lines.push(`${label}  ${cells.join("  ")}`);
+        }
+        if (floor + 1 < result.floors) {
+            lines.push("");
+        }
+    }
+    return lines.join("\n");
+}
+
+class Puzzle3d {
+    constructor(pieces, rows, columns, floors, input) {
+        if (input) {
+            this.definition = parsePuzzle3d(input);
+        } else {
+            const usableCells = [];
+            for (let floor = 0; floor < floors; floor++) {
+                for (let row = 0; row < rows; row++) {
+                    for (let column = 0; column < columns; column++) {
+                        usableCells.push([row, column, floor]);
+                    }
+                }
+            }
+            this.definition = {
+                rows,
+                columns,
+                floors,
+                usableCells,
+                pieces: polyPieces().slice(0, pieces)
+            };
+            const pieceCells = this.definition.pieces.reduce(
+                (total, piece) => total + piece.cells.length,
+                0
+            );
+            if (pieceCells !== usableCells.length) {
+                this.invalidMessage = `grid has ${rows * columns * floors} cells but pieces contain ${pieces * 5}`;
+            }
+        }
+        this.totalSolutions = 0;
+        this.triedPieces = 0;
+        this.solutionFound = false;
+        this.result = null;
+    }
+
+    solve() {
+        if (this.invalidMessage) {
+            return "Invalid input";
+        }
+        this.result = solvePuzzle3d(this.definition);
+        this.totalSolutions = this.result.solved ? 1 : 0;
+        this.solutionFound = this.result.solved;
+        this.triedPieces = this.result.triedRows;
+        return formatSolution(this.result);
+    }
+}
+
+export {
+    Puzzle3d,
+    PuzzleInputError,
+    buildOrientations,
+    formatSolution,
+    parsePuzzle3d,
+    solvePuzzle3d
+};

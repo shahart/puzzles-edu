@@ -14,8 +14,8 @@ await import(pathToFileURL(path.resolve('test/node/setup.mjs')).href);
 // Add test files
 mocha.addFile(path.resolve('test/node/kickoff.test.mjs'));
 mocha.addFile(path.resolve('test/node/3d.test.mjs'));
+mocha.addFile(path.resolve('test/node/3d-presets.test.mjs'));
 
 mocha.run((failures) => {
   process.exitCode = failures ? 1 : 0;
 });
-
