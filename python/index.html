@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Run the General Puzzle solver locally in your browser with PyScript."
+    >
+    <title>Python Puzzle Solver</title>
+    <link
+        rel="stylesheet"
+        href="https://pyscript.net/releases/2026.7.2/core.css"
+    >
+    <script
+        type="module"
+        src="https://pyscript.net/releases/2026.7.2/core.js"
+    ></script>
+    <link rel="stylesheet" href="./pyscript.css">
+</head>
+<body>
+    <main class="solver-card">
+        <p class="eyebrow">PyScript browser runner</p>
+        <h1>Python Puzzle Solver</h1>
+        <p class="intro">
+            The existing Python solver runs entirely in this browser. No Flask
+            server receives the puzzle or performs the calculation.
+        </p>
+
+        <form id="solver-form" onsubmit="return false;">
+            <div class="dimensions">
+                <label for="rows">
+                    Rows
+                    <input id="rows" name="rows" type="number" min="1" value="5" required>
+                </label>
+                <span aria-hidden="true">×</span>
+                <label for="columns">
+                    Columns
+                    <input
+                        id="columns"
+                        name="columns"
+                        type="number"
+                        min="1"
+                        value="12"
+                        required
+                    >
+                </label>
+            </div>
+            <button id="solve-button" type="button">Solve in Python</button>
+        </form>
+
+        <section class="result" aria-live="polite" aria-atomic="true">
+            <p id="status" class="status">Loading Python…</p>
+            <p id="result" class="answer"></p>
+            <p id="details" class="details"></p>
+        </section>
+
+        <noscript>This demo requires JavaScript to load PyScript.</noscript>
+    </main>
+
+    <script
+        type="py"
+        src="./pyscript_app.py"
+        config="./pyscript.json"
+    ></script>
+</body>
+</html>

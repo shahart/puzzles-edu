@@ -1,0 +1,8 @@
+{
+    "files": {
+        "./src/__init__.py": "./src/__init__.py",
+        "./src/core/__init__.py": "./src/core/__init__.py",
+        "./src/core/piece.py": "./src/core/piece.py",
+        "./src/core/puzzle2d.py": "./src/core/puzzle2d.py"
+    }
+}

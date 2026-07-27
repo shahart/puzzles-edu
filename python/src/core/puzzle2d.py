@@ -27,6 +27,12 @@ class Puzzle2D:
         self._aborted = False
 
     def set(self, rows: int, columns: int) -> None:
+        # A rectangular board and its 90-degree rotation have the same tilings.
+        # Search the taller orientation because the row-major backtracking order
+        # is dramatically faster for narrow boards such as 20x3.
+        if columns > rows:
+            rows, columns = columns, rows
+
         self.pieces_indices = []
         self.solution = [0] * self.PIECES
         self.total_solutions = 0
@@ -199,6 +205,13 @@ class Puzzle2D:
             for i in range(self.curr_piece.total_this_fill):
                 row_i = self.row + self.curr_piece.get_row_set(set_so_far)
                 column_j = column_jj + self.curr_piece.get_column_set(set_so_far)
+                if (
+                    row_i < 0
+                    or row_i >= self.ROWS
+                    or column_j < 0
+                    or column_j >= self.COLUMNS
+                ):
+                    return False
                 if self.grid[row_i][column_j] != 0:
                     return False
                 else:
@@ -233,8 +246,12 @@ class Puzzle2D:
         if elapsed_time > 0:
             print(f"at {self.tried_pieces // elapsed_time:,} pieces per sec")
         print(
-            f"number of solutions "
-            f"{self.total_solutions * (8 if self.ROWS == self.COLUMNS else 4)}"
+            f"number of solutions {self.get_solution_count()}"
         )
 
         return self.total_solutions
+
+    def get_solution_count(self) -> int:
+        """Return solutions including equivalent board symmetries."""
+        symmetries = 8 if self.ROWS == self.COLUMNS else 4
+        return self.total_solutions * symmetries
