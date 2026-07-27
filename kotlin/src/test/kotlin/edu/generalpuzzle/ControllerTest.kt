@@ -30,4 +30,28 @@ class ControllerTest {
             .bodyJson()
             .hasPathSatisfying("$") { size -> size.assertThat().isEqualTo(1) }
     }
+
+    @Test
+    fun countSolutions() {
+        given(svc.solve(countSolutions = true)).willReturn(2)
+
+        mockMvcTester.get().uri("/solve/20_3?count=true")
+            .exchange()
+            .assertThat()
+            .hasStatusOk()
+            .hasContentType(MediaType.APPLICATION_JSON)
+            .bodyJson()
+            .hasPathSatisfying("$") { size -> size.assertThat().isEqualTo(2) }
+    }
+
+    @Test
+    fun solve3d() {
+        mockMvcTester.get().uri("/solve3d/3_4_5")
+            .exchange()
+            .assertThat()
+            .hasStatusOk()
+            .hasContentType(MediaType.APPLICATION_JSON)
+            .bodyJson()
+            .hasPathSatisfying("$") { size -> size.assertThat().isEqualTo(1) }
+    }
 }

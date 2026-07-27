@@ -35,6 +35,8 @@ class Puzzle2D {
         solution = arrayOfNulls(PIECES)
         totalSolutions = 0
         triedPieces = 0
+        row = 0
+        column = 0
 
         ROWS = rows
         COLUMNS = columns
@@ -230,15 +232,21 @@ class Puzzle2D {
         return true
     }
 
-    fun solve(): Int {
+    fun solve(countSolutions: Boolean = false): Int {
         val start = System.currentTimeMillis()
         val totalFillInPieces = pieces.filterNotNull().sumOf { it.totalThisFill }
 
         if (totalFillInGrid != totalFillInPieces) {
             log.error("Id {}_{}. Invalid config, grid {} pieces {}", ROWS, COLUMNS, totalFillInGrid, totalFillInPieces)
         } else {
-            log.info("Starting rows {} cols {}", ROWS, COLUMNS)
-            put()
+            val exactCoverRows = buildExactCoverRows()
+            val result = if (countSolutions) {
+                ExactCoverCounter.count(totalFillInGrid + PIECES, exactCoverRows)
+            } else {
+                ExactCoverCounter.findOne(totalFillInGrid + PIECES, exactCoverRows)
+            }
+            totalSolutions = result.solutions
+            triedPieces = result.triedRows
         }
 
         val elapsedTime = (System.currentTimeMillis() - start) / 1000
@@ -248,8 +256,60 @@ class Puzzle2D {
         if (elapsedTime > 0) {
             log.info("at {} pieces per sec", nf.format(triedPieces / elapsedTime))
         }
-        log.info("number of solutions {}", totalSolutions * if (ROWS == COLUMNS) 8 else 4)
+        val reportedSolutions = if (countSolutions) totalSolutions else {
+            totalSolutions * if (ROWS == COLUMNS) 8 else 4
+        }
+        log.info("number of solutions {}", reportedSolutions)
 
         return totalSolutions
+    }
+
+    private fun buildExactCoverRows(): List<IntArray> {
+        val cellColumns = Array(ROWS) { IntArray(COLUMNS) }
+        var cellColumn = 0
+        for (gridRow in 0 until ROWS) {
+            for (gridColumn in 0 until COLUMNS) {
+                cellColumns[gridRow][gridColumn] = if (grid[gridRow][gridColumn] == -1) {
+                    -1
+                } else {
+                    cellColumn++
+                }
+            }
+        }
+
+        val exactCoverRows = mutableListOf<IntArray>()
+        pieces.filterNotNull().forEachIndexed { pieceIndex, piece ->
+            repeat(piece.getAvailRotations()) {
+                val pieceRows = IntArray(piece.totalThisFill) { piece.getRowSet(it) }
+                val pieceColumns = IntArray(piece.totalThisFill) { piece.getColumnSet(it) }
+                val minRow = pieceRows.min()
+                val maxRow = pieceRows.max()
+                val minColumn = pieceColumns.min()
+                val maxColumn = pieceColumns.max()
+
+                for (rowOffset in -minRow until ROWS - maxRow) {
+                    for (columnOffset in -minColumn until COLUMNS - maxColumn) {
+                        val coverRow = IntArray(piece.totalThisFill + 1)
+                        var available = true
+                        for (cell in 0 until piece.totalThisFill) {
+                            val boardColumn = cellColumns[
+                                rowOffset + pieceRows[cell]
+                            ][columnOffset + pieceColumns[cell]]
+                            if (boardColumn == -1) {
+                                available = false
+                                break
+                            }
+                            coverRow[cell] = boardColumn
+                        }
+                        if (available) {
+                            coverRow[piece.totalThisFill] = totalFillInGrid + pieceIndex
+                            exactCoverRows += coverRow
+                        }
+                    }
+                }
+                piece.rotate()
+            }
+        }
+        return exactCoverRows
     }
 }

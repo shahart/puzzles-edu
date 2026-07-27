@@ -24,6 +24,18 @@ class Puzzle2DTest {
     }
 
     @Test
+    fun testCountsAllSolutions20_3() {
+        puzzle2D.set(20, 3)
+        Assertions.assertEquals(2, puzzle2D.solve(countSolutions = true))
+    }
+
+    @Test
+    fun testHasSolution3_20() {
+        puzzle2D.set(3, 20)
+        Assertions.assertEquals(1, puzzle2D.solve())
+    }
+
+    @Test
     fun testNoSolution5_13() {
         puzzle2D.set(5, 13)
         Assertions.assertEquals(0, puzzle2D.solve())
