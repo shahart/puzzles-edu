@@ -85,13 +85,23 @@ class Builder {
             columns = declardColumns;
             rows = declardRows;
             foundCells = columns * rows;
+            if (columns > rows) {
+                // The row-first solver is much faster with the short edge as columns.
+                // Keep the requested orientation when returning or displaying the result.
+                [rows, columns] = [columns, rows];
+                puzzle.transposeOutput = true;
+                puzzle.grid = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
+                puzzle.gridCopy = new Array(rows).fill(0).map(_ => new Array(columns).fill(0));
+            }
         }
         else {
             i=declardRows+1;
         }
         puzzle.COLUMNS = columns; // this.grid.length;
         puzzle.ROWS = rows; // this.grid[0].length;
-        console.log("Found " + (rows) + " rows, " + columns + " cols, with total of cells " + foundCells);
+        const outputRows = puzzle.transposeOutput ? columns : rows;
+        const outputColumns = puzzle.transposeOutput ? rows : columns;
+        console.log("Found " + outputRows + " rows, " + outputColumns + " cols, with total of cells " + foundCells);
         puzzle.totalFillInGrid = foundCells;
         // Puzzle2D, line "// Parts2D_Examples"
         puzzle.names = '';

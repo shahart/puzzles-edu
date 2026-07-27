@@ -20,6 +20,7 @@ class Puzzle2d {
         this.EXIT_SIGN = 100000;
         this.triedPieces = 0;
         this.solutionFound = false;
+        this.transposeOutput = false;
         this.row = 0;
         this.column = 0;
         this.piecesIndices = new Array();
@@ -88,13 +89,20 @@ class Puzzle2d {
     }
 
     getGrid() {
-        return this.grid;
+        if (!this.transposeOutput) {
+            return this.grid;
+        }
+        return new Array(this.COLUMNS).fill(0).map((_, row) =>
+            new Array(this.ROWS).fill(0).map((__, column) => this.grid[column][row])
+        );
     }
 
     showGrid() {
         // console.log(new Date().getTime() - this.start + " [msec] grid:"); // . Tried Pieces " + this.triedPieces); //  + " leftPieces " + this.piecesIndices.length);
         this.allLines = '';
-        for (let i=0; i<this.ROWS; i++) {
+        const outputRows = this.transposeOutput ? this.COLUMNS : this.ROWS;
+        const outputColumns = this.transposeOutput ? this.ROWS : this.COLUMNS;
+        for (let i=0; i<outputRows; i++) {
             let line = "";
             if (i+1 < 10) {
                 line += " " + (i+1);
@@ -103,24 +111,26 @@ class Puzzle2d {
                 line += (i+1);
             }
             line += "  ";
-            for (let j=0;  j<this.COLUMNS; j++) {
-                if (this.grid[i] === undefined || this.grid[i][j] === undefined) {
+            for (let j=0;  j<outputColumns; j++) {
+                const row = this.transposeOutput ? j : i;
+                const column = this.transposeOutput ? i : j;
+                if (this.grid[row] === undefined || this.grid[row][column] === undefined) {
                     console.error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                     alert("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                     throw new Error("undefined grid cell, row " + i + " column " + j + " make sure `#rows,columns` is correct");
                 }
-                if (this.grid[i][j] === -1) {
+                if (this.grid[row][column] === -1) {
                     line += "*  ";
                 // } else if (this.totalSolutions === 0) {
-                } else if (this.grid[i][j] === 0) {
+                } else if (this.grid[row][column] === 0) {
                     line += "-  ";
-                } else if (this.grid[i][j] === -10) { // 2nd type of grid cell
+                } else if (this.grid[row][column] === -10) { // 2nd type of grid cell
                      line += "o  ";
-                } else if (this.grid[i][j] === -15) { // good fish (AquaBelle)
+                } else if (this.grid[row][column] === -15) { // good fish (AquaBelle)
                     line += "g  ";
                 } else {
-                    let ch = this.names.charAt(this.grid[i][j] - 1);
-                    if (this.gridCopy[i][j] <= -10) {
+                    let ch = this.names.charAt(this.grid[row][column] - 1);
+                    if (this.gridCopy[row][column] <= -10) {
                         ch = ch.toLowerCase();
                     }
                     line += ch + "  ";

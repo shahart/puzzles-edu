@@ -1,108 +1,93 @@
 import { Puzzle2d } from "../puzzle2d.js";
 import { Piece } from "../piece.js";
 
-describe('Mocha Puzzle2D tests', function () {
+const { assert } = chai;
 
-    it('10x6-12 pieces', function () {
-        let puzzle2d = new Puzzle2d(12, 10, 6);
-        let res = puzzle2d.solve();
-        console.log("10x6-12 pieces>>" + res);
-        chai.assert.include(res, ' 1  ');
+describe("Puzzle2D (browser)", function () {
+    it("10x6-12 pieces", function () {
+        const puzzle2d = new Puzzle2d(12, 10, 6);
+        const res = puzzle2d.solve();
+        assert.include(res, " 1  ");
     });
 
-    it('3x3-3 pieces-no solution', function () {
-        let input =
-            '#3,3\n' +
-            'XXX\n' +
-            'xxX\n' +
-            'xxx\n' +
-            '\n' +
-            '#end of grid\n' +
-            '#PieceA\n' +
-            '  X\n' +
-            'xxX\n' +
-            'X\n' +
-            '\n' +
-            '#pieceB\n' +
-            'xx\n' +
-            'x\n' +
-            '\n' +
-            '#pieceC\n' +
-            'x\n' +
-            '\n' +
-            '#piece-End\n';
-        let puzzle2d = new Puzzle2d(3, 3, 3, input);
-        let res = puzzle2d.solve();
-        console.log("3x3-3 pieces-no solution>>" + res);
-        chai.assert.equal(res, 'Found no solution');
-    });
-
-    it('invalid config, grid 60 pieces 55', () => {
-        let puzzle2d = new Puzzle2d(11, 6, 10);
-        let res = puzzle2d.solve();
-        console.log("invalid config, grid 60 pieces 55>>" + res);
-        chai.assert.equal(res, 'Invalid input');
-    });
-
-    it('invalid config, grid 50 pieces 60', () => {
-        let puzzle2d = new Puzzle2d(12, 5, 10);
-        let res = puzzle2d.solve();
-        console.log("invalid config, grid 50 pieces 60>>" + res);
-        chai.assert.equal(res, 'Invalid input');
-    });
-
-    xit('12x5-Poly-9000-timeout', function () {
-        let puzzle2d = new Puzzle2d(12, 6, 10);
-        let res = puzzle2d.solve();
-        console.log("12x5-Poly>>" + res);
-        chai.assert.equal(res, '');
-    }); // .timeout(9200) // mocha's timeout 2 sec, app timeout (was) 9s, firefox 20s - trim now for 1.5 for 0.5 sec for user to hit okay
-
-    it('12x5-Poly-2000-timeout', function () {
-        let res;
-        try {
-            let puzzle2d = new Puzzle2d(12, 6, 10);
-            res = puzzle2d.solve();
-            console.log("12x5-Poly-2000-timeout>>" + res);
-            // chai.assert.fail();
-        } catch (err) {
-            console.warn(err);
-            console.warn(err.message);
-            console.log("timeout>>" + res);
-            chai.assert.isUndefined(res);
-            chai.assert.include(err.message, 'Timeout');
-        }
-    }); // made app timeout < 2s - people has no patience
-
-    // todo separate describe, for 'piece-' tests
-
-    it('piece-valid', function () {
-        let layout = [[1],[1],[1],[1,1]];
-        let piece = new Piece(0, layout, 1,1,'0');
-        chai.assert.equal(piece.totalThisFill, 5);
-    });
-
-    it('piece-invalid', function () {
-        try {
-            let layout = []; // [[1],[1],[1],[1,1]];
-            new Piece(0, layout, 1,1,'0');
-            chai.assert.fail();
-        } catch (err) {
-            console.warn('piece-invalid>>' + err);
-            chai.assert.include(err.message, 'undefined'); // Cannot read properties of undefined (reading 'length') at new Piece (piece.js:24:58) - layouts[0][0].length
+    it("20x3 bug", function () {
+        for (const dimensions of ["3,20", "20,3"]) {
+            it(`solves a ${dimensions} Poly rectangle`, function () {
+                const puzzle2d = new Puzzle2d(
+                    0,
+                    0,
+                    0,
+                    `#${dimensions}\n#end of grid. Pieces:Poly`
+                );
+                const res = puzzle2d.solve();
+                assert.include(res, " 1  ");
+                assert.lengthOf(res.trimEnd().split("\n"), Number(dimensions.split(",")[0]));
+            });
         }
     });
 
-    it('piece-empty', function () {
+    it("3x3-3 pieces-no solution", function () {
+        const input =
+            "#3,3\n" +
+            "XXX\n" +
+            "xxX\n" +
+            "xxx\n" +
+            "\n" +
+            "#end of grid\n" +
+            "#PieceA\n" +
+            "  X\n" +
+            "xxX\n" +
+            "X\n" +
+            "\n" +
+            "#pieceB\n" +
+            "xx\n" +
+            "x\n" +
+            "\n" +
+            "#pieceC\n" +
+            "x\n" +
+            "\n" +
+            "#piece-End\n";
+        const puzzle2d = new Puzzle2d(3, 3, 3, input);
+        const res = puzzle2d.solve();
+        assert.equal(res, "Found no solution");
+    });
+
+    it("invalid config, grid 60 pieces 55", function () {
+        const puzzle2d = new Puzzle2d(11, 6, 10);
+        const res = puzzle2d.solve();
+        assert.equal(res, "Invalid input");
+    });
+
+    it("invalid config, grid 50 pieces 60", function () {
+        const puzzle2d = new Puzzle2d(12, 5, 10);
+        const res = puzzle2d.solve();
+        assert.equal(res, "Invalid input");
+    });
+
+    it("piece-valid", function () {
+        const layout = [[1], [1], [1], [1, 1]];
+        const piece = new Piece(0, layout, 1, 1, "0");
+        assert.equal(piece.totalThisFill, 5);
+    });
+
+    it("piece-invalid", function () {
         try {
-            let layout = [[]];
-            let piece = new Piece(0, layout, 1,1,'0');
-            chai.assert.equal(piece.totalThisFill, 0);
-            chai.assert.fail();
+            const layout = [];
+            new Piece(0, layout, 1, 1, "0");
+            assert.fail("expected constructor to throw");
         } catch (err) {
-            console.warn('piece-empty>>' + err.message);
-            chai.assert.include(err.message, 'empty piece');
+            assert.include(String(err?.message ?? err), "undefined");
         }
     });
 
+    it("piece-empty", function () {
+        try {
+            const layout = [[]];
+            const piece = new Piece(0, layout, 1, 1, "0");
+            assert.equal(piece.totalThisFill, 0);
+            assert.fail("expected constructor to throw");
+        } catch (err) {
+            assert.include(String(err?.message ?? err), "empty piece");
+        }
+    });
 });

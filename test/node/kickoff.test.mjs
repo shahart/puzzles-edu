@@ -10,6 +10,22 @@ describe('Puzzle2D (Node)', function () {
     assert.include(res, ' 1  ');
   });
 
+  it('20x3 bug', function() {
+    for (const dimensions of ['3,20', '20,3']) {
+      it(`solves a ${dimensions} Poly rectangle`, function () {
+        const puzzle2d = new Puzzle2d(
+            0,
+            0,
+            0,
+            `#${dimensions}\n#end of grid. Pieces:Poly`
+        );
+        const res = puzzle2d.solve();
+        assert.include(res, ' 1  ');
+        assert.lengthOf(res.trimEnd().split('\n'), Number(dimensions.split(',')[0]));
+      });
+    }
+  });
+
   it('3x3-3 pieces-no solution', function () {
     const input =
       '#3,3\n' +
@@ -76,4 +92,3 @@ describe('Puzzle2D (Node)', function () {
     }
   });
 });
-
