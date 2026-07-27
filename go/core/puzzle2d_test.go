@@ -2,12 +2,7 @@ package core
 
 import "testing"
 
-func resetTotalFill() {
-	TotalFill = 0
-}
-
 func TestHasSolutionFor12x5(t *testing.T) {
-	resetTotalFill()
 	p := NewPuzzle2D()
 	p.Set(12, 5)
 	result := p.Solve(nil)
@@ -17,7 +12,6 @@ func TestHasSolutionFor12x5(t *testing.T) {
 }
 
 func TestHasSolutionFor10x6(t *testing.T) {
-	resetTotalFill()
 	p := NewPuzzle2D()
 	p.Set(10, 6)
 	result := p.Solve(nil)
@@ -27,7 +21,6 @@ func TestHasSolutionFor10x6(t *testing.T) {
 }
 
 func TestNoSolutionFor5x13(t *testing.T) {
-	resetTotalFill()
 	p := NewPuzzle2D()
 	p.Set(5, 13)
 	result := p.Solve(nil)

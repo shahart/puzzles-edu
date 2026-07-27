@@ -1,44 +1,51 @@
 package core
 
 import (
+	"context"
 	"fmt"
-	"sync/atomic"
 	"time"
 )
 
 type Puzzle2D struct {
-	PIECES          int
-	ROWS            int
-	COLUMNS         int
-	TotalSolutions  int
-	TriedPieces     int
-	Row             int
-	Column          int
-	PiecesIndices   []int
-	Solution        []int
-	Pieces          []*Piece
-	Names           string
-	Grid            [][]int
-	CurrPiece       *Piece
-	TotalFillInGrid int
-	AvailInGrid     int
-	aborted         *atomic.Bool
+	PIECES            int
+	ROWS              int
+	COLUMNS           int
+	TotalSolutions    int
+	TriedPieces       int
+	Row               int
+	Column            int
+	PiecesIndices     []int
+	Solution          []int
+	Pieces            []*Piece
+	Names             string
+	Grid              [][]int
+	CurrPiece         *Piece
+	TotalFillInGrid   int
+	TotalFillInPieces int
+	AvailInGrid       int
+	ctx               context.Context
 }
 
 func NewPuzzle2D() *Puzzle2D {
 	return &Puzzle2D{
-		PIECES:  12,
-		aborted: &atomic.Bool{},
+		PIECES: 12,
 	}
 }
 
 func (p *Puzzle2D) Set(rows, columns int) {
-	TotalFill = 0
+	// Transposed rectangles have identical solutions, but scanning along the
+	// shorter dimension dramatically reduces the search tree for narrow boards.
+	if rows < columns {
+		rows, columns = columns, rows
+	}
+
 	p.PiecesIndices = []int{}
 	p.Solution = make([]int, p.PIECES)
 	p.TotalSolutions = 0
 	p.TriedPieces = 0
-	p.aborted.Store(false)
+	p.TotalFillInPieces = 0
+	p.Row = 0
+	p.Column = 0
 
 	p.ROWS = rows
 	p.COLUMNS = columns
@@ -79,6 +86,7 @@ func (p *Puzzle2D) Set(rows, columns int) {
 	for i := 0; i < p.PIECES; i++ {
 		p.PiecesIndices = append(p.PiecesIndices, i)
 		p.Pieces[i] = NewPiece(i, allPieces[i], rotations[i], symmetric[i], string(p.Names[i]))
+		p.TotalFillInPieces += p.Pieces[i].TotalThisFill
 	}
 
 	if p.ROWS == p.COLUMNS && p.ROWS == 8 {
@@ -131,6 +139,10 @@ func (p *Puzzle2D) showPieces() {
 }
 
 func (p *Puzzle2D) Put() {
+	if p.isAborted() {
+		return
+	}
+
 	leftPieces := len(p.PiecesIndices)
 
 	if leftPieces == 0 {
@@ -164,7 +176,7 @@ func (p *Puzzle2D) Put() {
 					p.ShowGrid()
 					p.showPieces()
 
-					if p.aborted.Load() {
+					if p.isAborted() {
 						fmt.Printf("Id %d_%d. Signaled timed out! totalSolutions %d\n", p.ROWS, p.COLUMNS, p.TotalSolutions)
 						return
 					}
@@ -251,21 +263,28 @@ func (p *Puzzle2D) CanPut(rowsSet, columnsSet []int) bool {
 	return true
 }
 
-func (p *Puzzle2D) Solve(abortChan <-chan struct{}) int {
-	start := time.Now()
-
-	if abortChan != nil {
-		select {
-		case <-abortChan:
-			p.aborted.Store(true)
-		default:
-		}
+func (p *Puzzle2D) isAborted() bool {
+	if p.ctx == nil {
+		return false
 	}
+	select {
+	case <-p.ctx.Done():
+		return true
+	default:
+		return false
+	}
+}
 
-	if p.TotalFillInGrid != TotalFill {
-		fmt.Printf("Invalid config, grid %d pieces %d\n", p.TotalFillInGrid, TotalFill)
+func (p *Puzzle2D) SolveContext(ctx context.Context) int {
+	start := time.Now()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	p.ctx = ctx
+
+	if p.TotalFillInGrid != p.TotalFillInPieces {
+		fmt.Printf("Invalid config, grid %d pieces %d\n", p.TotalFillInGrid, p.TotalFillInPieces)
 	} else {
-		TotalFill = 0
 		fmt.Printf("Starting rows %d cols %d\n", p.ROWS, p.COLUMNS)
 		p.Put()
 	}
@@ -282,4 +301,24 @@ func (p *Puzzle2D) Solve(abortChan <-chan struct{}) int {
 	fmt.Printf("number of solutions %d\n", p.TotalSolutions*multiplier)
 
 	return p.TotalSolutions
+}
+
+// Solve keeps the original channel-based API for callers outside the HTTP
+// server. New code should prefer SolveContext so request cancellation is
+// propagated without an extra goroutine.
+func (p *Puzzle2D) Solve(abortChan <-chan struct{}) int {
+	if abortChan == nil {
+		return p.SolveContext(context.Background())
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go func() {
+		select {
+		case <-abortChan:
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+	return p.SolveContext(ctx)
 }

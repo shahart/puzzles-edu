@@ -10,6 +10,7 @@ import (
 
 func main() {
 	http.HandleFunc("/solve/", routes.SolveHandler)
+	http.HandleFunc("/solve3d/", routes.Solve3DHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {

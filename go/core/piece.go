@@ -2,8 +2,6 @@ package core
 
 import "fmt"
 
-var TotalFill int
-
 type Piece struct {
 	Index             int
 	Name              string
@@ -47,7 +45,6 @@ func NewPiece(index int, layout [][]int, availRotations int, symmetric int, name
 	for _, row := range layout {
 		for _, value := range row {
 			if value == 1 {
-				TotalFill++
 				p.TotalThisFill++
 			}
 		}
