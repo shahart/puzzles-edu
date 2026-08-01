@@ -43,7 +43,11 @@ class GraphIt3d {
             shapes +=
                 `<Shape DEF="PIECE_${index}">` +
                 `<Appearance><Material diffuseColor="${colorFor(index)}"/></Appearance>` +
-                '<Box size="7 7 7"/></Shape>\n';
+                '<Box size="7 7 7"';
+                if (index === 0) {
+                    shapes += " onclick=\"window.close()\"";
+                }
+                shapes += '/></Shape>\n';
         });
 
         let points = "";
@@ -66,7 +70,7 @@ class GraphIt3d {
     <link rel="stylesheet" href="https://x3dom.org/release/x3dom.css">
 </head>
 <body>
-    <button type="button" onclick="window.close()">Go Back</button>
+    <button type="button" onclick="window.close()">Go Back</button>&nbsp;or back by clicking on some Red box
     <X3D profile="Interchange" style="width:100%;height:90vh">
         <Scene>
             <Transform rotation="0 1 0 -1" scale="0.05 0.05 0.05">
