@@ -7,6 +7,39 @@ let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
 
 let puzzle;
+const solvedStateKey = 'puzzle2dSolvedState';
+
+function saveSolvedState(input, output) {
+    try {
+        sessionStorage.setItem(solvedStateKey, JSON.stringify({
+            input,
+            output,
+            title: dropdownButton.value
+        }));
+    } catch (error) {
+        console.warn('Could not preserve the solved puzzle: ' + error.message);
+    }
+}
+
+function restoreSolvedState() {
+    try {
+        const savedState = JSON.parse(sessionStorage.getItem(solvedStateKey));
+        const input = document.getElementById('input').value;
+        if (!savedState || savedState.input !== input || !savedState.output.startsWith(" 1  ")) {
+            return;
+        }
+
+        puzzle = new Puzzle2d(0, 0, 0, input);
+        document.getElementById('output').innerHTML = savedState.output;
+        graphItButton.disabled = false;
+        if ([...dropdownButton.options].some((option) => option.value === savedState.title)) {
+            dropdownButton.value = savedState.title;
+        }
+    } catch (error) {
+        sessionStorage.removeItem(solvedStateKey);
+        console.warn('Could not restore the solved puzzle: ' + error.message);
+    }
+}
 
 function handleOrientation(event) {
     let rot = "";
@@ -108,6 +141,7 @@ if (!(typeof (StorageEvent) !== undefined)) {
 
 let lastRun = loadPuzzle("lastRun");
 document.getElementById('input').value = lastRun !== '' ? lastRun : "#15,4\n#end of grid. Pieces:Poly";
+restoreSolvedState();
 
 dropdownButton.addEventListener('change', () => {
 
@@ -737,10 +771,16 @@ solveButton.addEventListener('click', () => {
             output.innerHTML.indexOf("no solution") !== -1 ||
             output.innerHTML.indexOf("Invalid input") !== -1 ||
             !output.innerHTML.startsWith(" 1  ");
+        if (graphItButton.disabled) {
+            sessionStorage.removeItem(solvedStateKey);
+        } else {
+            saveSolvedState(input, output.innerHTML);
+        }
     }
     else {
         console.warn('Invalid input. Follow an example');
         output.innerHTML = ' Invalid input. Follow an example';
+        sessionStorage.removeItem(solvedStateKey);
     }
 });
 

@@ -5,8 +5,42 @@ let graphItButton = document.getElementById('graphItButton');
 let dropdownButton = document.getElementById('PuzzleSelect');
 let activeWorker = null;
 let currentResult = null;
+const solvedStateKey = 'puzzle3dSolvedState';
 
 graphItButton.disabled = true;
+
+function saveSolvedState(input, output, result) {
+    try {
+        sessionStorage.setItem(solvedStateKey, JSON.stringify({
+            input,
+            output,
+            result,
+            title: dropdownButton.value
+        }));
+    } catch (error) {
+        console.warn('Could not preserve the solved puzzle: ' + error.message);
+    }
+}
+
+function restoreSolvedState() {
+    try {
+        const savedState = JSON.parse(sessionStorage.getItem(solvedStateKey));
+        if (!savedState || savedState.input !== document.getElementById('input').value ||
+            !savedState.result?.solved) {
+            return;
+        }
+
+        currentResult = savedState.result;
+        document.getElementById('output').value = savedState.output;
+        graphItButton.disabled = false;
+        if ([...dropdownButton.options].some((option) => option.value === savedState.title)) {
+            dropdownButton.value = savedState.title;
+        }
+    } catch (error) {
+        sessionStorage.removeItem(solvedStateKey);
+        console.warn('Could not restore the solved puzzle: ' + error.message);
+    }
+}
 
 function cancelActiveSolve() {
     if (activeWorker !== null) {
@@ -82,6 +116,7 @@ saveButton3.addEventListener('click', () => {
 
 let lastRun = loadPuzzle("lastRun3d");
 document.getElementById('input').value = lastRun !== '' ? lastRun : "#3,4,5\n#end of grid. Pieces:Poly";
+restoreSolvedState();
 
 dropdownButton.addEventListener('change', () => {
     cancelActiveSolve();
@@ -493,6 +528,7 @@ solveButton.addEventListener('click', () => {
     }
 
     savePuzzle("lastRun3d", input);
+    sessionStorage.removeItem(solvedStateKey);
     currentResult = null;
     graphItButton.disabled = true;
     output.value = 'Solving…';
@@ -520,6 +556,9 @@ solveButton.addEventListener('click', () => {
         currentResult = event.data.result;
         output.value = event.data.output;
         graphItButton.disabled = !currentResult.solved;
+        if (currentResult.solved) {
+            saveSolvedState(input, output.value, currentResult);
+        }
         console.log(
             `Ended in ${currentResult.elapsedMs} msec. Tried placements ${currentResult.triedRows}`
         );
