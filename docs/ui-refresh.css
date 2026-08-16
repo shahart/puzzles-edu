@@ -463,6 +463,48 @@ textarea {
     color: var(--muted);
 }
 
+.hex-neighbor-map {
+    position: relative;
+    width: min(100%, 300px);
+    aspect-ratio: 1;
+    margin: 24px auto 4px;
+}
+
+.hex-center,
+.hex-neighbor {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    aspect-ratio: 1.15;
+    padding: 8px;
+    box-sizing: border-box;
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+    font: 500 11px/1.1 "IBM Plex Mono", monospace;
+    text-align: center;
+}
+
+.hex-center {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    color: #10131a;
+    background: var(--accent);
+}
+
+.hex-neighbor {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hex-neighbor-1 { top: 50%; right: 0; translate: 0 -50%; }
+.hex-neighbor-2 { top: 10%; right: 13%; }
+.hex-neighbor-3 { top: 10%; left: 13%; }
+.hex-neighbor-4 { top: 50%; left: 0; translate: 0 -50%; }
+.hex-neighbor-5 { bottom: 10%; left: 13%; }
+.hex-neighbor-6 { right: 13%; bottom: 10%; }
+
 .feature-list {
     display: grid;
     gap: 12px;

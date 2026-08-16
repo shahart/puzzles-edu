@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/puzzles-edu/manifest.json">
+    <meta charset="utf-8">
+    <meta name="author" content="Shahar">
+    <meta name="description" content="Solve layered hexagonal-prism lattice puzzles in the browser">
+    <meta name="keywords" content="puzzle,solver,hexagon,hexagonal prism,exact cover">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ui-refresh.css">
+    <title>Hex Prism Solver</title>
+    <script src="hex/sourceHex.js" type="module"></script>
+</head>
+<body>
+<noscript>
+    <p style="color:red">JavaScript should be enabled!</p>
+</noscript>
+<div class="site-shell">
+    <header class="topbar">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">HEX</span>
+            <span class="brand-copy">
+                <span class="brand-title">Hexagonal-Prism Solver</span>
+                <span class="brand-subtitle">Six neighbors around every cell, plus front and back</span>
+            </span>
+        </a>
+        <nav class="nav-links">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="2dsolver.html">2D Solver</a>
+            <a class="nav-link" href="3dsolver.html">3D Solver</a>
+            <a class="nav-link" href="more.html">More Puzzles</a>
+        </nav>
+    </header>
+
+    <section class="solver-hero">
+        <span class="eyebrow">Hex Prism Solver</span>
+        <h1>Pack shapes on a layered hexagonal lattice.</h1>
+        <p class="solver-copy">Each cell has six neighbors in its layer and one neighbor on either face. Start from a preset, edit the text, solve it in the background, then open the interactive prism view.</p>
+    </section>
+
+    <div class="solver-grid">
+        <section class="solver-card">
+            <div class="control-row">
+                <div>
+                    <label for="PuzzleSelect">Preset Puzzle</label>
+                    <select id="PuzzleSelect">
+                        <option value="StackedTriangle">Stacked Triangle</option>
+                        <option value="HexFlower">Hex Flower</option>
+                        <option value="Custom">Custom</option>
+                        <option value="Presets" disabled selected>Presets</option>
+                    </select>
+                </div>
+
+                <div>
+                    <div class="field-label">Load my own 💾</div>
+                    <div class="save-grid">
+                        <button id="restoreButton1" type="button">A</button>
+                        <button id="restoreButton2" type="button">B</button>
+                        <button id="restoreButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="field-label">Save the input to</div>
+                    <div class="save-grid">
+                        <button id="saveButton1" type="button">A</button>
+                        <button id="saveButton2" type="button">B</button>
+                        <button id="saveButton3" type="button">C</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="input">Puzzle Definition</label>
+                    <textarea id="input" rows="18" cols="34" spellcheck="false" aria-label="Hex puzzle definition"></textarea>
+                </div>
+
+                <div class="button-row solver-actions">
+                    <button id="solveButton" type="button">Solve</button>
+                    <button id="graphItButton" type="button" disabled>Show</button>
+                </div>
+
+                <div>
+                    <label for="output">Solution</label>
+                    <textarea id="output" disabled rows="14" cols="34" aria-label="Hex puzzle solution"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel-card">
+            <h2 class="panel-title">Write Your Own Puzzle</h2>
+            <p class="solver-note">Axial coordinates are written as <span class="mono">q,r,z</span>. The six neighbors change q and r; front and back change z.</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>Axial ASCII</strong>
+                    Start with <span class="mono">#rows,columns,layers</span>. Use <span class="mono">x</span> for a cell, holes for <span class="mono">-</span>, and a blank line between layers.
+                </div>
+                <div class="feature-item">
+                    <strong>Coordinate lists</strong>
+                    Start with <span class="mono">#coordinates</span>, then write one integer <span class="mono">q,r,z</span> triple per cell. Negative coordinates are valid.
+                </div>
+                <div class="feature-item">
+                    <strong>Piece blocks</strong>
+                    Finish the grid with <span class="mono">#end of grid</span>. Define <span class="mono">#PieceA</span> blocks and finish with <span class="mono">#piece-End</span>. Add <span class="mono">xN</span> to create identical copies.
+                </div>
+                <div class="feature-item">
+                    <strong>Physical turns</strong>
+                    Pieces may rotate in 60° steps and turn front-to-back, for up to 12 distinct orientations.
+                </div>
+            </div>
+
+            <div class="hex-neighbor-map" aria-label="Axial neighbor directions">
+                <span class="hex-center">q,r</span>
+                <span class="hex-neighbor hex-neighbor-1">+1,0</span>
+                <span class="hex-neighbor hex-neighbor-2">+1,-1</span>
+                <span class="hex-neighbor hex-neighbor-3">0,-1</span>
+                <span class="hex-neighbor hex-neighbor-4">-1,0</span>
+                <span class="hex-neighbor hex-neighbor-5">-1,+1</span>
+                <span class="hex-neighbor hex-neighbor-6">0,+1</span>
+            </div>
+
+            <div class="footer-card" style="margin-top: 18px;">
+                <p class="tiny muted">The browser harness covers parsing, orientations, solving, and rendering.</p>
+                <div class="button-row">
+                    <a class="pill-link" href="hex/test/test.html">Tests</a>
+                    <a class="pill-link" href="index.html">Back to demos</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+</body>
+</html>
