@@ -505,6 +505,28 @@ textarea {
 .hex-neighbor-5 { bottom: 10%; left: 13%; }
 .hex-neighbor-6 { right: 13%; bottom: 10%; }
 
+.sphere-stack-demo {
+    position: relative;
+    width: 260px;
+    height: 210px;
+    max-width: 100%;
+    margin: 26px auto 4px;
+}
+
+.sphere-dot {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #fff7dc 0 9%, #eaa06e 32%, var(--accent) 68%, var(--accent-strong) 100%);
+    box-shadow: inset -12px -14px 22px rgba(70, 28, 8, 0.22), 0 16px 30px rgba(72, 41, 17, 0.16);
+}
+
+.sphere-dot-left { left: 8px; bottom: 4px; }
+.sphere-dot-middle { left: 82px; bottom: 4px; }
+.sphere-dot-right { right: 8px; bottom: 4px; }
+.sphere-dot-top { top: 12px; left: 82px; z-index: 2; }
+
 .feature-list {
     display: grid;
     gap: 12px;
