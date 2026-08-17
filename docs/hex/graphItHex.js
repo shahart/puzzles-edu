@@ -72,17 +72,18 @@ class GraphItHex {
     <script src="https://x3dom.org/release/x3dom-full.js"></script>
     <link rel="stylesheet" href="https://x3dom.org/release/x3dom.css">
     <style>
-        html, body { height: 100%; margin: 0; background: #0c111a; color: #e8edf7; font-family: sans-serif; }
-        body { display: grid; grid-template-rows: auto 1fr; }
-        header { display: flex; align-items: center; gap: 14px; padding: 12px 16px; }
+        html, body { height: 100%; margin: 0; overflow: hidden; background: #0c111a; color: #e8edf7; font-family: sans-serif; }
+        header { display: flex; align-items: center; gap: 14px; height: 60px; padding: 12px 16px; box-sizing: border-box; }
         button { border: 0; border-radius: 999px; padding: 9px 14px; font-weight: 700; cursor: pointer; }
-        x3d { width: 100%; height: 100%; }
+        x3d { display: block; width: 100vw; height: calc(100vh - 60px); }
+        @supports (height: 100dvh) { x3d { height: calc(100dvh - 60px); } }
     </style>
 </head>
 <body>
     <header><button type="button" onclick="window.close()">Go Back</button><span>${escapeHtml(title)}</span></header>
     <X3D profile="Interchange">
         <Scene>
+            <NavigationInfo type='"EXAMINE"' transitionType='"TELEPORT"'></NavigationInfo>
             <Viewpoint position="0 0 120"></Viewpoint>
             <Transform rotation="1 0 0 -0.82" scale="0.8 0.8 0.8">
                 <Transform translation="${center.map((value) => value.toFixed(3)).join(" ")}">

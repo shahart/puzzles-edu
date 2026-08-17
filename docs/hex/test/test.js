@@ -79,6 +79,8 @@ describe("Hexagonal-prism solver", function () {
         assert.include(markup, "IndexedFaceSet");
         assert.include(markup, 'DEF="HEX_PIECE_0"');
         assert.include(markup, 'translation="10.000 0.000 0.000"');
+        assert.include(markup, "height: calc(100vh - 60px)");
+        assert.notInclude(markup, "x3d { width: 100%; height: 100%; }");
     });
 });
 

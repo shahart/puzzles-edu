@@ -107,6 +107,8 @@ describe("Close-packed sphere solver", function () {
         const markup = new GraphItSphere().getSphereX3d(puzzle.result, "unit test");
         assert.include(markup, '<Sphere radius="5"/>');
         assert.include(markup, 'translation="5.000 2.887 8.165"');
+        assert.include(markup, "height: calc(100vh - 60px)");
+        assert.notInclude(markup, "x3d { width: 100%; height: 100%; }");
     });
 });
 
