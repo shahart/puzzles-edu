@@ -47,7 +47,8 @@ class GraphItSphere {
         const shapes = names.map((name, index) =>
             `<Shape DEF="SPHERE_PIECE_${index}">` +
             `<Appearance><Material diffuseColor="${colorFor(index)}"/></Appearance>` +
-            '<Sphere radius="5"/></Shape>'
+            '<Sphere radius="5"' + (index === 0 ? ' onclick="window.close()"' : '') +
+            '/></Shape>'
         ).join("\n");
         const cells = positions.map((position, index) =>
             `<Transform DEF="SPHERE_CELL_${index}" translation="${position.map((value) => value.toFixed(3)).join(" ")}">` +
@@ -71,7 +72,7 @@ class GraphItSphere {
     </style>
 </head>
 <body>
-    <header><button type="button" onclick="window.close()">Go Back</button><span>${escapeHtml(title)}</span></header>
+    <header><button type="button" onclick="window.close()">Go Back</button>&nbsp;or back by clicking on some Red box. Title: <span>${escapeHtml(title)}</span></header>
     <X3D profile="Interchange">
         <Scene>
             <NavigationInfo type='"EXAMINE"' transitionType='"TELEPORT"'></NavigationInfo>

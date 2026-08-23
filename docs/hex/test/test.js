@@ -78,7 +78,11 @@ describe("Hexagonal-prism solver", function () {
         const markup = new GraphItHex().getHexX3d(puzzle.result, "unit test");
         assert.include(markup, "IndexedFaceSet");
         assert.include(markup, 'DEF="HEX_PIECE_0"');
+        assert.include(markup, '<IndexedFaceSet onclick="window.close()"');
+        assert.equal((markup.match(/onclick="window\.close\(\)"/g) || []).length, 2);
+        assert.include(markup, 'Coordinate point="5.7 0 -4.7');
         assert.include(markup, 'translation="10.000 0.000 0.000"');
+        assert.include(markup, 'rotation="0 0 1 0.523599"');
         assert.include(markup, "height: calc(100vh - 60px)");
         assert.notInclude(markup, "x3d { width: 100%; height: 100%; }");
     });

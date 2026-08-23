@@ -36,9 +36,11 @@ describe("Puzzle3D (browser)", function () {
             "#1,1,1\nx\n\n#end of grid\n#PieceA\nx\n\n#piece-End\n"
         );
         puzzle3d.solve();
-        const markup = new GraphIt3d().get3dX3d(puzzle3d.result, "unit test");
+        const markup = new GraphIt3d().get3dX3d(puzzle3d.result, "unit <test>");
         assert.include(markup, 'DEF="PIECE_0"');
         assert.include(markup, 'translation="0 0 0"');
+        assert.include(markup, "<span>unit &lt;test&gt;</span>");
+        assert.notInclude(markup, "<span>unit <test></span>");
     });
 
     it("1x1x1-1 piece", function () {

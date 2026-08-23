@@ -70,7 +70,7 @@ class GraphIt3d {
     <link rel="stylesheet" href="https://x3dom.org/release/x3dom.css">
 </head>
 <body>
-    <button type="button" onclick="window.close()">Go Back</button>&nbsp;or back by clicking on some Red box
+    <button type="button" onclick="window.close()">Go Back</button>&nbsp;or back by clicking on some Red box. Title: <span>${escapeHtml(title)}</span>
     <X3D profile="Interchange" style="width:100%;height:90vh">
         <Scene>
             <Transform rotation="0 1 0 -1" scale="0.05 0.05 0.05">

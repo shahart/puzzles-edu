@@ -26,13 +26,14 @@ function colorFor(index) {
         .join(" ");
 }
 
-function hexPrismGeometry() {
-    return '<IndexedFaceSet coordIndex="6 7 8 9 10 11 -1 5 4 3 2 1 0 -1 ' +
+function hexPrismGeometry(closeOnClick = false) {
+    return '<IndexedFaceSet' + (closeOnClick ? ' onclick="window.close()"' : '') +
+        ' coordIndex="6 7 8 9 10 11 -1 5 4 3 2 1 0 -1 ' +
         '1 7 6 0 -1 2 8 7 1 -1 3 9 8 2 -1 4 10 9 3 -1 5 11 10 4 -1 0 6 11 5 -1">' +
-        '<Coordinate point="4.8 0 -3.8, 2.4 4.157 -3.8, -2.4 4.157 -3.8, ' +
-        '-4.8 0 -3.8, -2.4 -4.157 -3.8, 2.4 -4.157 -3.8, ' +
-        '4.8 0 3.8, 2.4 4.157 3.8, -2.4 4.157 3.8, ' +
-        '-4.8 0 3.8, -2.4 -4.157 3.8, 2.4 -4.157 3.8"/>' +
+        '<Coordinate point="5.7 0 -4.7, 2.85 4.936 -4.7, -2.85 4.936 -4.7, ' +
+        '-5.7 0 -4.7, -2.85 -4.936 -4.7, 2.85 -4.936 -4.7, ' +
+        '5.7 0 4.7, 2.85 4.936 4.7, -2.85 4.936 4.7, ' +
+        '-5.7 0 4.7, -2.85 -4.936 4.7, 2.85 -4.936 4.7"/>' +
         '</IndexedFaceSet>';
 }
 
@@ -55,11 +56,11 @@ class GraphItHex {
         const shapes = names.map((name, index) =>
             `<Shape DEF="HEX_PIECE_${index}">` +
             `<Appearance><Material diffuseColor="${colorFor(index)}"/></Appearance>` +
-            hexPrismGeometry() +
+            hexPrismGeometry(index === 0) +
             '</Shape>'
         ).join("\n");
         const cells = positions.map((position, index) =>
-            `<Transform DEF="HEX_CELL_${index}" translation="${position.map((value) => value.toFixed(3)).join(" ")}">` +
+            `<Transform DEF="HEX_CELL_${index}" translation="${position.map((value) => value.toFixed(3)).join(" ")}" rotation="0 0 1 0.523599">` +
             `<Shape USE="HEX_PIECE_${shapeIndex.get(result.assignments[index])}"/></Transform>`
         ).join("\n");
 
@@ -80,7 +81,7 @@ class GraphItHex {
     </style>
 </head>
 <body>
-    <header><button type="button" onclick="window.close()">Go Back</button><span>${escapeHtml(title)}</span></header>
+    <header><button type="button" onclick="window.close()">Go Back</button>&nbsp;or back by clicking on some Red box. Title: <span>${escapeHtml(title)}</span></header>
     <X3D profile="Interchange">
         <Scene>
             <NavigationInfo type='"EXAMINE"' transitionType='"TELEPORT"'></NavigationInfo>

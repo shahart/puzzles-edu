@@ -1,9 +1,16 @@
 import { Puzzle2d } from "../puzzle2d.js";
 import { Piece } from "../piece.js";
+import { GraphIt } from "../graphIt.js";
 
 const { assert } = chai;
 
 describe("Puzzle2D (browser)", function () {
+    it("renders an escaped title beside the back button", function () {
+        const markup = new GraphIt().get_x3d([], "", "unit <test>", false);
+        assert.include(markup, "<span>unit &lt;test&gt;</span>");
+        assert.notInclude(markup, "<span>unit <test></span>");
+    });
+
     it("10x6-12 pieces", function () {
         const puzzle2d = new Puzzle2d(12, 10, 6);
         const res = puzzle2d.solve();

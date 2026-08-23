@@ -1,3 +1,11 @@
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+}
+
 class GraphIt {
 
     get_x3d(grid, solution, title, aquaBelleMode) {
@@ -21,11 +29,11 @@ class GraphIt {
             "    <script type='text/javascript' src='https://x3dom.org/release/x3dom-full.js'></script>\n" +
             "    <link rel='stylesheet' type='text/css' href='https://x3dom.org/release/x3dom.css' />\n" +
             "    <meta charset=\"utf-8\">\n" +
-            "    <title>x3d " + title + "</title>\n" +
+            "    <title>x3d " + escapeHtml(title) + "</title>\n" +
             "    <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0'>\n" +
             "</head>\n" +
             "<body>\n" +
-            "<button onClick=\"window.close()\">Go Back</button>&nbsp;or back by clicking on some Cyan box\n " +
+            "<button onClick=\"window.close()\">Go Back</button>&nbsp;or back by clicking on some Cyan box. Title: <span>" + escapeHtml(title) + "</span>\n " +
 
             "<center>" +
             // solution.replaceAll("\n", "<p>") + //
