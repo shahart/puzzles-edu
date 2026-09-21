@@ -256,6 +256,7 @@ class Puzzle2d {
                     //      Exynos 1380 (Q1 2023) -> 460k
                     //      iPhone 15 -> 1520k
                     //      mac-mini 2024 -> 1586 (900 on low power mode)
+                    //      Mac m5 -> 1930k
                     // Firefox Focus:
                     //      i7, 8th - 80, 76, 73 -> ~76k
                     //      Cell - 79, 72, 90 -> ~80k
