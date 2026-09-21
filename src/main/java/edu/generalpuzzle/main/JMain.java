@@ -67,7 +67,7 @@ final class JMain extends JFrame {
     public JMain() throws HeadlessException {
 //        super(resourceBundle.getString("puzzles"));
 
-        super("puzzles 1.0.2");
+        super("puzzles 2.0.0");
 
 //        try {
 //            resourceBundle = new PropertyResourceBundle(Files.newInputStream(Paths.get("application.properties")));

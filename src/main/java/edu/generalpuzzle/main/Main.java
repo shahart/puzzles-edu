@@ -21,9 +21,6 @@ import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 //import java.util.concurrent.ForkJoinPool;
 //import extra166y.ParallelArray;
@@ -61,6 +58,7 @@ public final class Main {
     private boolean matchesLoaded = false;
     private final PuzzleDefinitionLoader puzzleDefinitionLoader = new PuzzleDefinitionLoader(Path.of("config"));
     private final SolverOptionsLoader solverOptionsLoader = new SolverOptionsLoader(Path.of("myPzl.properties"));
+    private final SolverExecution solverExecution = new SolverExecution();
 
 
     public String getStatus(int id) {
@@ -329,10 +327,6 @@ public final class Main {
             }
 //        }
 
-        // TODO knownValue per thread
-        for (EngineStrategy engin: engine)
-            engin.setForRatio(knownSolutions);
-
         System.out.println();
         GraphIt.setFolderArgs(argsBuffer + "/");
         GraphIt.setArgs(argsBuffer + "_" +
@@ -342,80 +336,21 @@ public final class Main {
 
         new File("tmp" + File.separator + argsBuffer); //args[0]);
 
-        int enginePart = partsSize/ engine.length;
-        int currPart = fromPart;
-
         log.info(argsBuffer.toString());
         log.info("using " + engine[0].getClass().getName());
-
-        List<Callable<Integer>> tasks = new LinkedList<Callable<Integer>>();
-
-        for (int i=0; i<engine.length; i++) {
-            if (i == engine.length-1 && currPart + enginePart < partsSize) // handle the last part
-                enginePart = toPart - currPart;
-            engine[i].setRange(currPart, currPart + enginePart);
-            currPart += enginePart;
-            tasks.add(engine[i]); // parArr
-        }
-
-        Thread.currentThread().setPriority(Thread.NORM_PRIORITY-1);
-
-        System.gc();
-
-        timeToAll = System.currentTimeMillis();
-
-//        ForkJoinPool fj = new ForkJoinPool(2);
-//        pa =  ParallelArray.createUsingHandoff(engine, fj);
-//        pa.apply(solveIt);
-//
-
-//        new File("tmp").mkdir();
-//        new File("tmp/" + argsBuffer.toString()).mkdir(); //Args.args[0]).mkdir();
-
-        ExecutorService executor = Executors.newFixedThreadPool(engines); //engine.length+1); // parArr
-        try {
-            new File("tmp").mkdir();
-            new File("tmp/" + argsBuffer).mkdir(); //Args.args[0]).mkdir();
-
-            executor.invokeAll(tasks);
-        }
-        catch (Exception e) {
-            e.printStackTrace();                                                                                                                                                                                    
-        }
-        executor.shutdown();
-        
-        // duplicates statistics
-
-        int sum=0;
-        int count=0;
-
-        if (Shared.getInstance().uniqsFoundSolutions != null)
-            for (int i=0; i< Shared.getInstance().uniqsFoundSolutions.length; i++)
-                for (int j=0; j< Shared.getInstance().uniqsFoundSolutions[i].length; j++)
-                    if (Shared.getInstance().uniqsFoundSolutions[i][j] != null && ! Shared.getInstance().uniqsFoundSolutions[i][j].isEmpty()) {
-                        sum += Shared.getInstance().uniqsFoundSolutions[i][j].size();
-                        count++;
-                    }
-
-
-        if (sum > 0)
-            System.out.println("sum = " + sum + " count = " + count);
-
-
+        new File("tmp").mkdir();
+        new File("tmp/" + argsBuffer).mkdir();
+        SolverExecutionResult executionResult = solverExecution.execute(engine, engines, fromPart, toPart, knownSolutions);
+        if (executionResult.duplicateEntries() > 0)
+            System.out.println("sum = " + executionResult.duplicateEntries()
+                    + " count = " + executionResult.duplicateSets());
         log.info("finished");
+        timeToAll = executionResult.wallClockSeconds();
+        triedParts += executionResult.triedParts();
+        uniqueSolutions += executionResult.uniqueSolutions();
+        int totalSolutions = executionResult.totalSolutions();
 
-        log.info("parallel time: " + (System.currentTimeMillis() -timeToAll)/1000);
-        timeToAll = (System.currentTimeMillis() - timeToAll) / 1000;
-
-        int totalSolutions = 0;
-
-        for (ParallelEngineStrategy engin: engine) {
-            triedParts += engin.getTriedParts();
-            uniqueSolutions += engin.getUniqueSolutions();
-            totalSolutions += engin.getTotalSolutions();
-        }
-
-        System.out.println("total " + getTime() + " seconds");
+        System.out.println("total " + executionResult.engineSeconds() + " seconds");
 
         if (//EngineStrategy.get_ENGINE_TYPE() != EngineStrategy.ENGINE_TYPE_DLX &&
             engine[0].getLastSolution().length() > 0 && toPart - fromPart == partsSize) { // TODO or
