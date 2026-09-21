@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 //import org.apache.log4j.PropertyConfigurator;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -58,6 +59,7 @@ public final class Main {
     private int uniqueSolutions = 0;
 
     private boolean matchesLoaded = false;
+    private final PuzzleDefinitionLoader puzzleDefinitionLoader = new PuzzleDefinitionLoader(Path.of("config"));
 
 
     public String getStatus(int id) {
@@ -596,7 +598,7 @@ public final class Main {
 
     /** debug */
 	private String custom(String[] args, IGrid atLeastGrid, Parts partsOk) {
-        PuzzleException.addTrace = true;
+        PuzzleException.setAddTrace(true);
         if (args.length < 1 || (args.length == 1 && args[0].equalsIgnoreCase("DEBUG_CODE"))) {
             System.out.println("missing caseId"); // , try\n");
             return "missing caseId";
@@ -606,28 +608,19 @@ public final class Main {
         for (int i=1; i<args.length; i++)
             argsToScript[i-1] = Args.args[i]; //
 
-        Interpreter interpreter = new Interpreter();
+        Interpreter interpreter;
         String shuffle = "";
 
         int i =0;
         do {
             try {
-				interpreter.set("bsh.args", argsToScript);
+                interpreter = puzzleDefinitionLoader.newInterpreter(argsToScript);
 
                 if (i == 0)
                     System.out.println("\ncustom (" + args[0] + ") loaded - starting...\n");
-                IGrid grid = (IGrid) interpreter.source("config/" + args[0] + "_grid.bsh");
-                if (grid == null) {
-					System.out.println(interpreter.get("error"));
-                    return (String)interpreter.get("error");
-				}
+                IGrid grid = puzzleDefinitionLoader.loadGrid(interpreter, args[0]);
                 atLeastGrid = grid;
-                Parts parts = (Parts) interpreter.source("config/" + args[0] + "_parts.bsh");
-
-                if (parts == null) {
-					System.out.println(interpreter.get("error"));
-                    return (String)interpreter.get("error");
-				}
+                Parts parts = puzzleDefinitionLoader.loadParts(interpreter, args[0]);
 
                 if (engine.length == 1) {
                     int partsSize = parts.getParts().size();
@@ -642,11 +635,13 @@ public final class Main {
                 partsOk = parts;
                 interpreter.set("parts", parts);
                 try {
-                    Parts.matches = (boolean[][]) interpreter.source("config/" + args[0] + "_matches.bsh");
-                    matchesLoaded = true;
-                    System.out.println("matches.bsh - Loaded\n");
+                    Optional<boolean[][]> matches = puzzleDefinitionLoader.loadMatches(interpreter, args[0]);
+                    if (matches.isPresent()) {
+                        Parts.matches = matches.get();
+                        matchesLoaded = true;
+                        System.out.println("matches.bsh - Loaded\n");
+                    }
                 }
-                catch (FileNotFoundException e) { }
                 catch (Exception e) { System.out.println(e + "\n"); }
                 for (IPart part: parts.getParts()) {
                     parts.complete(part);
@@ -658,7 +653,7 @@ public final class Main {
                 if (i == 0 && parts != null) {
 
                     try {
-                        Parts partsII = (Parts) interpreter.source("config/" + args[0] + "_parts.bsh");
+                        Parts partsII = puzzleDefinitionLoader.loadParts(interpreter, args[0]);
                         IPart unique = partsII.getUniquePart();
                         partsII.clearUnique();
                         partsII.complete(unique);
@@ -795,7 +790,7 @@ public final class Main {
 
     /** no debug, hard code the case */
 	private String manualCustom() {
-        PuzzleException.addTrace = false;
+        PuzzleException.setAddTrace(false);
         System.out.println("MANUAL===============");
         int i=0;
         do {

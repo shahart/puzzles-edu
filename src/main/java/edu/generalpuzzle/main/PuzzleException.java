@@ -6,12 +6,20 @@ package edu.generalpuzzle.main;
  */
 public class PuzzleException extends RuntimeException {
 
-    public static boolean addTrace = false;
+    private static final ThreadLocal<Boolean> addTrace = ThreadLocal.withInitial(() -> false);
+
+    public static void setAddTrace(boolean enabled) {
+        addTrace.set(enabled);
+    }
+
+    public static boolean isAddTrace() {
+        return addTrace.get();
+    }
 
     private static String myArrays_toString() {
         StringBuffer str = new StringBuffer("\n\n");
         // todo 3rd party, like commons-lang3:3.12.0, ExceptionUtils
-        if (addTrace) {
+        if (isAddTrace()) {
             StackTraceElement[] stackTraceElement = new Exception().getStackTrace();
             for (int i=2; i<stackTraceElement.length; i++)
                 if (stackTraceElement[i].toString().contains("sun.reflect"))
@@ -28,4 +36,3 @@ public class PuzzleException extends RuntimeException {
     }
 
 }
-
