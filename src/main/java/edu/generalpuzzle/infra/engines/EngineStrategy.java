@@ -38,6 +38,10 @@ public abstract class EngineStrategy extends IEngineStrategy {
     public static void set_NO_ORIENTATIONS(boolean b) { NO_ORIENTATIONS = b; }
 
      public static int get_ENGINE_TYPE() { return ENGINE_TYPE; }
+
+    public static EngineType getEngineType() {
+        return EngineType.fromLegacyId(ENGINE_TYPE);
+    }
     // get_GENERATE_BY_ALL; } // TODO
 
     public static boolean trace = false;
@@ -45,6 +49,10 @@ public abstract class EngineStrategy extends IEngineStrategy {
     public static void set_GENERATE_BY_ALL(boolean b) { GENERATE_BY_ALL = b; }       // call this before "new Engine"
     public static void set_GRAPH_FOR_ALL(boolean b) { GRAPH_FOR_ALL = b; }       // call this before "new Engine"
     public static void set_ENGINE_TYPE(int b) { ENGINE_TYPE = b; }
+
+    public static void setEngineType(EngineType engineType) {
+        ENGINE_TYPE = engineType.legacyId();
+    }
 
     public static void setTrace(boolean b) { trace = b; }
 

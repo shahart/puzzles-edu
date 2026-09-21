@@ -1,6 +1,9 @@
 package edu.generalpuzzle;
 
-import edu.generalpuzzle.main.Main;
+import edu.generalpuzzle.solver.PuzzleSolveException;
+import edu.generalpuzzle.solver.PuzzleSolverService;
+import edu.generalpuzzle.solver.SolveRequest;
+import edu.generalpuzzle.solver.SolveResult;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,33 +12,34 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class Controller {
 
     private static final Logger log = LoggerFactory.getLogger(Controller.class);
+    private final PuzzleSolverService puzzleSolverService;
+
+    public Controller(PuzzleSolverService puzzleSolverService) {
+        this.puzzleSolverService = puzzleSolverService;
+    }
 
     @GetMapping(value = {"solve/{problemId}", "solve/{problemId}/{dimensions}"})
-    public ResponseEntity<String> solve(
+    public ResponseEntity<SolveResult> solve(
             @PathVariable("problemId") String problemId,
-            @PathVariable("dimensions") Optional<String> optDimensions
+            @PathVariable(value = "dimensions", required = false) String dimensions
             ) {
-
-        String dimensions = "null";
-        if (optDimensions.isPresent()) dimensions = optDimensions.get();
-        List<String> args = new ArrayList<>();
-        args.add(problemId);
-        if (! dimensions.isEmpty() && ! dimensions.equals("null")) {
-            args.addAll(List.of(dimensions.split("_")));
-        }
-
         log.info("solve problemId {} dims {}", problemId, dimensions);
-        String res = Main.mainGo(args.toArray(new String[0]));
-        log.info("DONE problemId {} >> result {}", problemId, res);
+        List<String> parsedDimensions = dimensions == null || dimensions.isBlank()
+                ? List.of()
+                : List.of(dimensions.split("_"));
+        SolveResult result = puzzleSolverService.solve(new SolveRequest(problemId, parsedDimensions));
+        log.info("DONE problemId {} >> totalSolutions {}", problemId, result.totalSolutions());
+        return ResponseEntity.ok(result);
+    }
 
-        return new ResponseEntity<>(res, HttpStatus.OK);
+    @ExceptionHandler({IllegalArgumentException.class, PuzzleSolveException.class})
+    public ResponseEntity<String> invalidSolveRequest(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }

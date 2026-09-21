@@ -129,7 +129,7 @@ public final class Main {
             p.load(new FileInputStream("myPzl.properties"));
             if (list)
                 p.list(System.out);
-            EngineStrategy.set_ENGINE_TYPE(Integer.parseInt(valid("ENGINE_TYPE",p, "1")));
+            EngineStrategy.setEngineType(EngineType.fromLegacyId(Integer.parseInt(valid("ENGINE_TYPE",p, "1"))));
             EngineStrategy.set_DL_SPLITS(Integer.parseInt(valid("DL_SPLITS",p, "0")));
             EngineStrategy.set_FULL_OUTPUT(Boolean.parseBoolean(valid("FULL_OUTPUT", p, "false")));
             EngineStrategy.set_GENERATE_BY_ALL(Boolean.parseBoolean(valid("GENERATE_BY_ALL", p, "false")));
@@ -162,14 +162,18 @@ public final class Main {
     }
 
     public static ParallelEngineStrategy getConcreteEngine(Parts parts, IGrid grid, int userEngine) {
+        return getConcreteEngine(parts, grid, EngineType.fromLegacyId(userEngine));
+    }
+
+    public static ParallelEngineStrategy getConcreteEngine(Parts parts, IGrid grid, EngineType engineType) {
 //        parts.getParts().remove(11); // var8
-        switch (userEngine) {
-            case EngineStrategy.ENGINE_TYPE_RECURSIVE:
+        switch (engineType) {
+            case RECURSIVE:
                 return new TrivialRecursiveEngineStrategy(parts, grid);
-            case EngineStrategy.ENGINE_TYPE_ITERATIVE:
+            case ITERATIVE:
                 return new TrivialIterativeEngineStrategy(parts, grid);
             default:
-                EngineStrategy.set_ENGINE_TYPE(EngineStrategy.ENGINE_TYPE_DLX);
+                EngineStrategy.setEngineType(EngineType.DLX);
                 return new DlxEngineStrategy(parts, grid);
         }
     }

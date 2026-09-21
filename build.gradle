@@ -55,7 +55,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.beanshell', name: 'bsh', version: '2.0b5' // migrate to Groovy 4 ?!
+    implementation group: 'org.apache-extras.beanshell', name: 'bsh', version: '2.0b6' // migrate to Groovy 4 ?!
 
     implementation group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.25.4'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.25.4'
@@ -67,6 +67,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
