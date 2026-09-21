@@ -60,6 +60,7 @@ public final class Main {
 
     private boolean matchesLoaded = false;
     private final PuzzleDefinitionLoader puzzleDefinitionLoader = new PuzzleDefinitionLoader(Path.of("config"));
+    private final SolverOptionsLoader solverOptionsLoader = new SolverOptionsLoader(Path.of("myPzl.properties"));
 
 
     public String getStatus(int id) {
@@ -107,60 +108,39 @@ public final class Main {
 
     // end COMM with main.JMain
 
-    /** validity of entry in the myPzl.properties */
-	private String valid(String s, Properties p, String value) {
-        String defaultValue = p.getProperty(s);
-        if (defaultValue == null)
-            System.out.println("error: myPzl.properties (" + s + ") not found - using defaults: " + value);
-        else {
-            String tmp = p.getProperty(s, value).split(" ")[0];
-            StringBuffer res = new StringBuffer();
-            for (int i=0; i<tmp.length(); i++)
-                if (Character.isLetter(tmp.charAt(i)) || Character.isDigit(tmp.charAt(i)))
-                    res.append(tmp.charAt(i));
-            return res.toString();
-        }
-        return defaultValue;
-    }
-
     /** read the myPzl.properties */
 	public void readINI(boolean list) {
-        engines = 0;
-        Properties p = new Properties();
+        SolverOptions options;
         try {
-            p.load(new FileInputStream("myPzl.properties"));
-            if (list)
-                p.list(System.out);
-            EngineStrategy.setEngineType(EngineType.fromLegacyId(Integer.parseInt(valid("ENGINE_TYPE",p, "1"))));
-            EngineStrategy.set_DL_SPLITS(Integer.parseInt(valid("DL_SPLITS",p, "0")));
-            EngineStrategy.set_FULL_OUTPUT(Boolean.parseBoolean(valid("FULL_OUTPUT", p, "false")));
-            EngineStrategy.set_GENERATE_BY_ALL(Boolean.parseBoolean(valid("GENERATE_BY_ALL", p, "false")));
-//            EngineStrategy.set_NO_ORIENTATIONS(Boolean.parseBoolean(valid("NO_ORIENTATIONS", p, "false")));
-            if (EngineStrategy.NO_ORIENTATIONS)
-                EngineStrategy.set_GENERATE_BY_ALL(true);
-            EngineStrategy.set_GRAPH_FOR_ALL(Boolean.parseBoolean(valid("GRAPH_FOR_ALL", p, "false")));
-            EngineStrategy.set_S_HEURI(Boolean.parseBoolean(valid("DL_SIZE_HEURISTIC", p, "true")));
-
-//            if (EngineStrategy.get_ENGINE_TYPE() != EngineStrategy.ENGINE_TYPE_DLX) // TODO 2010
-//                EngineStrategy.set_S_HEURI(false);
-
-            EngineStrategy.set_INTERNAL_VIEWER(Boolean.parseBoolean(valid("INTERNAL_VIEWER", p, "false"))); // TODO in linux- choose internal auto
-            EngineStrategy.set_ST_HEURI(Boolean.parseBoolean(valid("STRANDED_HEURISTIC", p, "true")));
-            EngineStrategy.set_AUTO_GRAPH_IT(Boolean.parseBoolean(valid("AUTO_GRAPH_IT", p, "true")));
-            autoDebug = Boolean.parseBoolean(valid("AUTO_DEBUG", p, "false"));
-            engines = Integer.parseInt(valid("THREADS", p, "1"));
-            if (engines > Runtime.getRuntime().availableProcessors())
-                System.out.println("note. too many threads\n");
-        }
-        catch (IOException e) {
+            options = solverOptionsLoader.load();
+        } catch (IOException e) {
             System.out.println("error: myPzl.properties not found - using defaults.");
-        }
-        catch (NumberFormatException e) {
+            options = SolverOptions.defaults();
+        } catch (IllegalArgumentException e) {
             System.out.println("error: myPzl.properties - wrong value " + e.getMessage());
+            options = SolverOptions.defaults();
         }
+        applyOptions(options);
+        if (list)
+            System.out.println(options);
+    }
+
+    private void applyOptions(SolverOptions options) {
+        EngineStrategy.setEngineType(options.engineType());
+        EngineStrategy.set_DL_SPLITS(options.dlSplits());
+        EngineStrategy.set_FULL_OUTPUT(options.fullOutput());
+        EngineStrategy.set_GENERATE_BY_ALL(options.generateByAll() || EngineStrategy.NO_ORIENTATIONS);
+        EngineStrategy.set_GRAPH_FOR_ALL(options.graphForAll());
+        EngineStrategy.set_S_HEURI(options.sizeHeuristic());
+        EngineStrategy.set_INTERNAL_VIEWER(options.internalViewer());
+        EngineStrategy.set_ST_HEURI(options.strandedHeuristic());
+        EngineStrategy.set_AUTO_GRAPH_IT(options.autoGraphIt());
+        autoDebug = options.autoDebug();
+        engines = options.threads();
+        if (engines > Runtime.getRuntime().availableProcessors())
+            System.out.println("note. too many threads\n");
         if (engines == 0)// || engines == 1) // TODO 12 if more than one tprocessor, otherwise 1
             engines = Runtime.getRuntime().availableProcessors();
-        // engine = new ParallelEngineStrategy[12]; //engines]; //parArr 12 or engines
     }
 
     public static ParallelEngineStrategy getConcreteEngine(Parts parts, IGrid grid, int userEngine) {
